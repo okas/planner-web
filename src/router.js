@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+// We use views in routing rathr than components.
+// Views should consume components.
+// Views are like layouts.
+
 const routeOptions = [
   {
     path: '/lights',
@@ -14,16 +18,17 @@ const routeOptions = [
     component: 'Home'
   },
   {
-    path: '/*',
-    component: 'NotFound'
+    path: '*',
+    component: 'HTTP404'
   }
 ]
 
+// Set up lazy loading
 function componentizer(routerOptions) {
   return routerOptions.map(opt => {
     return {
       ...opt,
-      component: () => import(`@/components/${opt.component}.vue`),
+      component: () => import(`@/views/${opt.component}.vue`),
       ...(opt.hasOwnProperty('children') && {
         children: componentizer(opt.children)
       })

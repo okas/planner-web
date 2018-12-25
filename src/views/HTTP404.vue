@@ -1,12 +1,12 @@
 <template>
   <main class="has-text-centered">
-    <p>404 - Oih! Ma ei saa aru, kuhu soovid minna.</p>
+    <p>Oih! Ma ei saa aru, kuhu soovid minna. (HTTP 404)</p>
   </main>
 </template>
 
 <script>
 export default {
-  name: 'not-found',
+  name: 'HTTP404',
   head: { title: { inner: 'Not Found!' } }
 }
 </script>
