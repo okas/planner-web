@@ -1,0 +1,16 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "extends": ["plugin:vue/essential", "@vue/prettier"],
+  "rules": {
+    "quotes": [2, "single"]
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  }
+}
