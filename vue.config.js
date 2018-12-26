@@ -5,8 +5,12 @@ module.exports = {
   assetsDir: undefined,
   productionSourceMap: undefined,
   parallel: undefined,
-  css: undefined,
-  configureWebpack: {
-    devtool: 'source-map'
+  css: {
+    loaderOptions: {
+      postcss: {
+        plugins: [require('autoprefixer')]
+      }
+    }
+  },
   }
 }
