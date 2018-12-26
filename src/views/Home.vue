@@ -1,13 +1,13 @@
 <template>
-  <div class="home">
+  <main id="home" class="has-text-centered">
     <img alt="Vue logo" src="../assets/logo_tk.png">
-  </div>
+  </main>
 </template>
 
 <script>
 // @ is an alias to /src
 export default {
-  name: 'home',
+  name: 'Home',
   head: { title: { inner: 'Kodu' } }
 }
 </script>

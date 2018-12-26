@@ -1,5 +1,5 @@
 <template>
-  <main class="has-text-centered">
+  <main id="http400" class="has-text-centered">
     <p>Oih! Ma ei saa aru, kuhu soovid minna. (HTTP 404)</p>
   </main>
 </template>

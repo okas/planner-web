@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'app',
+  name: 'App',
   head: {
     link() {
       return ['16', '32'].map(this.getFaviconModel)
