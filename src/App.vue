@@ -4,14 +4,16 @@
       <router-link to="/">Kodu</router-link>&nbsp;|
       <router-link to="/lights">Tuled</router-link>
     </nav>
-    </div>
-    <router-view/>
+    <router-view id="app-content"/>
+    <app-footer id="app-footer"/>
   </div>
 </template>
 
 <script>
+import AppFooter from './components/AppFooter'
 export default {
   name: 'App',
+  components: { AppFooter },
   head: {
     link() {
       // Move to main.js or somewhere when it gets rendered in server rather than in browser
