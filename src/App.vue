@@ -13,6 +13,7 @@ export default {
   name: 'App',
   head: {
     link() {
+      // Move to main.js or somewhere when it gets rendered in server rather than in browser
       return ['16', '32'].map(this.getFaviconModel)
     }
   },
