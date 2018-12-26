@@ -34,12 +34,13 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@globalImpScss';
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: $family-sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  color: $default-text-color;
 }
 #app-top-nav {
   padding: 30px;
