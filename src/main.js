@@ -4,12 +4,11 @@ import router from './router'
 import store from './store'
 import VueHead from 'vue-head'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 Vue.use(VueHead, { complement: 'SaarTK' })
 
 window.Vue = new Vue({
-  el: '#app-placeholder',
   store,
   router,
   template: '<app/>',
