@@ -8,7 +8,7 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: '@import "@globalScss";'
+        data: '@import "@globalVarScss";'
       },
       postcss: {
         plugins: [require('autoprefixer')]
@@ -24,6 +24,8 @@ module.exports = {
     }
   },
   chainWebpack: config => {
-    config.resolve.alias.set('@globalScss', '@/assets/globals.scss')
+    config.resolve.alias
+      .set('@globalVarScss', '@/assets/global_variables.scss')
+      .set('@globalImpScss', '@/assets/global_imports.scss')
   }
 }

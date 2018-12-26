@@ -1,8 +1,8 @@
 // https://vue-loader.vuejs.org/en/configurations/pre-processors.html#loading-a-global-settings-file
-
 @charset "utf-8";
 
-// <!--- Bulma styles ----
+//!--- Customize scss styles e.g. branding ----
+// Colors
 $primary: hsl(171, 100%, 41%);
 
 $info: hsl(204, 86%, 53%);
@@ -29,12 +29,11 @@ $dark: $grey-darker !default;
 
 $orange: hsl(14, 100%, 53%) !default;
 
-// --- Bulma styles ----!>
+// Typography
+$family-sans-serif: 'Nunito', sans-serif;
 
-// <!--- planner-web styles ----
+//!--- planner-web scss styles ----
 $default-text-color: #3e0101;
 
 // Dimensions
 $navbar-height: 3.25rem;
-
-// --- planner-web styles ----!>
