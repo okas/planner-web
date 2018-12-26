@@ -15,6 +15,14 @@ module.exports = {
       }
     }
   },
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      // mutate config for production...
+    } else if (process.env.NODE_ENV === 'development') {
+      // mutate for development...
+      config.devtool = 'eval-source-map' // test instead of 'source-map'
+    }
+  },
   chainWebpack: config => {
     config.resolve.alias.set('@globalScss', '@/assets/globals.scss')
   }
