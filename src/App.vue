@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Kodu</router-link>|
+    <nav id="app-top-nav">
+      <router-link to="/">Kodu</router-link>&nbsp;|
       <router-link to="/lights">Tuled</router-link>
+    </nav>
     </div>
     <router-view/>
   </div>
@@ -40,8 +41,12 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-#nav {
+#app-top-nav {
   padding: 30px;
+  border: 1px solid #bcedef;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow: inset 0px 0px 20px 15px #c5deff;
   a {
     font-weight: bold;
     color: #2c3e50;
