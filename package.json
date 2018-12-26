@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bulma": "^0.7.2",
+    "bulma-extensions": "^4.0.0",
     "vue": "^2.5.17",
     "vue-head": "^2.1.0",
     "vue-router": "^3.0.1",
