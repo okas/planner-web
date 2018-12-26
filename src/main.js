@@ -11,6 +11,5 @@ Vue.use(VueHead, { complement: 'SaarTK' })
 window.Vue = new Vue({
   store,
   router,
-  template: '<app/>',
-  components: { App }
-})
+  render: h => h(App)
+}).$mount('#app-placeholder')
