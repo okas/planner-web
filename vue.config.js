@@ -7,10 +7,15 @@ module.exports = {
   parallel: undefined,
   css: {
     loaderOptions: {
+      sass: {
+        data: '@import "@globalScss";'
+      },
       postcss: {
         plugins: [require('autoprefixer')]
       }
     }
   },
+  chainWebpack: config => {
+    config.resolve.alias.set('@globalScss', '@/assets/globals.scss')
   }
 }
