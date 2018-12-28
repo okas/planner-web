@@ -1,5 +1,5 @@
 <template>
-  <footer @click="quickDashRevelaed=!quickDashRevelaed">
+  <footer id="app-footer" @click="quickDashRevelaed=!quickDashRevelaed">
     <section class="permanent has-text-centered">
       Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
       <a
