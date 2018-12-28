@@ -5,30 +5,52 @@ import Router from 'vue-router'
 // Views should consume components.
 // Views are like layouts.
 
-const routeOptions = [
+// Use full paths for components as it simplifiest componentizer work.
+// IDE provides very good support, its is not 'costly' to give/type it :)
+const rawOptions = [
   {
-    path: '/lights',
-    name: 'lights',
-    component: 'Lights'
+    path: '/devices',
+    component: './views/Devices',
+    redirect: { name: 'lights' },
+    meta: { title: 'Seadmed' },
+    children: [
+      {
+        path: 'lights',
+        component: './components/DevicesLights',
+        name: 'lights',
+        meta: { title: 'Valgustid', alt: 'Tulede juhtimine' }
+      },
+      {
+        path: 'windowblinds',
+        component: './components/DevicesWindowBlinds',
+        name: 'windowblinds',
+        meta: { title: 'Rulood' }
+      },
+      {
+        path: 'irrigation',
+        component: './components/DevicesIrrigation',
+        name: 'irrigation',
+        meta: { title: 'Kastmine' }
+      }
+    ]
   },
   {
     path: '/',
+    component: './views/Home.vue',
     alias: '/index',
-    name: 'home',
-    component: 'Home'
+    meta: { title: 'Kodu' }
   },
   {
     path: '*',
-    component: 'HTTP404'
+    component: './views/HTTP404'
   }
 ]
 
-// Set up lazy loading
-function componentizer(routerOptions) {
-  return routerOptions.map(opt => {
+function componentizer(options) {
+  return options.map(opt => {
     return {
       ...opt,
-      component: () => import(`@/views/${opt.component}.vue`),
+      component: () => import(`${opt.component}`),
       ...(opt.hasOwnProperty('children') && {
         children: componentizer(opt.children)
       })
@@ -39,7 +61,9 @@ function componentizer(routerOptions) {
 Vue.use(Router)
 
 export default new Router({
-  routes: componentizer(routeOptions),
   mode: 'history',
+  routes: componentizer(rawOptions),
+  // linkActiveClass: 'is-active',
+  linkExactActiveClass: 'is-active',
   base: process.env.BASE_URL
 })

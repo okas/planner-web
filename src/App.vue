@@ -2,8 +2,7 @@
   <div id="app">
     <nav id="app-top-nav">
       <router-link to="/" exact>Kodu</router-link>&nbsp;|
-      <router-link to="/">Kodu</router-link>&nbsp;|
-      <router-link to="/lights">Tuled</router-link>
+      <router-link to="/devices/" replace>Seadmed</router-link>
     </nav>
     <router-view id="app-content"/>
     <app-footer id="app-footer"/>
@@ -54,7 +53,7 @@ export default {
   a {
     font-weight: bold;
     color: #2c3e50;
-    &.router-link-exact-active {
+    &.is-active {
       color: #42b983;
     }
   }
