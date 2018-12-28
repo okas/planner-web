@@ -6,6 +6,7 @@ import store from './store'
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 const options = {
+  name: 'Main',
   store,
   router,
   render: h => h(App),

@@ -10,7 +10,6 @@
 import AppTopNav from './components/AppTopNav.vue'
 import AppFooter from './components/AppFooter.vue'
 export default {
-  name: 'App',
   components: { AppTopNav, AppFooter }
 }
 </script>

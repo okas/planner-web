@@ -11,7 +11,6 @@
 
 <script>
 export default {
-  name: 'MenuSideNode',
   props: { item: { type: Object, required: true } }
 }
 </script>

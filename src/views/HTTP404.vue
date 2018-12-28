@@ -8,7 +8,6 @@
 
 <script>
 export default {
-  name: 'HTTP404',
   props: {
     windowLocationOrigin: {
       default: window.location.origin

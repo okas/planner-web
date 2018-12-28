@@ -5,7 +5,5 @@
   </main>
 </template>
 <script>
-export default {
-  name: 'DevicesWindowBlinds'
-}
+export default {}
 </script>

@@ -9,7 +9,6 @@
 
 <script>
 export default {
-  name: 'DevicesLights',
   methods: {
     appTitle() {
       return 'Tuled'

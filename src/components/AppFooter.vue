@@ -27,7 +27,6 @@
 // const debug = process.env.NODE_ENV !== 'production'
 
 export default {
-  name: 'AppFooter',
   data() {
     return {
       quickDashRevelaed: false

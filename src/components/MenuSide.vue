@@ -15,7 +15,6 @@
 <script>
 import MenuSideNode from './MenuSideNode'
 export default {
-  name: 'MenuSide',
   props: { selectedPaths: { type: [String, Array], required: true } },
   components: { MenuSideNode },
   computed: {
