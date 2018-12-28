@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AppFooter from './components/AppFooter'
+import AppFooter from './components/AppFooter.vue'
 export default {
   name: 'App',
   components: { AppFooter },
