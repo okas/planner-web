@@ -39,12 +39,12 @@ const rawOptions = [
   {
     path: '/',
     component: './views/Home.vue',
-    alias: '/index',
-    meta: { title: 'Kodu' }
+    alias: '/index'
   },
   {
     path: '*',
-    component: './views/HTTP404'
+    component: './views/HTTP404',
+    meta: { title: '404' }
   }
 ]
 
