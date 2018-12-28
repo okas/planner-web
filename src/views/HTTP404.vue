@@ -1,11 +1,18 @@
-<template>
+<template functional>
   <main id="http400" class="has-text-centered">
-    <p>Oih! Ma ei saa aru, kuhu soovid minna. (HTTP 404)</p>
+    <h2 class="title is-3 is-spaced has-text-weight-semibold">HTTP 404</h2>
+    <p class="has-background-warning">Siin aadresil ei ole midagi</p>
+    <pre><i>{{props.windowLocationOrigin}}</i><b>{{parent.$route.fullPath}}</b></pre>
   </main>
 </template>
 
 <script>
 export default {
-  name: 'HTTP404'
+  name: 'HTTP404',
+  props: {
+    windowLocationOrigin: {
+      default: window.location.origin
+    }
+  }
 }
 </script>
