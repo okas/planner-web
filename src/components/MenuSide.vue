@@ -2,12 +2,10 @@
 
 <template>
   <nav id="menu-side" class="menu" :class="{'has-background-warning': !hasRoutes}">
-    <!-- eslint-disable-next-line -->
-    <section v-for="r in filteredRoutes">
-      <p class="menu-label" v-text="r.meta.title"/>
+    <section class="menu-level1" v-for="r in filteredRoutes" :key="r.path">
+      <h1 class="menu-label" v-text="r.meta.title"/>
       <ul class="menu-list" v-if="hasRoutes">
-        <!-- eslint-disable-next-line -->
-        <menu-side-node v-for="cr in r.children" :item="cr"/>
+        <menu-side-node v-for="c in r.children" :item="c" :key="c.path"/>
       </ul>
       <p v-else v-text="message"/>
     </section>
