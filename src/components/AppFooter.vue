@@ -27,7 +27,7 @@
 // const debug = process.env.NODE_ENV !== 'production'
 
 export default {
-  name: 'App-Footer',
+  name: 'AppFooter',
   data() {
     return {
       quickDashRevelaed: false
@@ -57,7 +57,7 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #app-footer {
   font-size: 0.75em;
   position: fixed;
