@@ -6,7 +6,7 @@ import VueHead from 'vue-head'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
-Vue.use(VueHead, { complement: 'SaarTK' })
+Vue.use(VueHead)
 
 window.Vue = new Vue({
   store,

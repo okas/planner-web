@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+Vue.use(Router)
+
 // We use views in routing rathr than components.
 // Views should consume components.
 // Views are like layouts.
@@ -58,12 +60,34 @@ function componentizer(options) {
   })
 }
 
-Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: componentizer(rawOptions),
   // linkActiveClass: 'is-active',
   linkExactActiveClass: 'is-active',
   base: process.env.BASE_URL
 })
+
+// Credit: https://alligator.io/vuejs/vue-router-modify-head/
+// This callback runs before every route change, including on page load.
+router.beforeEach((to, from, next) => {
+  // This goes through the matched routes from last to first, finding the closest route with a title.
+  // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
+  const nearestWithTitle = to.matched
+    .slice()
+    .reverse()
+    .find(r => r.meta && r.meta.title)
+
+  function complement(h, ...r) {
+    return to.fullPath === '/' || !r[0]
+      ? h[1].replace('|', '').trim()
+      : r[0] + h[1]
+  }
+
+  // If a route with a title was found, set the document (page) title to that value.
+  document.title = complement`${nearestWithTitle.meta.title} | SaarTK`
+
+  next()
+})
+
+export default router

@@ -6,7 +6,6 @@
 
 <script>
 export default {
-  name: 'HTTP404',
-  head: { title: { inner: 'Not Found!' } }
+  name: 'HTTP404'
 }
 </script>

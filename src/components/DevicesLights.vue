@@ -10,7 +10,6 @@
 <script>
 export default {
   name: 'DevicesLights',
-  head: { title: { inner: 'Tuled' } },
   methods: {
     appTitle() {
       return 'Tuled'
