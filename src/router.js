@@ -78,14 +78,11 @@ router.beforeEach((to, from, next) => {
     .reverse()
     .find(r => r.meta && r.meta.title)
 
-  function complement(h, ...r) {
-    return to.fullPath === '/' || !r[0]
-      ? h[1].replace('|', '').trim()
-      : r[0] + h[1]
-  }
-
   // If a route with a title was found, set the document (page) title to that value.
-  document.title = complement`${nearestWithTitle.meta.title} | SaarTK`
+  const complement = 'SaarTK'
+  document.title = !nearestWithTitle
+    ? complement
+    : `${nearestWithTitle.meta.title} | ${complement}`
 
   next()
 })
