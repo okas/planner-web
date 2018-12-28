@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <nav id="app-top-nav">
+      <router-link to="/" exact>Kodu</router-link>&nbsp;|
       <router-link to="/">Kodu</router-link>&nbsp;|
       <router-link to="/lights">Tuled</router-link>
     </nav>
