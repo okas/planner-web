@@ -1,27 +1,21 @@
 <template>
   <div class="columns is-vcentered">
-    <main id="ligths" class="column container">
-  <section>
-    <header>
-      <h1 v-text="appTitle()"/>
-    </header>
-    <p>Siia tuleb tulede list, et lülitada neid tööle.</p>
-  </section>
-    </main>
+    <aside class="column container">
+      <menu-side :selectedPaths="path"/>
+    </aside>
+    <router-view/>
   </div>
 </template>
 
 <script>
+import MenuSide from '../components/MenuSide.vue'
 export default {
-  name: 'Lights',
-  head: { title: { inner: 'Tuled' } },
-  methods: {
-    appTitle() {
-      return 'Tuled'
+  name: 'Devices',
+  components: { MenuSide },
+  computed: {
+    path() {
+      return '/devices'
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>
