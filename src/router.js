@@ -37,6 +37,11 @@ const rawOptions = [
     ]
   },
   {
+    path: '/about',
+    component: './views/About.vue',
+    meta: { title: 'Info' }
+  },
+  {
     path: '/',
     component: './views/Home.vue',
     alias: '/index'
