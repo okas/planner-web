@@ -12,25 +12,25 @@ Vue.use(Router)
 const rawOptions = [
   {
     path: '/devices',
-    component: './views/Devices',
+    component: './views/Devices.vue',
     redirect: { name: 'lights' },
     meta: { title: 'Seadmed' },
     children: [
       {
         path: 'lights',
-        component: './components/DevicesLights',
+        component: './components/DevicesLights.vue',
         name: 'lights',
         meta: { title: 'Valgustid', alt: 'Tulede juhtimine' }
       },
       {
         path: 'windowblinds',
-        component: './components/DevicesWindowBlinds',
+        component: './components/DevicesWindowBlinds.vue',
         name: 'windowblinds',
         meta: { title: 'Rulood' }
       },
       {
         path: 'irrigation',
-        component: './components/DevicesIrrigation',
+        component: './components/DevicesIrrigation.vue',
         name: 'irrigation',
         meta: { title: 'Kastmine' }
       }
@@ -43,7 +43,7 @@ const rawOptions = [
   },
   {
     path: '*',
-    component: './views/HTTP404',
+    component: './views/HTTP404.vue',
     meta: { title: '404' }
   }
 ]
