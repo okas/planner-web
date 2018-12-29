@@ -1,42 +1,42 @@
 // Credit: https://medium.com/@disjfa/creating-navigation-using-vue-router-59d0b12ab75f
 
 <template>
-  <nav id="menu-side" class="menu" :class="{'has-background-warning': !hasRoutes}">
-    <section class="menu-level1" v-for="r in filteredRoutes" :key="r.path">
+  <nav id="menu-side" class="menu">
+    <section class="menu-level1" v-for="r in foundRoutes" :key="r.path">
       <h1 class="menu-label" v-text="r.meta.title"/>
-      <ul class="menu-list" v-if="hasRoutes">
+      <ul class="menu-list">
         <menu-side-node v-for="c in r.children" :item="c" :key="c.path"/>
       </ul>
-      <p v-else v-text="message"/>
+    </section>
+    <section class="notification is-paddingless is-warning" v-if="!foundRoutes.length">
+      <h1 class="menu-label" v-text="message"/>
+      <ul class="menu-list">
+        <li v-for="s in paths" :key="s" v-text="s"/>
+      </ul>
     </section>
   </nav>
 </template>
 
 <script>
-import MenuSideNode from './MenuSideNode'
+import MenuSideNode from './MenuSideNode.vue'
 export default {
+  data() {
+    return { message: 'Ruuteris puuduvad teekonnad:' }
+  },
   props: { selectedPaths: { type: [String, Array], required: true } },
   components: { MenuSideNode },
   computed: {
-    filteredRoutes() {
+    foundRoutes() {
       return this.$router.options.routes.filter(
-        r => r.hasOwnProperty('meta') && this.checkPath(r.path)
+        r =>
+          r.hasOwnProperty('meta') &&
+          this.paths.some(p => r.path.toLowerCase() == p.toLowerCase())
       )
     },
-    hasRoutes() {
-      return this.filteredRoutes.length > 0
-    },
-    message() {
-      return this.hasRoutes
-        ? ''
-        : `Kriteerium(e) pole ruuteris: [${this.selectedPaths}]`
-    }
-  },
-  methods: {
-    checkPath(test) {
+    paths() {
       return Array.isArray(this.selectedPaths)
-        ? this.selectedPaths.some(s => s === test)
-        : this.selectedPaths === test
+        ? this.selectedPaths
+        : [this.selectedPaths]
     }
   }
 }

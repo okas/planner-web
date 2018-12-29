@@ -10,11 +10,9 @@
 <script>
 import MenuSide from '../components/MenuSide.vue'
 export default {
-  components: { MenuSide },
-  computed: {
-    path() {
-      return '/devices'
-    }
-  }
+  data() {
+    return { path: '/devices' }
+  },
+  components: { MenuSide }
 }
 </script>
