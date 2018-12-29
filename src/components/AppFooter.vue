@@ -1,5 +1,5 @@
 <template>
-  <footer id="app-footer" @click="quickDashRevelaed=!quickDashRevelaed">
+  <footer class="app-footer" @click="quickDashRevelaed=!quickDashRevelaed">
     <section class="permanent has-text-centered">
       Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
       <a
@@ -51,13 +51,13 @@ export default {
 </script>
 
 <style>
-#app-content {
+.app-content {
   margin-bottom: 45px;
 }
 </style>
 
 <style lang="scss">
-#app-footer {
+.app-footer {
   font-size: 0.75em;
   position: fixed;
   bottom: 0;
