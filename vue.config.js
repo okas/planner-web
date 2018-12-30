@@ -24,8 +24,6 @@ module.exports = {
     }
   },
   chainWebpack: config => {
-    config.resolve.alias
-      .set('@globalVarScss', '@/assets/global_variables.scss')
-      .set('@globalImpScss', '@/assets/global_imports.scss')
+    config.resolve.alias.set('@globalVarScss', '@/assets/global_variables.scss')
   }
 }
