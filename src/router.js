@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { setHtmlHeadTitle, resolveRouteOptionComponents } from './utilities'
 
 Vue.use(Router)
 
@@ -9,7 +10,7 @@ Vue.use(Router)
 
 // Use full paths for components as it simplifiest componentizer work.
 // IDE provides very good support, its is not 'costly' to give/type it :)
-const rawOptions = [
+const rawRoutes = [
   {
     path: '/devices',
     component: './views/Devices.vue',
@@ -53,43 +54,14 @@ const rawOptions = [
   }
 ]
 
-function componentizer(options) {
-  return options.map(opt => {
-    return {
-      ...opt,
-      component: () => import(`${opt.component}`),
-      ...(opt.hasOwnProperty('children') && {
-        children: componentizer(opt.children)
-      })
-    }
-  })
-}
-
-const router = new Router({
+export default new Router({
   mode: 'history',
-  routes: componentizer(rawOptions),
+  routes: resolveRouteOptionComponents(rawRoutes),
   linkActiveClass: 'is-active router-link-active',
   linkExactActiveClass: 'is-active router-link-exact-active',
-  base: process.env.BASE_URL
+  base: process.env.BASE_URL,
+  beforeEach: (to, from, next) => {
+    setHtmlHeadTitle(to.matched, 'SaarTK')
+    next()
+  }
 })
-
-// Credit: https://alligator.io/vuejs/vue-router-modify-head/
-// This callback runs before every route change, including on page load.
-router.beforeEach((to, from, next) => {
-  // This goes through the matched routes from last to first, finding the closest route with a title.
-  // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
-  const nearestWithTitle = to.matched
-    .slice()
-    .reverse()
-    .find(r => r.meta && r.meta.title)
-
-  // If a route with a title was found, set the document (page) title to that value.
-  const complement = 'SaarTK'
-  document.title = !nearestWithTitle
-    ? complement
-    : `${nearestWithTitle.meta.title} | ${complement}`
-
-  next()
-})
-
-export default router
