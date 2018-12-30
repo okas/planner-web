@@ -1,9 +1,11 @@
 <template>
   <nav
     id="app-top-nav"
+    class="navbar is-fixed-top is-black"
     aria-label="main navigation"
     :class="scroll"
   >
+    <div class="navbar-brand is-mobile">
       <router-link class="navbar-item is-tab" to="/" exact>
         Saar
         <img class="app-logo" src="../assets/logo_tk.png">

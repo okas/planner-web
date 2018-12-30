@@ -15,10 +15,8 @@ export default {
 <style lang="scss">
 @import './assets/app_imports.scss';
 #app {
-  font-family: $family-sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $default-text-color;
 }
 .router-link-active {
   text-shadow: 0px 0px 20px #269294;

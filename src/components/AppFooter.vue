@@ -1,6 +1,6 @@
 <template>
-  <footer class="app-footer" @click="quickDashRevelaed=!quickDashRevelaed">
-    <section class="permanent has-text-centered">
+  <footer class="footer has-text-centered" @click="quickDashRevelaed=!quickDashRevelaed">
+    <section class="permanent">
       Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
       <a
         href="https://vuejs.org"
@@ -50,42 +50,28 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .app-content {
   margin-bottom: 45px;
 }
 </style>
 
 <style lang="scss">
-.app-footer {
+.footer {
   font-size: 0.75em;
   position: fixed;
   bottom: 0;
-  left: 0px;
-  right: 0px;
+  width: 100%;
+  // left: 0px;
+  // right: 0px;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
-  border-top: #e2c4c4 solid 1px;
-  background-color: rgba(#73fbce, 0.08);
+  border-top: 1px solid #3e1b1b;
   transition: 0.5s color;
   transition: 0.5s background-color;
   .permanent {
     margin: 10px 0;
-    text-shadow: 0 0 20px hsla(0, 0%, 100%, 1), 0 0 20px hsla(0, 0%, 100%, 1),
-      0 0 20px hsla(0, 0%, 100%, 1), 0 0 20px hsla(0, 0%, 100%, 1),
-      0 0 20px hsla(0, 0%, 100%, 1), 0 0 20px hsla(0, 0%, 100%, 1),
-      0 0 20px hsla(0, 0%, 100%, 1), 0 0 20px hsla(0, 0%, 100%, 1),
-      0 0 20px hsla(0, 0%, 100%, 1), 0 0 20px hsla(0, 0%, 100%, 1),
-      0 0 20px hsla(0, 0%, 100%, 1), 0 0 19px hsla(0, 0%, 100%, 1),
-      0 0 18px hsla(0, 0%, 100%, 1), 0 0 17px hsla(0, 0%, 100%, 1),
-      0 0 16px hsla(0, 0%, 100%, 1), 0 0 15px hsla(0, 0%, 100%, 1),
-      0 0 14px hsla(0, 0%, 100%, 1), 0 0 13px hsla(0, 0%, 100%, 1),
-      0 0 12px hsla(0, 0%, 100%, 1), 0 0 11px hsla(0, 0%, 100%, 1),
-      0 0 10px hsla(0, 0%, 100%, 1), 0 0 09px hsla(0, 0%, 100%, 1),
-      0 0 08px hsla(0, 0%, 100%, 1), 0 0 07px hsla(0, 0%, 100%, 1),
-      0 0 06px hsla(0, 0%, 100%, 1), 0 0 05px hsla(0, 0%, 100%, 1),
-      0 0 04px hsla(0, 0%, 100%, 1), 0 0 03px hsla(0, 0%, 100%, 1),
-      0 0 02px hsla(0, 0%, 100%, 1), 0 0 01px hsla(0, 0%, 100%, 1);
+
     .vue-logo {
       width: 16px;
       vertical-align: middle;

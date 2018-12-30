@@ -8,10 +8,11 @@
         <menu-side-node v-for="c in r.children" :item="c" :key="c.path"/>
       </ul>
     </section>
-    <section class="notification is-paddingless is-warning" v-if="!foundRoutes.length">
-      <h1 class="menu-label" v-text="message"/>
+    <section class="notification is-paddingless is-danger" v-if="!foundRoutes.length">
+      <h3 class="menu-label has-text-weight-semibold" v-text="errTitle"/>
       <ul class="menu-list">
-        <li v-for="s in paths" :key="s" v-text="s"/>
+        <li class="menu-item" v-text="errMessage"/>
+        <li class="menu-item" v-for="s in paths" :key="s" v-text="s"/>
       </ul>
     </section>
   </nav>
@@ -21,7 +22,10 @@
 import MenuSideNode from './MenuSideNode.vue'
 export default {
   data() {
-    return { message: 'Ruuteris puuduvad teekonnad:' }
+    return {
+      errTitle: 'Viga menüü loomisel!',
+      errMessage: 'Ruuteri pole teekondi:'
+    }
   },
   props: { selectedPaths: { type: [String, Array], required: true } },
   components: { MenuSideNode },

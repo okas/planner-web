@@ -2,6 +2,7 @@
 @charset "utf-8";
 
 //!--- Customize scss styles e.g. branding ----
+// https://bulma.io/documentation/customize/variables/
 // Colors
 $primary: hsl(171, 100%, 41%);
 
@@ -32,8 +33,14 @@ $orange: hsl(14, 100%, 53%) !default;
 // Typography
 $family-sans-serif: 'Nunito', sans-serif;
 
+// Other variables
+$text: $grey-light;
+
+$body-background-color: $dark;
+
+$menu-label-color: $text;
+$menu-item-color: $text;
 //!--- planner-web scss styles ----
-$default-text-color: #3e0101;
 
 // Dimensions
 $navbar-height: 3.25rem;
