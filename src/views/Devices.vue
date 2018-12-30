@@ -1,10 +1,8 @@
 <template>
-  <div class="columns is-vcentered">
-    <aside class="column container">
+  <main class="columns is-vcentered">
       <menu-side :selectedPaths="path"/>
     </aside>
-    <router-view/>
-  </div>
+  </main>
 </template>
 
 <script>

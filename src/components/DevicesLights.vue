@@ -1,10 +1,8 @@
 <template>
-  <main id="ligths" class="column container">
-    <section>
-      <h1 class="title is-2 is-spaced has-text-weight-semibold" v-text="appTitle()"/>
-      <article>Siia tuleb tulede list, et lülitada neid tööle.</article>
-    </section>
-  </main>
+  <section id="ligths" class="column container">
+    <h1 class="title is-2 is-spaced has-text-weight-semibold" v-text="appTitle()"/>
+    <article>Siia tuleb tulede list, et lülitada neid tööle.</article>
+  </section>
 </template>
 
 <script>
