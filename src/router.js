@@ -68,8 +68,8 @@ function componentizer(options) {
 const router = new Router({
   mode: 'history',
   routes: componentizer(rawOptions),
-  // linkActiveClass: 'is-active',
-  linkExactActiveClass: 'is-active',
+  linkActiveClass: 'is-active router-link-active',
+  linkExactActiveClass: 'is-active router-link-exact-active',
   base: process.env.BASE_URL
 })
 
