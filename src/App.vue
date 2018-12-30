@@ -1,16 +1,14 @@
 <template>
   <div id="app" class>
-    <app-top-nav/>
-    <router-view class="app-content"/>
-    <app-footer/>
+    <app-nav-top/>
   </div>
 </template>
 
 <script>
-import AppTopNav from './components/AppTopNav.vue'
+import AppNavTop from './components/AppNavTop.vue'
 import AppFooter from './components/AppFooter.vue'
 export default {
-  components: { AppTopNav, AppFooter }
+  components: { AppNavTop, AppFooter }
 }
 </script>
 

@@ -1,11 +1,9 @@
 <template>
   <nav
     id="app-top-nav"
-    class="navbar is-fixed-top is-dark"
     aria-label="main navigation"
     :class="scroll"
   >
-    <div class="navbar-brand">
       <router-link class="navbar-item is-tab" to="/" exact>
         Saar
         <img class="app-logo" src="../assets/logo_tk.png">
@@ -74,3 +72,4 @@ export default {
   }
 }
 </script>
+
