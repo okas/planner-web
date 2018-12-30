@@ -8,7 +8,7 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: '@import "@globalVarScss";'
+        data: '@import "@/assets/app_initial_variables.scss";'
       },
       postcss: {
         plugins: [require('autoprefixer')]
@@ -22,8 +22,5 @@ module.exports = {
       // mutate for development...
       config.devtool = 'eval-source-map' // test instead of 'source-map'
     }
-  },
-  chainWebpack: config => {
-    config.resolve.alias.set('@globalVarScss', '@/assets/global_variables.scss')
   }
 }
