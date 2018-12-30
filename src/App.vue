@@ -1,6 +1,8 @@
 <template>
   <div id="app" class>
     <app-nav-top/>
+    <router-view id="app-content" class="has-text-centered has-background-dark"/>
+    <app-footer class/>
   </div>
 </template>
 
