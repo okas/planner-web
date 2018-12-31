@@ -10,7 +10,10 @@ export function resolveRouteOptionComponents(routeOptions) {
   return routeOptions.map(opt => {
     return {
       ...opt,
-      component: () => import(`@/${convert(opt.component)}`), // Webpack quirk handling
+      component: () =>
+        import(/* webpackChunkName: "vue-router_[request]" */ `@/${convert(
+          opt.component
+        )}`),
       ...(opt.hasOwnProperty('children') && {
         children: resolveRouteOptionComponents(opt.children)
       })
