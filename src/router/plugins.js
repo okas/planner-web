@@ -1,8 +1,16 @@
+import path from 'path'
+
+// This is important for webpack lazy load! We need to return relative path.
+// NB! Output cannot be be prefixed with '@' as we do it during Webpack lazy loading.
+// See warning notification boxes below the "Magic Comments" section: https://webpack.js.org/api/module-methods/#magic-comments
+// Otherwise Webpack cannot infer and/or register correct path without @ in method call!
+var convert = c => path.resolve(c.startsWith('@') ? c.slice(1) : c).slice(1)
+
 export function resolveRouteOptionComponents(routeOptions) {
   return routeOptions.map(opt => {
     return {
       ...opt,
-      component: () => import(`${opt.component}`),
+      component: () => import(`@/${convert(opt.component)}`), // Webpack quirk handling
       ...(opt.hasOwnProperty('children') && {
         children: resolveRouteOptionComponents(opt.children)
       })
