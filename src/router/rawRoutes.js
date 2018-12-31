@@ -1,16 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import { setHtmlHeadTitle, resolveRouteOptionComponents } from './utilities'
-
-Vue.use(Router)
-
-// We use views in routing rathr than components.
-// Views should consume components.
-// Views are like layouts.
-
+// We use views in routing rather than components.
+// If views are used as layout, they consume components.
 // Use full paths for components as it simplifiest componentizer work.
 // IDE provides very good support, its is not 'costly' to give/type it :)
-const rawRoutes = [
+export const rawRoutes = [
   {
     path: '/devices',
     component: './views/Devices.vue',
@@ -53,15 +45,3 @@ const rawRoutes = [
     meta: { title: '404' }
   }
 ]
-
-export default new Router({
-  mode: 'history',
-  routes: resolveRouteOptionComponents(rawRoutes),
-  linkActiveClass: 'is-active router-link-active',
-  linkExactActiveClass: 'is-active router-link-exact-active',
-  base: process.env.BASE_URL,
-  beforeEach: (to, from, next) => {
-    setHtmlHeadTitle(to.matched, 'SaarTK')
-    next()
-  }
-})
