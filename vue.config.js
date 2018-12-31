@@ -22,5 +22,7 @@ module.exports = {
       // mutate for development...
       config.devtool = 'eval-source-map' // test instead of 'source-map'
     }
-  }
+  },
+
+  lintOnSave: undefined
 }
