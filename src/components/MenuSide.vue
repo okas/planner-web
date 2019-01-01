@@ -5,7 +5,7 @@
     <section class="menu-level1" v-for="r in foundRoutes" :key="r.path">
       <h1 class="menu-label" v-text="r.meta.title"/>
       <ul class="menu-list">
-        <menu-side-node v-for="c in r.children" :item="c" :key="c.path"/>
+        <MenuSideNode v-for="c in r.children" :item="c" :key="c.path"/>
       </ul>
     </section>
     <section class="notification is-paddingless is-danger" v-if="!foundRoutes.length">

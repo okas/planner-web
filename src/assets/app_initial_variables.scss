@@ -30,17 +30,34 @@ $dark: $grey-darker !default;
 
 $orange: hsl(14, 100%, 53%) !default;
 
+// Custom colors:
+$special1: hsl(0, 30%, 20%);
+$special2: hsl(0, 100%, 12%);
+$special3: hsl(0, 8%, 65%);
+
 // Typography
 $family-sans-serif: 'Nunito', sans-serif;
-
-// Other variables
 $text: $grey-light;
-
-$body-background-color: $dark;
+$title-color: $grey-lighter;
+$subtitle-strong-color: $grey-lighter;
+$subtitle-color: $white-bis;
 
 $menu-label-color: $text;
 $menu-item-color: $text;
+
+// Other variables
+$body-background-color: $dark;
+
+$footer-padding: 0;
+$footer-background-color: $black-ter;
+
+$box-background-color: $grey-dark;
+$box-shadow: 0 2px 3px 1px hsla(0, 0%, 100%, 0.15),
+  0 0 0 1px hsla(0, 0%, 100%, 0.15);
+$box-color: $special3;
+
 //!--- planner-web scss styles ----
+$header-footer-border: 1px solid $special1;
+$header-footer-border-radius: 30px;
 
 // Dimensions
-$navbar-height: 3.25rem;

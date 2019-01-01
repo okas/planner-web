@@ -2,9 +2,9 @@
 
 <template functional>
   <li class="menu-item">
-    <router-link :to="props.item" :title="props.item.meta.alt || ''">{{props.item.meta.title}}</router-link>
+    <RouterLink :to="props.item" :title="props.item.meta.alt || ''">{{props.item.meta.title}}</RouterLink>
     <ul class="menu-list" v-if="props.item.hasOwnProperty('children')">
-      <menu-side-node v-for="i in props.item.children" :item="i" :key="i.path"/>
+      <MenuSideNode v-for="i in props.item.children" :item="i" :key="i.path"/>
     </ul>
   </li>
 </template>

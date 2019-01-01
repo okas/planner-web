@@ -1,5 +1,5 @@
 <template>
-  <section id="ligths" class="column container">
+  <section id="ligths">
     <h1 class="title is-2 is-spaced has-text-weight-semibold" v-text="appTitle()"/>
     <article>Siia tuleb tulede list, et lülitada neid tööle.</article>
   </section>
@@ -15,7 +15,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #ligths {
   border: 1px blueviolet solid;
 }

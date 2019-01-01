@@ -1,8 +1,8 @@
 <template>
   <div id="app" class>
-    <app-nav-top/>
-    <router-view id="app-content" class="has-text-centered has-background-dark"/>
-    <app-footer class/>
+    <AppNavTop class="section"/>
+    <RouterView class="app-content section"/>
+    <AppFooter class="section"/>
   </div>
 </template>
 
@@ -16,10 +16,6 @@ export default {
 
 <style lang="scss">
 @import './assets/app_imports.scss';
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 .router-link-active {
   text-shadow: 0px 0px 20px #269294;
 }

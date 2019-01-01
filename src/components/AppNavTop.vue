@@ -1,36 +1,38 @@
 <template>
   <nav
     id="app-top-nav"
-    class="navbar is-fixed-top is-black"
+    class="navbar is-fixed-top is-black is-paddingless"
     aria-label="main navigation"
     :class="scroll"
   >
-    <div class="navbar-brand is-mobile">
-      <router-link class="navbar-item is-tab" to="/" exact>
-        Saar
-        <img class="app-logo" src="../assets/logo_tk.png">
-      </router-link>
-      <a
-        class="navbar-burger burger"
-        role="button"
-        aria-expanded="false"
-        data-target="navbar-menu"
-        @click="toggle"
-        :class="activeCls"
-      >
-        <span aria-hidden="true"/>
-        <span aria-hidden="true"/>
-        <span aria-hidden="true"/>
-      </a>
-    </div>
-    <!-- Links from router should be rendered based on rout configuration.
-    Like MenuSide component.-->
-    <div id="navbar-menu" class="navbar-menu" :class="activeCls">
-      <div class="navbar-start">
-        <router-link class="navbar-item is-tab" to="/devices">Seadmed</router-link>
+    <div class="container">
+      <div class="navbar-brand is-mobile">
+        <RouterLink class="navbar-item is-tab" to="/" exact>
+          Saar
+          <img class="app-logo" src="../assets/logo_tk.png">
+        </RouterLink>
+        <a
+          class="navbar-burger burger"
+          role="button"
+          aria-expanded="false"
+          data-target="navbar-menu"
+          @click="toggle"
+          :class="activeCls"
+        >
+          <span aria-hidden="true"/>
+          <span aria-hidden="true"/>
+          <span aria-hidden="true"/>
+        </a>
       </div>
-      <div class="navbar-end">
-        <router-link class="navbar-item is-tab" to="/about">Info</router-link>
+      <!-- Links from router should be rendered based on rout configuration.
+      Like MenuSide component.-->
+      <div id="navbar-menu" class="navbar-menu" :class="activeCls">
+        <div class="navbar-start">
+          <RouterLink class="navbar-item is-tab" to="/devices">Seadmed</RouterLink>
+        </div>
+        <div class="navbar-end">
+          <RouterLink class="navbar-item is-tab" to="/about">Info</RouterLink>
+        </div>
       </div>
     </div>
   </nav>
@@ -75,3 +77,13 @@ export default {
 }
 </script>
 
+<style lang="scss">
+#app-top-nav * {
+  transition: 0.3s all !important;
+}
+#app-top-nav {
+  border-bottom-right-radius: $header-footer-border-radius;
+  border-bottom-left-radius: $header-footer-border-radius;
+  border-bottom: $header-footer-border;
+}
+</style>

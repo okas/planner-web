@@ -1,7 +1,13 @@
 <template>
-  <main class="columns is-vcentered">
-      <menu-side :selectedPaths="path"/>
-    </aside>
+  <main>
+    <div class="container is-fluid">
+      <div class="columns">
+        <aside class="column is-narrow">
+          <MenuSide :selected-paths="path"/>
+        </aside>
+        <RouterView class="column is-offset-1"/>
+      </div>
+    </div>
   </main>
 </template>
 
