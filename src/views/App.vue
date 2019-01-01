@@ -7,15 +7,15 @@
 </template>
 
 <script>
-import AppNavTop from './components/AppNavTop.vue'
-import AppFooter from './components/AppFooter.vue'
+import AppNavTop from '../components/AppNavTop.vue'
+import AppFooter from '../components/AppFooter.vue'
 export default {
   components: { AppNavTop, AppFooter }
 }
 </script>
 
 <style lang="scss">
-@import './assets/app_imports.scss';
+@import '../assets/app_imports.scss';
 .router-link-active {
   text-shadow: 0px 0px 20px #269294;
 }
