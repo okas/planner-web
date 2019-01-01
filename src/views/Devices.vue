@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="container is-fluid">
+    <div class="container">
       <div class="columns">
         <aside class="column is-narrow">
           <MenuSide :selected-paths="path"/>
