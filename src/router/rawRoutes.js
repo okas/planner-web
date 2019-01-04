@@ -5,7 +5,7 @@
 export default [
   {
     path: '/devices',
-    component: '../views/Devices.vue',
+    component: '../layouts/Devices.vue',
     redirect: { name: 'lights' },
     meta: { title: 'Seadmed' },
     children: [
