@@ -2,7 +2,7 @@
   <section id="ligths">
     <h1 class="title is-2 is-spaced has-text-weight-semibold" v-text="appTitle"/>
     <article>
-      <a class="button" @click="ioGetAllLamps">Päri lambid</a>
+      <a class="button" @click="ioGetAllLamps">Värskenda</a>
       <ul>
         <li class="box" v-for="(lamps, room) of groupedLamps" :key="room">
           <p class="subtitle is-4 has-text-weight-light" v-text="room"/>
@@ -13,10 +13,10 @@
               <input
                 class="switch is-thin is-rounded"
                 type="checkbox"
-                :id="`s_${l.$loki}`"
+                :id="`l_${l.$loki}`"
                 v-model="l.state"
               >
-              <label :for="`s_${l.$loki}`"/>
+              <label :for="`l_${l.$loki}`"/>
             </li>
           </ul>
         </li>
