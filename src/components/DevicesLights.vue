@@ -4,15 +4,21 @@
     <article>
       <a class="button" @click="ioGetAllLamps">Päri lambid</a>
       <ul>
-        <li class="field" v-for="l in lamps" :key="l.$loki">
-          <input
-            class="switch is-thin is-rounded is-outlined"
-            type="checkbox"
-            :id="`l-switch${l.$loki}`"
-            v-model="l.state"
-          >
-          <label :for="`l-switch${l.$loki}`" v-text="l.name"/>
-          <div class="icon is-large"></div>
+        <li class="box" v-for="(lamps, room) of groupedLamps" :key="room">
+          <p class="subtitle is-4 has-text-weight-light" v-text="room"/>
+          <ul>
+            <li class="box" v-for="l in lamps" :key="l.$loki">
+              <p class="is-size-5" v-text="l.name"/>
+              <f-a class="fa-3x" icon="lightbulb" :class="{'has-text-warning': !!l.state}"/>
+              <input
+                class="switch is-thin is-rounded"
+                type="checkbox"
+                :id="`s_${l.$loki}`"
+                v-model="l.state"
+              >
+              <label :for="`s_${l.$loki}`"/>
+            </li>
+          </ul>
         </li>
       </ul>
     </article>
@@ -28,17 +34,12 @@ export default {
   data() {
     return {
       appTitle: 'Tuled',
-      lamps: [],
-      iSize: 48
+      groupedLamps: []
     }
   },
-  computed: {},
   methods: {
     ioGetAllLamps() {
-      socket.emit('lamps-get_all', data => {
-        // console.log(data)
-        this.lamps = data
-      })
+      socket.emit('get-all-room_lamps', data => (this.groupedLamps = data))
     }
   },
   beforeCreate() {
@@ -46,10 +47,10 @@ export default {
     let id = undefined
     socket.on('connect', () => {
       id = socket.id
-      console.debug(`|-- [ ${id} ] : connected with id -->`)
+      console.debug(`|-> [ ${id} ] : connected with id`)
     })
     socket.on('disconnect', reason => {
-      console.debug(`--> [ ${id} ] : reason: "${reason}" --|`)
+      console.debug(`>-| [ ${id} ] : reason: "${reason}"`)
       // Be more forceful here ? Transport errors will make it give up..
       if (reason !== ('forced close', 'io client disconnect')) {
         socket.connect()
