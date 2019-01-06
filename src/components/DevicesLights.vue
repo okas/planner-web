@@ -26,10 +26,6 @@
 </template>
 
 <script>
-import socketIOclient from 'socket.io-client'
-
-let socket = undefined
-
 export default {
   data() {
     return {
@@ -39,26 +35,13 @@ export default {
   },
   methods: {
     ioGetAllLamps() {
-      socket.emit('get-all-room_lamps', data => (this.groupedLamps = data))
+      this.$io.emit('get-all-room_lamps', data => (this.groupedLamps = data))
     }
   },
-  beforeCreate() {
-    socket = socketIOclient('/', { autoConnect: false })
-    let id = undefined
-    socket.on('connect', () => {
-      id = socket.id
-      console.debug(`|-> [ ${id} ] : connected with id`)
-    })
-    socket.on('disconnect', reason => {
-      console.debug(`>-| [ ${id} ] : reason: "${reason}"`)
-      // Be more forceful here ? Transport errors will make it give up..
-      if (reason !== ('forced close', 'io client disconnect')) {
-        socket.connect()
-      }
-    })
-    socket.connect()
-  },
-  beforeDestroy: () => socket.disconnect()
+  created() {
+    // Can be combined with addtional component display whileloading. "Ater Nav Fetch"
+    this.ioGetAllLamps()
+  }
 }
 </script>
 
