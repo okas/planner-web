@@ -35,7 +35,10 @@ export default {
   },
   methods: {
     ioGetAllLamps() {
-      this.$io.emit('get-all-room_lamps', data => (this.groupedLamps = data))
+      this.$socket.emit(
+        'get-all-room_lamps',
+        data => (this.groupedLamps = data)
+      )
     }
   },
   created() {
