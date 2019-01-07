@@ -18,7 +18,7 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/socket.io': {
+      '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
         ws: true
