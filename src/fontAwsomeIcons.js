@@ -3,7 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
 
-export default function setupIcons(
+export default function initIcons(
   fontAwsomeIconsComponentName = 'font-awesome-icon'
 ) {
   library.add(faLightbulb)
