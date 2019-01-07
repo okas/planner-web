@@ -7,16 +7,16 @@
         <li class="box" v-for="(lamps, room) of groupedLamps" :key="room">
           <p class="subtitle is-4 has-text-weight-light" v-text="room"/>
           <ul>
-            <li class="box" v-for="l in lamps" :key="l.$loki">
+            <li class="box" v-for="l in lamps" :key="l.id">
               <p class="is-size-5" v-text="l.name"/>
               <f-a class="fa-3x" icon="lightbulb" :class="{'has-text-warning': !!l.state}"/>
               <input
                 class="switch is-thin is-rounded"
                 type="checkbox"
-                :id="`l_${l.$loki}`"
+                :id="`l${l.id}`"
                 v-model="l.state"
               >
-              <label :for="`l_${l.$loki}`"/>
+              <label :for="`l${l.id}`"/>
             </li>
           </ul>
         </li>
