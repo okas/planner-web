@@ -2,7 +2,7 @@ import Vue from 'vue'
 import SocketIOClient from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import store from '../store'
-import registerEvents from './events'
+import registerEvents from './sysEvents'
 
 const mode = process.env.NODE_ENV !== 'production'
 let isInitialized = false
