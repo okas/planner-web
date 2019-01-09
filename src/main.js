@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './layouts/App.vue'
 import router from './router'
 import store from './store'
-import initSocketIO from './socketIO'
+import initSocketIO from './socket.io-plugin'
 import { insertFaviconsToDOM } from './utilities'
 import initIcons from './fontAwsomeIcons'
 
