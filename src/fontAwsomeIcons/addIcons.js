@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import { faLightbulb, faBan, faCloud } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faLightbulb)
+library.add(faLightbulb, faBan, faCloud)

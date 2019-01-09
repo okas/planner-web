@@ -2,18 +2,29 @@
   <footer
     id="app-footer"
     class="footer is-size-7 is-paddingless"
-    :class="{'api-lost': apiLost}"
     @click="quickDashRevelaed=!quickDashRevelaed"
   >
-    <div class="container">
-      <section class="permanent has-text-centered">
-        Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          <img class="vue-logo" src="../assets/logo_vue.png">
-        </a>
+    <div class="container has-text-centered">
+      <section class="permanent columns is-mobile">
+        <div class="column is-4 is-offset-4 is-paddingless">
+          <span class="copyright">
+            Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
+            <a
+              href="https://vuejs.org"
+              target="_blank"
+            >
+              <img class="vue-logo" src="../assets/logo_vue.png">
+            </a>
+          </span>
+        </div>
+        <div class="column is-1 is-offset-3 is-paddingless">
+          <span class="icon" :title="apiLostIconTitle">
+            <span class="fa-stack fa-lg">
+              <f-a class="fa-stack-1x" icon="cloud" :class="{'has-text-success': !apiLost}"/>
+              <f-a class="fa-stack-1x has-text-danger" icon="ban" v-if="apiLost"/>
+            </span>
+          </span>
+        </div>
       </section>
       <!--     <section v-if="quickDashRevelaed" class="debug tags has-addons">
       <div class="tag is-white">
@@ -49,8 +60,10 @@ export default {
     },
     apiLost() {
       return this.$store.state.apiConnected === false
+    },
+    apiLostIconTitle() {
+      return this.apiLost ? 'Puudub ühendus serveriga!' : 'Ühendatud serveriga'
     }
-
     // ...mapState({
     //   ioId: s => s.ioId || 'n/a',
     //   ioIdClass: s => (s.ioId ? '' : 'has-text-danger'),
@@ -87,9 +100,15 @@ export default {
   }
   .permanent {
     margin: 10px 0;
-    .vue-logo {
-      width: 16px;
+    .fa-stack {
+      height: 0.7rem;
+    }
+    .copyright {
       vertical-align: middle;
+      .vue-logo {
+        width: 16px;
+        vertical-align: middle;
+      }
     }
   }
   //   .debug.tags {
