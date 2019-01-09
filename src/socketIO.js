@@ -20,7 +20,12 @@ const initialVueSocketIoConfig = {
 
 function registerSocketEvents(socket) {
   let id = undefined
-  const socket = SocketIOClient('/', socketIoConfig)
+  const color = 'MediumPurple'
+
+  socket.on('connect', () => {
+    id = socket.id
+    console.info(`%c|-> [ ${id} ] : connected with id.`, `color:${color}`)
+  })
 
   socket.on('reconnect_attempt', () => {
     console.warn(
@@ -30,7 +35,7 @@ function registerSocketEvents(socket) {
   })
 
   socket.on('disconnect', reason => {
-    console.info(`%c>-| [ ${id} ] : reason: "${reason}"`, 'color:purple')
+    console.info(`%c>-| [ ${id} ] : reason: "${reason}"`, `color:${color}`)
     // Be more forceful here ? Transport errors will make it give up..
     if (reason !== ('forced close', 'io client disconnect')) {
       socket.connect()
