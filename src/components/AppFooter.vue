@@ -4,9 +4,9 @@
     class="footer is-size-7 is-paddingless"
     @click="quickDashRevelaed=!quickDashRevelaed"
   >
-    <div class="container has-text-centered">
+    <div class="container">
       <section class="permanent columns is-mobile">
-        <div class="column is-4 is-offset-4 is-paddingless">
+        <div class="column is-4 is-offset-4 is-paddingless has-text-centered">
           <span class="copyright">
             Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
             <a
@@ -17,7 +17,7 @@
             </a>
           </span>
         </div>
-        <div class="column is-1 is-offset-3 is-paddingless">
+        <div class="column is-1 is-offset-3 is-paddingless has-text-right">
           <span class="icon" :title="apiLostIconTitle">
             <span class="fa-stack fa-lg">
               <f-a class="fa-stack-1x" icon="cloud" :class="{'has-text-success': !apiLost}"/>
