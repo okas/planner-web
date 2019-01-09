@@ -1,5 +1,10 @@
 <template>
-  <footer id="app-footer" class="footer is-size-7 is-paddingless" @click="quickDashRevelaed=!quickDashRevelaed">
+  <footer
+    id="app-footer"
+    class="footer is-size-7 is-paddingless"
+    :class="{'api-lost': apiLost}"
+    @click="quickDashRevelaed=!quickDashRevelaed"
+  >
     <div class="container">
       <section class="permanent has-text-centered">
         Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
@@ -41,7 +46,11 @@ export default {
       return currentTear !== startYear
         ? `${startYear}-${currentTear}`
         : startYear
+    },
+    apiLost() {
+      return this.$store.state.apiConnected === false
     }
+
     // ...mapState({
     //   ioId: s => s.ioId || 'n/a',
     //   ioIdClass: s => (s.ioId ? '' : 'has-text-danger'),
@@ -73,7 +82,9 @@ export default {
   transition: 0.5s background-color;
   z-index: 30;
   line-height: 1.5;
-  // min-height: $navbar-height;
+  &.api-lost {
+    border-top-color: $danger;
+  }
   .permanent {
     margin: 10px 0;
     .vue-logo {
