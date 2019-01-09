@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    apiConnected: undefined
+    apiConnected: false
   },
   mutations: {
     m_io_connect: s => (s.apiConnected = true),
