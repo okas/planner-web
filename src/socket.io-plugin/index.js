@@ -11,8 +11,14 @@ let isInitialized = false
 
 const initialSocketIoClientConfig = {
   path: '/api',
-  transports: ['websocket', 'polling'],
-  uri: '/'
+  // transports: ['websocket', 'polling'],
+  uri: '/',
+  reconnectionAttempts: 10000,
+  reconnectionDelay: 500,
+  reconnectionDelayMax: 1000,
+  randomizationFactor: 0.25,
+  timeout: 5000,
+  forceNew: true
 }
 const initialVueSocketIoConfig = {
   debug: mode,
@@ -27,7 +33,7 @@ function enforceSocketIoClientConfig(config) {
       }": socket.io is connected just after setting up all the events, this setting will be enforced to "false".`
     )
   }
-  config.autoConnect = false
+  config.autoConnect = true
 }
 
 function enforceVueSocketIoConfig(config) {

@@ -21,4 +21,32 @@ export default function register(socket) {
       socket.connect()
     }
   })
+
+  socket.on('connect_error', error => {
+    console.log(`event: "connection_error" : [ ${error} ]`)
+  })
+
+  socket.on('connect_timeout', timeout => {
+    console.log(`event: "connect_timeout" : [ ${timeout} ]`)
+  })
+
+  socket.on('error', error => {
+    console.log(`event: "error" : [ ${error} ]`)
+  })
+
+  socket.on('reconnect', attemptNumber => {
+    console.log(`event: "reconnect" : [ ${attemptNumber} ]`)
+  })
+
+  socket.on('reconnecting', attemptNumber => {
+    console.log(`event: "reconnecting" : [ ${attemptNumber} ]`)
+  })
+
+  socket.on('reconnect_error', error => {
+    console.log(`event: "reconnect_error" : [ ${error} ]`)
+  })
+
+  socket.on('reconnect_failed', () => {
+    console.log('event: "reconnect_failed" ')
+  })
 }
