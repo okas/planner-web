@@ -95,9 +95,6 @@ export default {
   transition: 0.5s background-color;
   z-index: 30;
   line-height: 1.5;
-  &.api-lost {
-    border-top-color: $danger;
-  }
   .permanent {
     margin: 10px 0;
     .fa-stack {
