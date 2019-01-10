@@ -17,7 +17,7 @@
             </a>
           </span>
         </div>
-        <div class="column is-1 is-offset-3 is-paddingless has-text-right">
+        <div class="column is-1 is-offset-3 is-paddingless has-text-centered">
           <span class="icon" :title="apiLostIconTitle">
             <span class="fa-stack fa-lg">
               <f-a class="fa-stack-1x" icon="cloud" :class="{'has-text-success': !apiLost}"/>
