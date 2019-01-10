@@ -2,7 +2,9 @@
   <section id="ligths">
     <header>
       <h2 class="title is-2 is-spaced has-text-weight-semibold" v-text="appTitle"/>
-      <a class="button" @click="ioGetAllLamps">Värskenda</a>
+      <a class="button" @click="ioGetAllLamps">
+        <f-a icon="sync-alt"/>
+      </a>
     </header>
     <section class="room section" v-for="(lamps, room) of groupedLamps" :key="room">
       <h3 class="subtitle is-5 has-text-weight-light" v-text="room"/>
