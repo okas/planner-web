@@ -10,7 +10,7 @@
       <h3 class="subtitle is-5 has-text-weight-light" v-text="room"/>
       <ul class="columns is-multiline is-mobile">
         <li
-          class="column is-2-widescreen is-one-fifth-desktop is-one-quarter-tablet is-third-mobile"
+          class="column is-2-widescreen is-one-fifth-desktop is-one-fifth-tablet is-third-mobile is-narrow-mobile"
           v-for="l in lamps"
           :key="l.id"
         >
