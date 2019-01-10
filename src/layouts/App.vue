@@ -1,8 +1,8 @@
 <template>
-  <div id="app" class>
-    <AppNavTop class="section"/>
+  <div id="app">
+    <AppNavTop/>
     <RouterView class="app-content section"/>
-    <AppFooter class="section"/>
+    <AppFooter/>
   </div>
 </template>
 
