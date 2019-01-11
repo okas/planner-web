@@ -23,6 +23,7 @@
 <script>
 import Lamp from '../components/DevicesLightsLamp'
 export default {
+  name: 'Lights',
   data() {
     return {
       groupedLamps: []
@@ -38,6 +39,7 @@ export default {
     }
   },
   created() {
+    // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllLamps()
   }
 }

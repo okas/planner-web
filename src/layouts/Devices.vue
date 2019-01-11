@@ -14,6 +14,7 @@
 <script>
 import MenuSide from '../components/MenuSide.vue'
 export default {
+  components: { MenuSide },
   data() {
     return { path: '/devices' }
   },

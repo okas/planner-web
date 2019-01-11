@@ -20,6 +20,7 @@
 <script>
 import Remote from '../components/DevicesWindowBlindsRemote'
 export default {
+  name: 'WindowBlinds',
   data() {
     return { groupedBlinds: [] }
   },
@@ -33,6 +34,7 @@ export default {
     }
   },
   created() {
+    // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllBlinds()
   }
 }
