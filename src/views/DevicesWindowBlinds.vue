@@ -1,7 +1,6 @@
 <template>
   <section id="windowlinds">
     <header>
-      <h1 class="title is-1 has-text-success">Ruloode juhtimine</h1>
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
       <a class="button" @click="ioGetAllBlinds">
         <f-a icon="sync-alt"/>
@@ -19,7 +18,7 @@
 </template>
 
 <script>
-import Remote from './DevicesWindowBlindsRemote'
+import Remote from '../components/DevicesWindowBlindsRemote'
 export default {
   data() {
     return { groupedBlinds: [] }
@@ -34,7 +33,6 @@ export default {
     }
   },
   created() {
-    // Can be combined with addtional component display whileloading. "Ater Nav Fetch"
     this.ioGetAllBlinds()
   }
 }

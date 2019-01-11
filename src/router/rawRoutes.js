@@ -11,19 +11,19 @@ export default [
     children: [
       {
         path: 'lights',
-        component: '../components/DevicesLights.vue',
+        component: '../views/DevicesLights.vue',
         name: 'lights',
         meta: { title: 'Valgustid', alt: 'Tulede juhtimine' }
       },
       {
         path: 'windowblinds',
-        component: '../components/DevicesWindowBlinds.vue',
+        component: '../views/DevicesWindowBlinds.vue',
         name: 'windowblinds',
         meta: { title: 'Rulood' }
       },
       {
         path: 'irrigation',
-        component: '../components/DevicesIrrigation.vue',
+        component: '../views/DevicesIrrigation.vue',
         name: 'irrigation',
         meta: { title: 'Kastmine' }
       }

@@ -1,7 +1,6 @@
 <template>
   <section id="ligths">
     <header>
-      <h2 class="title is-2 is-spaced has-text-weight-semibold" v-text="appTitle"/>
       <a class="button" @click="ioGetAllLamps">
         <f-a icon="sync-alt"/>
       </a>
@@ -22,11 +21,10 @@
 </template>
 
 <script>
-import Lamp from './DevicesLightsLamp'
+import Lamp from '../components/DevicesLightsLamp'
 export default {
   data() {
     return {
-      appTitle: 'Tuled',
       groupedLamps: []
     }
   },
@@ -40,7 +38,6 @@ export default {
     }
   },
   created() {
-    // Can be combined with addtional component display whileloading. "Ater Nav Fetch"
     this.ioGetAllLamps()
   }
 }
