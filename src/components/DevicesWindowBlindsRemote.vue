@@ -1,7 +1,7 @@
 <template>
   <div class="remote">
     <div class="box">
-      <h4 class="subtitle is-4 has-text-centered">Aken</h4>
+      <h4 class="subtitle is-4 has-text-centered" v-text="blind.name"/>
       <div class="controls">
         <button class="button up">
           <f-a icon="chevron-up"/>
@@ -15,12 +15,12 @@
         <div class="slider-wrapper">
           <div class="wrap-helper">
             <input
-              class="slider is-large is-circle"
-              step="1"
-              min="0"
-              max="100"
-              value="50"
               type="range"
+              class="slider is-large is-circle"
+              step="0.1"
+              min="0"
+              max="1"
+              :value="blind.state"
             >
           </div>
         </div>
@@ -28,6 +28,12 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: { blind: { type: Object, required: true } }
+}
+</script>
 
 <style lang="scss" scoped>
 .remote {
