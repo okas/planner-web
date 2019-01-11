@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <AppNavTop/>
+    <NavTop/>
     <RouterView class="app-content section"/>
-    <AppFooter/>
+    <Footer/>
   </div>
 </template>
 
 <script>
-import AppNavTop from '../components/AppNavTop.vue'
-import AppFooter from '../components/AppFooter.vue'
+import NavTop from '../components/AppNavTop.vue'
+import Footer from '../components/AppFooter.vue'
 export default {
-  components: { AppNavTop, AppFooter }
+  components: { NavTop, Footer }
 }
 </script>
 
