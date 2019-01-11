@@ -11,7 +11,7 @@ export function resolveRouteOptionComponents(routeOptions) {
     return {
       ...opt,
       component: () =>
-        import(/* webpackChunkName: "vue-router_[request]" */ `@/${convert(
+        import(/* webpackChunkName: "[request]" */ `@/${convert(
           opt.component
         )}`),
       ...(opt.hasOwnProperty('children') && {
