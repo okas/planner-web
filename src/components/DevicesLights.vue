@@ -56,7 +56,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #ligths > header {
   margin: 0 0 3rem;
 }
