@@ -5,7 +5,15 @@
         <aside class="column is-narrow">
           <MenuSide :selected-paths="path"/>
         </aside>
-        <RouterView class="column is-offset-1"/>
+        <RouterView class="column is-offset-1">
+          <h1
+            class="title is-1"
+            slot="header-title"
+            slot-scope="{_class}"
+            :class="_class"
+            v-text="headerTitle"
+          />
+        </RouterView>
       </div>
     </div>
   </main>
@@ -18,6 +26,10 @@ export default {
   data() {
     return { path: '/devices' }
   },
-  components: { MenuSide }
+  computed: {
+    headerTitle() {
+      return this.$route.meta.title
+    }
+  }
 }
 </script>

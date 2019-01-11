@@ -1,6 +1,7 @@
 <template>
   <section id="windowlinds">
     <header>
+      <slot name="header-title" :cls="'has-text-success'"/>
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
       <a class="button" @click="ioGetAllBlinds">
         <f-a icon="sync-alt"/>

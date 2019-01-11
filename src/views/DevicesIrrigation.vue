@@ -1,7 +1,9 @@
 <template>
   <section id="irrigation">
-    <h1 class="title is-1 has-text-info">Taimede kastmine</h1>
+    <header>
+      <slot name="header-title" :cls="'has-text-info'"/>
     <p class="has-text-info">Kastmise süsteemi armatuurlaud</p>
+    </header>
   </section>
 </template>
 
