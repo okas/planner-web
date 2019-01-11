@@ -77,7 +77,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #app-top-nav * {
   transition: 0.3s all !important;
 }

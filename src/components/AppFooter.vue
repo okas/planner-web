@@ -82,7 +82,7 @@ export default {
 }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #app-footer {
   position: fixed;
   bottom: 0;
