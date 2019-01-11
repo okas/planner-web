@@ -1,5 +1,5 @@
 <template>
-  <section id="windowlinds">
+  <section id="windowblinds">
     <header>
       <slot name="header-title" :_class="'has-text-success'"/>
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
