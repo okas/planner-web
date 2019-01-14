@@ -42,8 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$remote-width: 149px;
-$remote-height: 274.5px;
+@import '../assets/devices-windowblinds.scss';
 
 #windowblinds > header {
   margin: 0 0 3rem;

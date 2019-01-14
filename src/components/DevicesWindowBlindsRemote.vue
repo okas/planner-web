@@ -32,11 +32,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$col-gap: 10px;
-$row-gap: 22.5px;
-$button-height: 45px;
-$button-width: 49.5px;
-$slider-height: $row-gap * 2 + $button-height * 3;
+@import '../assets/devices-windowblinds.scss';
+
+$slider-height: $remote-row-gap * 2 + $button-height * 3;
 // Following 3 lines calculate transform-origin values related to slider height
 $origin-offset: 5px;
 $x-origin: ($slider-height / 2 - $origin-offset);
@@ -48,16 +46,16 @@ $y-origin: ($slider-height / 2 + $origin-offset);
   justify-items: center;
   grid-template-columns: repeat(2, $button-width);
   grid-template-rows: 2rem repeat(3, $button-height);
-  grid-column-gap: $col-gap;
-  grid-row-gap: $row-gap;
+  grid-column-gap: $remote-col-gap;
+  grid-row-gap: $remote-row-gap;
   grid-template-areas:
     'lb lb'
     'up sl'
     'st sl'
     'dn sl';
   &.box {
-    width: 149px;
-    height: 274.5px;
+    width: $remote-width;
+    height: $remote-height;
   }
   .remote-label {
     grid-area: lb;
