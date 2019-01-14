@@ -7,14 +7,14 @@
         <f-a icon="sync-alt"/>
       </a>
     </header>
-    <section class="room has-text-centered" v-for="(blinds, room) of groupedBlinds" :key="room">
-      <h3 class="title is-4" v-text="room"/>
-      <ul>
-        <li v-for="b in blinds" :key="b.id">
-          <remote :blind="b"/>
-        </li>
-      </ul>
-    </section>
+    <div class="rooms-grid">
+      <section class="room" v-for="(blinds, room) of groupedBlinds" :key="room">
+        <h3 class="title is-4" v-text="room"/>
+        <div class="remotes-grid">
+          <remote v-for="b in blinds" :key="b.id" :blind="b"/>
+        </div>
+      </section>
+    </div>
   </section>
 </template>
 
@@ -40,3 +40,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+$remote-width: 149px;
+$remote-height: 274.5px;
+
+#windowblinds > header {
+  margin: 0 0 3rem;
+}
+.rooms-grid {
+  display: grid;
+  gap: 3rem;
+  grid-auto-flow: dense;
+  justify-content: start;
+  grid-template-columns: repeat(auto-fit, minmax($remote-width, 1fr));
+  .remotes-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-auto-flow: dense;
+    justify-content: start;
+    grid-template-columns: repeat(auto-fit, minmax($remote-width, 1fr));
+  }
+}
+</style>
