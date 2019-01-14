@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import initSocketIO from './socket.io-plugin'
 import { insertFaviconsToDOM } from './utilities'
-import initIcons from './fontAwsomeIcons'
+import initIcons from './plugins/fontAwsomeIcons-plugin'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
