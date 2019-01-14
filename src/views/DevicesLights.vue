@@ -6,18 +6,14 @@
         <f-a icon="sync-alt"/>
       </a>
     </header>
-    <section class="room section" v-for="(lamps, room) of groupedLamps" :key="room">
-      <h3 class="subtitle is-5 has-text-weight-light" v-text="room"/>
-      <ul class="columns is-multiline is-mobile">
-        <li
-          class="column is-2-widescreen is-one-fifth-desktop is-one-fifth-tablet is-third-mobile is-narrow-mobile"
-          v-for="l in lamps"
-          :key="l.id"
-        >
-          <lamp :lamp="l"/>
-        </li>
-      </ul>
-    </section>
+    <div class="rooms-grid">
+      <section class="room" v-for="(lamps, room) of groupedLamps" :key="room">
+        <h3 class="subtitle is-5 has-text-weight-light" v-text="room"/>
+        <div class="lamps-grid">
+          <lamp v-for="l in lamps" :key="l.id" :lamp="l"/>
+        </div>
+      </section>
+    </div>
   </section>
 </template>
 
@@ -47,10 +43,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/devices_lights.scss';
+
 #ligths > header {
   margin: 0 0 3rem;
 }
-.room.section {
-  padding: 0 0 2.5rem;
+.rooms-grid {
+  display: grid;
+  gap: 2.5rem;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(auto-fit, minmax($lamp-width, auto));
+  .lamps-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-auto-flow: dense;
+    justify-content: start;
+    grid-template-columns: repeat(auto-fit, minmax($lamp-width, auto));
+  }
 }
 </style>

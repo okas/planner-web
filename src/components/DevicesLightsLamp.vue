@@ -1,5 +1,5 @@
 <template>
-  <div class="lamp box">
+  <div class="lamp box is-marginless">
     <h4 class="lamp-name is-size-6" v-text="lamp.name"/>
     <f-a class="lamp-icon fa-2x" icon="lightbulb" :class="{'has-text-warning': !!lamp.state}"/>
     <div class="switch-container">
@@ -21,16 +21,20 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
+@import '../assets/devices_lights.scss';
+
 .lamp {
   display: grid;
-  grid-column-gap: 0.5rem;
+  grid-column-gap: 5%;
   grid-row-gap: 0.25rem;
   grid-template-areas:
     'n n'
     'i s';
-  grid-template-columns: 37.5% 63.25%;
+  grid-template-columns: 35% 60%;
   justify-content: center;
   &.box {
+    width: $lamp-width;
+    height: $lamp-height;
     padding: 0.75rem;
   }
   .lamp-name {
