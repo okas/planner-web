@@ -26,6 +26,12 @@ export default [
         component: '../views/DevicesIrrigation.vue',
         name: 'irrigation',
         meta: { title: 'Kastmine' }
+      },
+      {
+        path: 'dev-presets',
+        component: '../views/DevicesPresets.vue',
+        name: 'dev-presets',
+        meta: { title: 'Eelseadistused', alt: 'Seadistused hulgijuhtimiseks' }
       }
     ]
   },
