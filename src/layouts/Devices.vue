@@ -5,7 +5,7 @@
         <aside class="column is-narrow">
           <MenuSide :selected-paths="path"/>
         </aside>
-        <RouterView class="column is-offset-1">
+        <RouterView class="column is-offset-1 component">
           <h1
             class="title is-1"
             slot="header-title"
@@ -33,3 +33,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" >
+.component > header {
+  margin: 0 0 3rem;
+}
+</style>

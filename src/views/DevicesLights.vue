@@ -45,9 +45,6 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/devices_lights.scss';
 
-#ligths > header {
-  margin: 0 0 3rem;
-}
 .rooms-grid {
   display: grid;
   gap: 2.5rem;

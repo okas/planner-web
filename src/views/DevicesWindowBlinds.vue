@@ -44,9 +44,6 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/devices-windowblinds.scss';
 
-#windowblinds > header {
-  margin: 0 0 3rem;
-}
 .rooms-grid {
   display: grid;
   gap: 3rem;
