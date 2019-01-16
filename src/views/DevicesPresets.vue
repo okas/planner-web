@@ -11,9 +11,9 @@
       <article class="preset" v-for="p in presets" :key="p.id">
         <h3 class="name is-size-4" v-text="p.name"/>
         <span class="schedule" v-text="p.schedule"/>
-        <div class="commands">
-          <button>Käivita</button>
-          <button>Muuda</button>
+        <div class="buttons is-marginless">
+          <button class="button is-small">Käivita</button>
+          <button class="button is-small" @click="editPreset(p)">Muuda</button>
         </div>
         <div class="devices-grid" v-for="d in p.devices" :key="d.id">
           <span class="order" v-text="p.setorder[d.id] || '='"/>
@@ -22,17 +22,44 @@
         </div>
       </article>
     </div>
+    <edit-modal
+      class="edit-preset"
+      :class="{'is-active': modalShow}"
+      :preset="presetForEdit"
+      @quit="quitEdit"
+      @save="savePreset"
+      v-if="modalShow"
+    />
   </section>
 </template>
 
 <script>
+import EditModal from '../components/DevicesPresetsEditModal'
+
 export default {
+  name: 'Presets',
+  components: { EditModal },
   data() {
     return {
-      presets: []
+      presets: [],
+      presetForEdit: {},
+      modalShow: false
     }
   },
   methods: {
+    editPreset(preset) {
+      this.presetForEdit = preset
+      this.modalShow = true
+    },
+    savePreset(preset) {
+      this.modalShow = false
+      Object.assign(this.presetForEdit, preset)
+      this.presetForEdit = null
+    },
+    quitEdit() {
+      this.presetForEdit = null
+      this.modalShow = false
+    },
     ioGetPresets() {
       this.presets = [
         {
@@ -52,8 +79,9 @@ export default {
           schedule: 'iga päev 08:00',
           devices: [
             { id: 0, path: 'Lamp 2 / Elutuba', val: 1 },
-            { id: 1, path: 'Ruloo 1 / Elutuba', val: 0.75 },
-            { id: 2, path: 'Ruloo 2 / Elutuba', val: 0.75 }
+            { id: 1, path: 'Lamp 2 / Elutuba', val: 1 },
+            { id: 2, path: 'Laua kohal 1 / Köök', val: 0.75 },
+            { id: 3, path: 'Ruloo 2 / Elutuba', val: 0.75 }
           ]
         },
         {
@@ -90,7 +118,7 @@ export default {
   .schedule {
     grid-area: schd;
   }
-  .commands {
+  .buttons {
     grid-area: cmmd;
   }
   .devices-grid {
