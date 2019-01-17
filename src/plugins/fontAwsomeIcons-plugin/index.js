@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import './registry'
+import './registry-solid'
+import './registry-regular'
 
 export default function initIcons(
   fontAwsomeIconsComponentName = 'font-awesome-icon'
