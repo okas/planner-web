@@ -28,7 +28,7 @@ export default [
         meta: { title: 'Kastmine' }
       },
       {
-        path: 'dev-presets',
+        path: 'presets',
         component: '../views/DevicesPresets.vue',
         name: 'dev-presets',
         meta: { title: 'Eelseadistused', alt: 'Seadistused hulgijuhtimiseks' }
