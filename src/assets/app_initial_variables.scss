@@ -56,6 +56,9 @@ $box-shadow: 0 2px 3px 1px hsla(0, 0%, 100%, 0.15),
   0 0 0 1px hsla(0, 0%, 100%, 0.15);
 $box-color: $special3;
 
+//!--- bulma-extensions scss styles ----
+$steps-completed-color: $success;
+
 //!--- planner-web scss styles ----
 $header-footer-border: 1px solid $special1;
 $header-footer-border-radius: 30px;
