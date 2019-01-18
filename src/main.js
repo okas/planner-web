@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueStatic from 'vue-static'
 import App from './layouts/App.vue'
 import router from './router'
 import store from './store'
@@ -8,6 +9,9 @@ import initIcons from './plugins/fontAwsomeIcons-plugin'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
+Vue.use(VueStatic, {
+  namespaced: true
+})
 initSocketIO()
 initIcons('f-a')
 
