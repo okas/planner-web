@@ -18,7 +18,7 @@
                 <f-a icon="cog"/>
               </span>
             </button>
-        </div>
+          </div>
           <div class="control">
             <button class="button is-small is-outlined is-light">
               <span class="icon">
@@ -34,7 +34,7 @@
         </div>
       </article>
     </div>
-    <edit-modal
+    <editor
       class="edit-preset"
       :class="{'is-active': modalShow}"
       :preset="presetForEdit"
@@ -46,11 +46,11 @@
 </template>
 
 <script>
-import EditModal from '../components/DevicesPresetsEditModal'
+import Editor from '../components/DevicesPresetsEditor'
 
 export default {
   name: 'Presets',
-  components: { EditModal },
+  components: { Editor },
   data() {
     return {
       presets: [],
