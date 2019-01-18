@@ -11,9 +11,21 @@
       <article class="preset" v-for="p in presets" :key="p.id">
         <h3 class="name is-size-4" v-text="p.name"/>
         <span class="schedule" v-text="p.schedule"/>
-        <div class="buttons is-marginless">
-          <button class="button is-small">Käivita</button>
-          <button class="button is-small" @click="editPreset(p)">Muuda</button>
+        <div class="commands field is-grouped is-marginless">
+          <div class="control">
+            <button class="button is-small is-outlined is-light" @click="editPreset(p)">
+              <span class="icon">
+                <f-a icon="cog"/>
+              </span>
+            </button>
+        </div>
+          <div class="control">
+            <button class="button is-small is-outlined is-light">
+              <span class="icon">
+                <f-a icon="play"/>
+              </span>
+            </button>
+          </div>
         </div>
         <div class="devices-grid" v-for="d in p.devices" :key="d.id">
           <span class="order" v-text="p.setorder[d.id] || '='"/>
@@ -118,7 +130,7 @@ export default {
   .schedule {
     grid-area: schd;
   }
-  .buttons {
+  .commands {
     grid-area: cmmd;
   }
   .devices-grid {
