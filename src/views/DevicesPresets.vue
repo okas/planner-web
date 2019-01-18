@@ -77,34 +77,34 @@ export default {
         {
           id: 0,
           name: 'Magamistoa hommik',
-          setorder: { 0: 1, 1: 2 },
           schedule: 'iga päev 08:00',
           devices: [
             { id: 0, path: 'Lamp 1 / Magamistuba', val: 1 },
             { id: 1, path: 'Ruloo 1 / Magamistuba', val: 0.5 }
-          ]
+          ],
+          setorder: { 0: 1, 1: 2 }
         },
         {
           id: 1,
           name: 'Elutoa hommik',
-          setorder: { 0: null, 1: 1, 2: 2 },
           schedule: 'iga päev 08:00',
           devices: [
             { id: 0, path: 'Lamp 2 / Elutuba', val: 1 },
             { id: 1, path: 'Lamp 2 / Elutuba', val: 1 },
             { id: 2, path: 'Laua kohal 1 / Köök', val: 0.75 },
             { id: 3, path: 'Ruloo 2 / Elutuba', val: 0.75 }
-          ]
+          ],
+          setorder: { 0: null, 1: 1, 2: 2 }
         },
         {
           id: 2,
           name: 'Jareki hommik',
-          setorder: { 0: null, 1: null },
           schedule: 'iga päev 06:30',
           devices: [
             { id: 0, path: 'Laelamp / Jareki tuba', val: 1 },
             { id: 1, path: 'Ruloo 1 / Jareki tuba', val: 0.5 }
-          ]
+          ],
+          setorder: { 0: null, 1: null }
         }
       ]
     }
