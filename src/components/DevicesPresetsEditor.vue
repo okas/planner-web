@@ -26,6 +26,7 @@
             <p v-text="s.description"/>
           </div>
         </div>
+        <!-- render step contents -->
         <section class="steps-content">
           <div class="step-content has-text-centered">
             <div class="field is-horizontal">
@@ -56,6 +57,7 @@
           <div class="step-content has-text-centered">Sisu 2</div>
           <div class="step-content has-text-centered">Sisu 3</div>
         </section>
+        <!-- render step actions/buttons -->
         <section class="steps-actions">
           <div class="steps-action">
             <button class="button is-outlined is-success" @click="$emit('save', p)">
@@ -100,13 +102,14 @@ export default {
         {
           id: 1,
           title: 'Nimetus',
-          description: 'Määra nimi ja toimumise aja muster.',
+          description: 'Määra nimi ja millal seadmeid juhtima hakatakse.',
           icon: 'check'
         },
         {
           id: 2,
           title: 'Seadmed',
-          description: 'Vali seadmed, mida määratud ajal käitatakse.',
+          description:
+            'Vali seadmed ja nende olekud, millesse need määratud ajal seadmed pannakse.',
           icon: 'check'
         },
         {
