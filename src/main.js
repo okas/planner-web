@@ -9,9 +9,7 @@ import initIcons from './plugins/fontAwsomeIcons-plugin'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
-Vue.use(VueStatic, {
-  namespaced: true
-})
+Vue.use(VueStatic)
 initSocketIO()
 initIcons('f-a')
 

@@ -13,8 +13,7 @@
         <button class="modal-close is-large" aria-label="close" @click="$emit('quit')"/>
       </div>
       <section class="steps">
-        <!-- render 3 steps based on viewmodel data -->
-        <div class="step-item" v-for="s in $static.steps" :key="s.id">
+        <div class="step-item" v-for="s in s_steps" :key="s.id">
           <div class="step-marker">
             <span class="text" v-text="s.id"/>
             <span class="icon">
@@ -98,7 +97,7 @@ export default {
   },
   static() {
     return {
-      steps: [
+      s_steps: [
         {
           id: 1,
           title: 'Nimetus',
