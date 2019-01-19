@@ -62,7 +62,9 @@ export default {
       return this.$store.state.ioConnected === false
     },
     apiLostIconTitle() {
-      return this.apiLost ? 'Puudub ühendus serveriga!' : 'Ühendatud serveriga'
+      return this.apiLost
+        ? `Puudub ühendus serveriga, id oli: [ ${this.$store.state.ioId_prev} ]`
+        : `Ühendatud serveriga, id: [ ${this.$store.state.ioId} ]`
     }
     // ...mapState({
     //   ioId: s => s.ioId || 'n/a',
