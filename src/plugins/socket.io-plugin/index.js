@@ -22,7 +22,7 @@ const initialSocketIoClientConfig = {
 }
 const initialVueSocketIoConfig = {
   debug: mode,
-  vuex: { store, actionPrefix: 'a_io_', mutationPrefix: 'm_io_' }
+  vuex: { store, actionPrefix: 'a_io_', mutationPrefix: 'M_IO_' }
 }
 
 function enforceSocketIoClientConfig(config) {

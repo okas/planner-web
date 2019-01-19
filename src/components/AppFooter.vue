@@ -59,7 +59,7 @@ export default {
         : startYear
     },
     apiLost() {
-      return this.$store.state.apiConnected === false
+      return this.$store.state.ioConnected === false
     },
     apiLostIconTitle() {
       return this.apiLost ? 'Puudub ühendus serveriga!' : 'Ühendatud serveriga'
