@@ -1,6 +1,6 @@
 <template>
   <section id="devpresets">
-    <header>
+    <header class="component-header">
       <slot name="header-title" :_class="'has-text-danger'"/>
       <p class="has-text-danger">Eelseadistuse haldus</p>
       <a class="button" @click="ioGetPresets">

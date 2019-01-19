@@ -16,10 +16,14 @@ export default {
 
 <style lang="scss">
 @import '../assets/app_imports.scss';
+
 .router-link-active {
   text-shadow: 0px 0px 20px #269294;
 }
 .router-link-exact-active {
   text-shadow: 0px 0px 20px #00f9ff;
+}
+.component-header {
+  margin: 0 0 3rem;
 }
 </style>

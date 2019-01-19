@@ -1,6 +1,6 @@
 <template>
   <section id="ligths">
-    <header>
+    <header class="component-header">
       <slot name="header-title" :_class="{'has-text-warning': true}"/>
       <a class="button" @click="ioGetAllLamps">
         <f-a icon="sync-alt"/>

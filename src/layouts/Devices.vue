@@ -5,7 +5,7 @@
         <aside class="column is-narrow">
           <MenuSide :selected-paths="path"/>
         </aside>
-        <RouterView class="column is-offset-1 component">
+        <RouterView class="column is-offset-1">
           <h1
             class="title is-1"
             slot="header-title"
@@ -21,6 +21,7 @@
 
 <script>
 import MenuSide from '../components/MenuSide.vue'
+
 export default {
   components: { MenuSide },
   data() {
@@ -33,9 +34,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" >
-.component > header {
-  margin: 0 0 3rem;
-}
-</style>
