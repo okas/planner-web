@@ -1,9 +1,5 @@
 <template>
-  <footer
-    id="app-footer"
-    class="footer is-size-7 is-paddingless"
-    @click="quickDashRevelaed=!quickDashRevelaed"
-  >
+  <footer id="app-footer" class="footer is-size-7 is-paddingless">
     <div class="container">
       <section class="permanent columns is-mobile">
         <div class="column is-4 is-offset-4 is-paddingless has-text-centered">
@@ -18,31 +14,33 @@
           </span>
         </div>
         <div class="column is-1 is-offset-3 is-paddingless has-text-centered">
-          <span class="icon" :title="apiLostIconTitle">
+          <span class="icon" :title="ioIconTitle" @click="quickDashRevelaed=!quickDashRevelaed">
             <span class="fa-stack fa-lg">
-              <f-a class="fa-stack-1x" icon="cloud" :class="{'has-text-success': !apiLost}"/>
-              <f-a class="fa-stack-1x has-text-danger" icon="ban" v-if="apiLost"/>
+              <f-a
+                class="fa-stack-1x"
+                icon="cloud"
+                :class="{'has-text-success': this.ioConnected}"
+              />
+              <f-a class="fa-stack-1x has-text-danger" icon="ban" v-if="!this.ioConnected"/>
             </span>
           </span>
         </div>
       </section>
-      <!--     <section v-if="quickDashRevelaed" class="debug tags has-addons">
-      <div class="tag is-white">
-        <b>SocketIO Client ID:&nbsp;</b>
-        <span v-text="ioId" :class="ioIdClass"/>
-      </div>
-      <div :class="ioIsNewClass" class="tag is-rounded">
-        <b v-text="ioIsNew"/>
-      </div>
-      </section>-->
+      <section class="debug tags has-addons has-text-centered" v-if="quickDashRevelaed">
+        <div class="tag is-white">
+          <b>SocketIO Client ID:&nbsp;</b>
+          <span :class="{'has-text-danger': !this.ioConnected}" v-text="ioIdOrNA"/>
+        </div>
+        <div class="tag is-rounded" :class="[ioConnected ? 'is-success' : 'is-danger']">
+          <b v-text="ioIsNew"/>
+        </div>
+      </section>
     </div>
   </footer>
 </template>
 
 <script>
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapState } = createNamespacedHelpers('irrigation')
-// const debug = process.env.NODE_ENV !== 'production'
+import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -51,27 +49,19 @@ export default {
     }
   },
   computed: {
-    years() {
-      const startYear = 2017
-      const currentTear = new Date().getFullYear()
-      return currentTear !== startYear
-        ? `${startYear}-${currentTear}`
-        : startYear
+    years: () => `${2018}-${new Date().getFullYear()}`,
+    ioIconTitle() {
+      return this.ioConnected
+        ? `Ühendatud serveriga, id: [ ${this.ioId} ]`
+        : `Puudub ühendus serveriga, id oli: [ ${this.ioId_prev} ]`
     },
-    apiLost() {
-      return this.$store.state.ioConnected === false
-    },
-    apiLostIconTitle() {
-      return this.apiLost
-        ? `Puudub ühendus serveriga, id oli: [ ${this.$store.state.ioId_prev} ]`
-        : `Ühendatud serveriga, id: [ ${this.$store.state.ioId} ]`
-    }
-    // ...mapState({
-    //   ioId: s => s.ioId || 'n/a',
-    //   ioIdClass: s => (s.ioId ? '' : 'has-text-danger'),
-    //   ioIsNew: s => (s.ioId !== s.ioId_prev ? 'new' : 'old'),
-    //   ioIsNewClass: s => (s.ioId !== s.ioId_prev ? 'is-success' : 'is-danger')
-    // })
+    ...mapState({
+      ioId: 'ioId',
+      ioId_prev: 'ioId_prev',
+      ioConnected: 'ioConnected',
+      ioIdOrNA: s => s.ioId || 'n/a',
+      ioIsNew: s => (s.ioConnected ? 'new' : 'old')
+    })
   }
 }
 </script>
@@ -85,7 +75,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-#app-footer {
+.footer {
   position: fixed;
   bottom: 0;
   left: 0px;
@@ -110,11 +100,11 @@ export default {
       }
     }
   }
-  //   .debug.tags {
-  //     justify-content: center;
-  //     &:last-child {
-  //       margin-bottom: -3px;
-  //     }
-  //   }
+  .debug.tags {
+    justify-content: center;
+    &:last-child {
+      margin-bottom: -3px;
+    }
+  }
 }
 </style>
