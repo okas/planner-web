@@ -8,10 +8,10 @@
       </a>
     </header>
     <div class="rooms-grid">
-      <section class="room" v-for="(blinds, room) of groupedBlinds" :key="room">
-        <h3 class="title is-4" v-text="room"/>
+      <section class="room" v-for=" room of groupedBlinds" :key="room.id">
+        <h3 class="title is-4" v-text="room.id"/>
         <div class="remotes-grid">
-          <remote v-for="b in blinds" :key="b.id" :blind="b"/>
+          <remote v-for="blind in room.items" :key="blind.id" :blind="blind"/>
         </div>
       </section>
     </div>
@@ -22,10 +22,10 @@
 import Remote from '../components/DevicesWindowBlindsRemote'
 export default {
   name: 'WindowBlinds',
+  components: { Remote },
   data() {
     return { groupedBlinds: [] }
   },
-  components: { Remote },
   methods: {
     ioGetAllBlinds() {
       this.$socket.emit(

@@ -7,10 +7,10 @@
       </a>
     </header>
     <div class="rooms-grid">
-      <section class="room" v-for="(lamps, room) of groupedLamps" :key="room">
-        <h3 class="subtitle is-5 has-text-weight-light" v-text="room"/>
+      <section class="room" v-for="room in groupedLamps" :key="room.id">
+        <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id"/>
         <div class="lamps-grid">
-          <lamp v-for="l in lamps" :key="l.id" :lamp="l"/>
+          <lamp v-for="lamp in room.items" :key="lamp.id" :lamp="lamp"/>
         </div>
       </section>
     </div>
@@ -21,12 +21,12 @@
 import Lamp from '../components/DevicesLightsLamp'
 export default {
   name: 'Lights',
+  components: { Lamp },
   data() {
     return {
       groupedLamps: []
     }
   },
-  components: { Lamp },
   methods: {
     ioGetAllLamps() {
       this.$socket.emit(
