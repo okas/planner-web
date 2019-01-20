@@ -42,7 +42,9 @@
       @quit="quitEdit"
       @save="savePreset"
       v-if="modalShow"
-    />
+    >
+      <h2 class="title is-2 has-text-danger" slot="header-title">Muuda eelseadistust</h2>
+    </editor>
   </section>
 </template>
 

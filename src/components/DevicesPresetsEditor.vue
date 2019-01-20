@@ -9,9 +9,9 @@
   >
     <div class="modal-background"></div>
     <div class="modal-content">
-      <div class="control">
-        <button class="modal-close is-large" aria-label="close" @click="$emit('quit')"/>
-      </div>
+      <header class="component-header has-text-centered">
+        <slot name="header-title" :_class="'has-text-danger'"/>
+      </header>
       <section class="steps">
         <!-- render all steps based on viewmodel data -->
         <div class="step-item" v-for="s in s_steps" :key="s.id">
