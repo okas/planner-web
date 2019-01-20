@@ -1,5 +1,5 @@
 <template>
-  <div class="blind-remote-grid box is-marginless">
+  <div class="blind-remote grid box is-marginless">
     <h4 class="remote-label is-size-5 has-text-centered" v-text="blind.name"/>
     <button class="up button is-medium">
       <f-a icon="chevron-up"/>
