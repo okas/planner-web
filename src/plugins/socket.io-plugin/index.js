@@ -10,14 +10,9 @@ let isInitialized = false
 /* Initial configs */
 
 const initialSocketIoClientConfig = {
-  path: '/api',
-  // transports: ['websocket', 'polling'],
   uri: '/',
-  reconnectionAttempts: 10000,
-  reconnectionDelay: 500,
-  reconnectionDelayMax: 1000,
-  randomizationFactor: 0.25,
-  timeout: 5000,
+  path: '/api',
+  transports: ['websocket', 'polling'],
   forceNew: true
 }
 const initialVueSocketIoConfig = {

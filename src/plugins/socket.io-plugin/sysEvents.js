@@ -16,10 +16,6 @@ export default function register(socket) {
 
   socket.on('disconnect', reason => {
     console.info(`%c>-| [ ${id} ] : reason: "${reason}"`, `color:${color}`)
-    // Be more forceful here ? Transport errors will make it give up..
-    if (reason !== ('forced close', 'io client disconnect')) {
-      socket.connect()
-    }
   })
 
   socket.on('connect_error', error => {
