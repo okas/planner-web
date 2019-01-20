@@ -53,7 +53,7 @@ export default {
     ioIconTitle() {
       return this.ioConnected
         ? `Ühendatud serveriga, id: [ ${this.ioId} ]`
-        : `Puudub ühendus serveriga, id oli: [ ${this.ioId_prev} ]`
+        : `Puudub ühendus serveriga, id oli: [ ${this.ioId_prev || 'n/a'} ]`
     },
     ...mapState({
       ioId: 'ioId',
