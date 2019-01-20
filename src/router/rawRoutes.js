@@ -16,9 +16,9 @@ export default [
         meta: { title: 'Valgustid', alt: 'Tulede juhtimine' }
       },
       {
-        path: 'windowblinds',
-        component: '../views/DevicesWindowBlinds.vue',
-        name: 'windowblinds',
+        path: 'blinds',
+        component: '../views/DevicesBlinds.vue',
+        name: 'blinds',
         meta: { title: 'Rulood' }
       },
       {

@@ -1,5 +1,5 @@
 <template>
-  <section id="windowblinds">
+  <section id="blinds">
     <header class="component-header">
       <slot name="header-title" :_class="'has-text-success'"/>
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import Remote from '../components/DevicesWindowBlindsRemote'
+import Remote from '../components/DevicesBlindsRemote'
 export default {
-  name: 'WindowBlinds',
+  name: 'Blinds',
   components: { Remote },
   data() {
     return { groupedBlinds: [] }
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/devices-windowblinds.scss';
+@import '../assets/devices-blinds.scss';
 
 .rooms-grid {
   display: grid;

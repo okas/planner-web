@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/devices-windowblinds.scss';
+@import '../assets/devices-blinds.scss';
 
 $slider-height: $remote-row-gap * 2 + $button-height * 3;
 // Following 3 lines calculate transform-origin values related to slider height
