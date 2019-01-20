@@ -5,7 +5,7 @@
     tabindex="0"
     ref="root"
     @keyup.stop.esc="$emit('quit')"
-    @keyup.stop.enter="$emit('save', p)"
+    @keyup.stop.enter="$emit('save', preset)"
   >
     <div class="modal-background"></div>
     <div class="modal-content">
@@ -13,6 +13,7 @@
         <button class="modal-close is-large" aria-label="close" @click="$emit('quit')"/>
       </div>
       <section class="steps">
+        <!-- render all steps based on viewmodel data -->
         <div class="step-item" v-for="s in s_steps" :key="s.id">
           <div class="step-marker">
             <span class="text" v-text="s.id"/>
@@ -27,39 +28,15 @@
         </div>
         <!-- render step contents -->
         <section class="steps-content">
-          <div class="step-content has-text-centered">
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label has-text-grey">Nimi</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input class="input" type="text" placeholder="Text input" v-model="p.name">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label has-text-grey">Ajastus</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input class="input" type="text" placeholder="Text input" v-model="p.schedule">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="step-content has-text-centered">Sisu 2</div>
-          <div class="step-content has-text-centered">Sisu 3</div>
+          <step1 class="step-content" :preset.sync="preset"/>
+          <step2 class="step-content" :preset.sync="preset"/>
+          <step3 class="step-content" :preset.sync="preset"/>
+          <step4 class="step-content" :preset.sync="preset"/>
         </section>
         <!-- render step actions/buttons -->
         <section class="steps-actions">
           <div class="steps-action">
-            <button class="button is-outlined is-success" @click="$emit('save', p)">
+            <button class="button is-outlined is-success" @click="$emit('save', preset)">
               <span class="icon">
                 <f-a icon="check"/>
               </span>
@@ -82,17 +59,26 @@
         </section>
       </section>
     </div>
+    <button class="modal-close is-large" aria-label="close" @click="$emit('quit')"/>
   </div>
 </template>
 
 <script>
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
+import Step1 from './DevicesPresetsEditorStep1Content'
+import Step2 from './DevicesPresetsEditorStep2Content'
+import Step3 from './DevicesPresetsEditorStep3Content'
+import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  props: { preset: { type: Object, required: true } },
+  components: { Step1, Step2, Step3, Step4 },
+  props: {
+    presetForEdit: { type: Object, required: true },
+    devices: { type: Array, required: true }
+  },
   data() {
     return {
-      p: { ...this.preset }
+      preset: { ...this.presetForEdit }
     }
   },
   static() {

@@ -35,9 +35,10 @@
       </article>
     </div>
     <editor
-      class="edit-preset"
+      class="component"
       :class="{'is-active': modalShow}"
-      :preset="presetForEdit"
+      :presetForEdit="presetForEdit"
+      :devices="deviceSelection"
       @quit="quitEdit"
       @save="savePreset"
       v-if="modalShow"
