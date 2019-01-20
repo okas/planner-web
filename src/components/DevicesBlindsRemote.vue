@@ -18,7 +18,7 @@
           step="0.01"
           min="0"
           max="1"
-          :value="blind.state"
+          v-model.number="blind.state"
         >
       </div>
     </div>
@@ -40,7 +40,7 @@ $origin-offset: 5px;
 $x-origin: ($slider-height / 2 - $origin-offset);
 $y-origin: ($slider-height / 2 + $origin-offset);
 
-.blind-remote-grid {
+.blind-remote.grid {
   display: grid;
   justify-content: center;
   justify-items: center;

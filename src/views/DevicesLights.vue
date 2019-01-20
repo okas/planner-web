@@ -10,7 +10,7 @@
       <section class="room" v-for="room in groupedLamps" :key="room.id">
         <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id"/>
         <div class="lamps-grid">
-          <lamp v-for="lamp in room.items" :key="lamp.id" :lamp="lamp"/>
+          <lamp v-for="lamp in room.items" :key="lamp.id" :lamp.sync="lamp"/>
         </div>
       </section>
     </div>

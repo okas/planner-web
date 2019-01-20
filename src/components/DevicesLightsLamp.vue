@@ -8,6 +8,8 @@
         type="checkbox"
         :id="`l${lamp.id}`"
         v-model="lamp.state"
+        :true-value="1"
+        :false-value="0"
       >
       <label class="switch-label" :for="`l${lamp.id}`"/>
     </div>

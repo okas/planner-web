@@ -7,7 +7,12 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input class="input" type="text" :placeholder="s_placeholder1" v-model="preset.name">
+            <input
+              class="input"
+              type="text"
+              :placeholder="s_placeholder1"
+              v-model.trim="preset.name"
+            >
           </div>
         </div>
       </div>
@@ -19,7 +24,7 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input class="input" type="text" v-model="preset.schedule">
+            <input class="input" type="text" v-model.trim="preset.schedule">
           </div>
         </div>
       </div>

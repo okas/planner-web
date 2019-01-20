@@ -11,7 +11,7 @@
       <section class="room" v-for=" room of groupedBlinds" :key="room.id">
         <h3 class="title is-4" v-text="room.id"/>
         <div class="remotes-grid">
-          <remote v-for="blind in room.items" :key="blind.id" :blind="blind"/>
+          <remote v-for="blind in room.items" :key="blind.id" :blind.sync="blind"/>
         </div>
       </section>
     </div>
