@@ -93,12 +93,18 @@ export default {
         {
           id: 2,
           title: 'Seadmed',
-          description:
-            'Vali seadmed ja nende olekud, millesse need määratud ajal seadmed pannakse.',
+          description: 'Vali välja sedmed, mida on vaja juhtida.',
           icon: 'check'
         },
         {
           id: 3,
+          title: 'Olekud',
+          description:
+            'Määra seadmetele olek, millesse need käivitusel pannakse.',
+          icon: 'check'
+        },
+        {
+          id: 4,
           title: 'Järjestus',
           description: 'Vali, millises järjekorras seadmed käivitatakse.',
           icon: 'flag'
