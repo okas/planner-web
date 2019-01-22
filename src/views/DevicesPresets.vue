@@ -3,7 +3,7 @@
     <header class="component-header">
       <slot name="header-title" :_class="'has-text-danger'"/>
       <p class="has-text-danger">Eelseadistuse haldus</p>
-      <a class="button" @click="ioGetPresets">
+      <a class="button" role="button" @click="ioGetPresets">
         <f-a icon="sync-alt"/>
       </a>
     </header>
