@@ -4,8 +4,8 @@
     class="modal"
     tabindex="0"
     ref="root"
-    @keyup.stop.esc="$emit('quit')"
-    @keyup.stop.enter="$emit('save', preset)"
+    @keyup.stop.esc="quit"
+    @keyup.stop.enter="save"
   >
     <div class="modal-background"></div>
     <div class="modal-content">
@@ -36,7 +36,7 @@
         <!-- render step actions/buttons -->
         <section class="steps-actions">
           <div class="steps-action">
-            <button class="button is-outlined is-success" @click="$emit('save', preset)">
+            <button class="button is-outlined is-success" @click="save">
               <span class="icon">
                 <f-a icon="check"/>
               </span>
@@ -59,7 +59,7 @@
         </section>
       </section>
     </div>
-    <button class="modal-close is-large" aria-label="close" @click="$emit('quit')"/>
+    <button class="modal-close is-large" aria-label="close" @click="quit"/>
   </div>
 </template>
 
@@ -78,7 +78,10 @@ export default {
   },
   data() {
     return {
-      preset: { ...this.presetForEdit }
+      preset: {
+        /* this way internal state of editor is isolated from parent model changes */
+        ...this.presetForEdit
+      }
     }
   },
   static() {
@@ -110,6 +113,14 @@ export default {
           icon: 'flag'
         }
       ]
+    }
+  },
+  methods: {
+    save() {
+      this.$emit('save', this.preset)
+    },
+    quit() {
+      this.$emit('quit')
     }
   },
   mounted() {
