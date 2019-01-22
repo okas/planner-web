@@ -1,5 +1,5 @@
 <template>
-  <div class="has-text-centered">
+  <div class="step-2 has-text-centered">
     <div class="field is-horizontal">
       <div class="field-label is-normal">
         <label class="label has-text-grey">Seadmed</label>
