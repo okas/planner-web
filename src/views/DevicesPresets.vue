@@ -37,7 +37,7 @@
     <editor
       class="component"
       :class="{'is-active': modalShow}"
-      :presetForEdit="presetForEdit"
+      :preset-for-edit="presetForEdit"
       :devices="deviceSelection"
       @quit="quitEdit"
       @save="savePreset"
