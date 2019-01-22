@@ -2,7 +2,7 @@
   <section id="ligths">
     <header class="component-header">
       <slot name="header-title" :_class="{'has-text-warning': true}"/>
-      <a class="button" @click="ioGetAllLamps">
+      <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetAllLamps">
         <f-a icon="sync-alt"/>
       </a>
     </header>
