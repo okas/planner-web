@@ -1,5 +1,12 @@
 <template>
   <div class="step-2 has-text-centered">
+    <div class="field">
+      <div class="control">
+        <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="refresh">
+          <f-a icon="sync-alt"/>
+        </a>
+      </div>
+    </div>
     <div class="field is-horizontal">
       <div class="field-label is-normal">
         <label class="label has-text-grey">Seadmed</label>
@@ -16,5 +23,12 @@
 </template>
 
 <script>
-export default { props: { preset: { type: Object, required: true } } }
+export default {
+  props: { preset: { type: Object, required: true } },
+  methods: {
+    refresh() {
+      this.$emit('refreshDevices')
+    }
+  }
+}
 </script>
