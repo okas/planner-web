@@ -17,7 +17,7 @@
           aria-expanded="false"
           data-target="navbar-menu"
           @click="toggle"
-          :class="activeCls"
+          :class="{'is-active': isActive}"
         >
           <span aria-hidden="true"/>
           <span aria-hidden="true"/>
@@ -26,7 +26,7 @@
       </div>
       <!-- Links from router should be rendered based on rout configuration.
       Like MenuSide component.-->
-      <div id="navbar-menu" class="navbar-menu" :class="activeCls">
+      <div id="navbar-menu" class="navbar-menu" :class="{'is-active': isActive}">
         <div class="navbar-start">
           <RouterLink class="navbar-item is-tab" to="/devices">Seadmed</RouterLink>
         </div>
@@ -47,11 +47,6 @@ export default {
       scroll: ''
     }
   },
-  computed: {
-    activeCls() {
-      return this.isActive ? 'is-active' : ''
-    }
-  },
   methods: {
     toggle() {
       this.isActive = !this.isActive
@@ -60,11 +55,6 @@ export default {
       const y = window.scrollY
       this.scroll = y > this.lastY ? 'scrollUp' : ''
       this.lastY = y
-    }
-  },
-  watch: {
-    $route() {
-      this.isActive = false
     }
   },
   created() {
