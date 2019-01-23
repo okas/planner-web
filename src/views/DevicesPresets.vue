@@ -38,7 +38,6 @@
       class="component"
       :class="{'is-active': modalShow}"
       :preset-for-edit="presetForEdit"
-      :devices="deviceSelection"
       @quit="quitEdit"
       @save="savePreset"
       v-if="modalShow"
