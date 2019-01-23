@@ -3,7 +3,6 @@
     id="app-top-nav"
     class="navbar is-fixed-top is-black is-paddingless"
     aria-label="main navigation"
-    :class="scroll"
   >
     <div class="container">
       <div class="navbar-brand is-mobile">
@@ -44,7 +43,6 @@ export default {
     return {
       isActive: false,
       lastY: 0,
-      scroll: ''
     }
   },
   methods: {
@@ -53,7 +51,6 @@ export default {
     },
     handleScroll() {
       const y = window.scrollY
-      this.scroll = y > this.lastY ? 'scrollUp' : ''
       this.lastY = y
     }
   },
