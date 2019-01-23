@@ -26,13 +26,6 @@
             <p v-text="s.description"/>
           </div>
         </div>
-        <!-- render step contents -->
-        <section class="steps-content">
-          <step1 class="step-content" :preset.sync="preset"/>
-          <step2 class="step-content" :preset.sync="preset"/>
-          <step3 class="step-content" :preset.sync="preset"/>
-          <step4 class="step-content" :preset.sync="preset"/>
-        </section>
         <!-- render step actions/buttons -->
         <section class="steps-actions">
           <div class="steps-action">
@@ -56,6 +49,13 @@
               </span>
             </button>
           </div>
+        </section>
+        <!-- render step contents -->
+        <section class="steps-content">
+          <step1 class="step-content" :preset.sync="preset"/>
+          <step2 class="step-content" :preset.sync="preset" @refreshDevices="refreshDevices"/>
+          <step3 class="step-content" :preset.sync="preset"/>
+          <step4 class="step-content" :preset.sync="preset"/>
         </section>
       </section>
     </div>
