@@ -73,15 +73,15 @@ import Step4 from './DevicesPresetsEditorStep4Content'
 export default {
   components: { Step1, Step2, Step3, Step4 },
   props: {
-    presetForEdit: { type: Object, required: true },
-    devices: { type: Array, required: true }
+    presetForEdit: { type: Object, required: true }
   },
   data() {
     return {
       preset: {
         /* this way internal state of editor is isolated from parent model changes */
         ...this.presetForEdit
-      }
+      },
+      deviceSelection: []
     }
   },
   static() {
@@ -116,11 +116,20 @@ export default {
     }
   },
   methods: {
+    refreshDevices() {
+      this.ioGetDeviceSelection()
+    },
     save() {
       this.$emit('save', this.preset)
     },
     quit() {
       this.$emit('quit')
+    },
+    ioGetDeviceSelection() {
+      this.$socket.emit(
+        'get-devices-selection',
+        data => (this.deviceSelection = data)
+      )
     }
   },
   mounted() {
