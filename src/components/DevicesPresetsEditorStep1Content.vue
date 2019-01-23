@@ -10,6 +10,7 @@
             <input
               class="input"
               type="text"
+              ref="focus"
               :placeholder="s_placeholder1"
               v-model.trim="preset.name"
             >

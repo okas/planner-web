@@ -14,7 +14,7 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input class="input" type="text" placeholder="--vali seadmed">
+            <input class="input" type="text" placeholder="--vali seadmed" ref="focus">
           </div>
         </div>
       </div>

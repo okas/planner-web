@@ -12,7 +12,7 @@
       <header class="component-header has-text-centered">
         <slot name="header-title" :_class="'has-text-danger'"/>
       </header>
-      <section class="steps">
+      <section class="steps" ref="stepsContainer">
         <!-- render all steps based on viewmodel data -->
         <div class="step-item" v-for="s in s_steps" :key="s.id">
           <div class="step-marker">
@@ -130,39 +130,30 @@ export default {
         'get-devices-selection',
         data => (this.deviceSelection = data)
       )
+    },
+    initBulmaSteps() {
+      new BulmaSteps(this.$refs.stepsContainer, {
+        // stepClickable: true, // experimenting, source has this option
+        /* need to add Vue instance as a context to handler */
+        onShow: showHandler.bind(this)
+      })
+      /**
+       * Manipulate focus of some element in modal to caputer ESC key event.
+       * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
+       */
+      function showHandler(stepId) {
+        /* Select the element however needed. */
+        try {
+          this.$children[stepId].$refs.focus.focus()
+        } catch {
+          /* If no focusable ref found on step content, then focus current modal. */
+          this.$refs.root.focus()
+        }
+      }
     }
   },
   mounted() {
-    let stepsElement = document.querySelector(
-      `.steps[${this.$options._scopeId}]`
-    )
-    let contentsElements = stepsElement.querySelectorAll(
-      '.steps-content>.step-content'
-    )
-
-    /**
-     * Manipulate focus of some element in modal to caputer ESC key event.
-     * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
-     */
-    function showHandler(stepId) {
-      if (!contentsElements[stepId]) {
-        return
-      }
-      let anyControl = contentsElements[stepId].querySelector(
-        'input[type="text"], button, input'
-      )
-      if (anyControl) {
-        anyControl.focus()
-      } else {
-        // Optionally could set focus to step elements as well if they are clickables
-        this.$refs.root.focus()
-      }
-    }
-    new BulmaSteps(stepsElement, {
-      // stepClickable: true, // experimenting, source has this option
-      /* need to add Vue instance as a context to handler */
-      onShow: showHandler.bind(this)
-    })
+    this.initBulmaSteps()
   }
 }
 </script>

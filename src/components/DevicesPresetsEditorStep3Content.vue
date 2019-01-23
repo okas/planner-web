@@ -7,7 +7,7 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input class="input" type="text" placeholder="--vali seadme olekud">
+            <input class="input" type="text" placeholder="--vali seadme olekud" ref="focus">
           </div>
         </div>
       </div>
