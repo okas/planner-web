@@ -14,11 +14,10 @@ initSocketIO()
 initIcons('f-a')
 
 const options = {
-  name: 'Main',
   store,
   router,
-  render: h => h(App),
   created: insertFaviconsToDOM([16, 32])
 }
 
-new Vue(options).$mount('#app-placeholder')
+const AppClass = Vue.extend(App)
+new AppClass(options).$mount('#app-placeholder')
