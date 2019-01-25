@@ -9,6 +9,7 @@
 <script>
 import NavTop from '../components/AppNavTop.vue'
 import Footer from '../components/AppFooter.vue'
+
 export default {
   components: { NavTop, Footer }
 }

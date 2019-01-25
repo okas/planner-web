@@ -15,7 +15,7 @@
           role="button"
           aria-expanded="false"
           data-target="navbar-menu"
-          @click="toggle"
+          @click="toggleBurger"
           :class="{'is-active': isActive}"
         >
           <span aria-hidden="true"/>
@@ -33,9 +33,9 @@
           <RouterLink class="navbar-item is-tab" to="/about">Info</RouterLink>
           <div class="navbar-item">
             <i18n-select/>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </nav>
 </template>
@@ -48,11 +48,11 @@ export default {
   data() {
     return {
       isActive: false,
-      lastY: 0,
+      lastY: 0
     }
   },
   methods: {
-    toggle() {
+    toggleBurger() {
       this.isActive = !this.isActive
     },
     handleScroll() {

@@ -36,7 +36,7 @@ const mutations = {}
 Vue.use(Vuex)
 
 store = new Vuex.Store({
-  strict: isDebug,
+  strict: true,
   state,
   mutations: { ...mutations, ...socketIOEvents },
   modules: { i18nSelect },
@@ -44,3 +44,8 @@ store = new Vuex.Store({
 })
 
 export default store
+
+/*
+ * https://alligator.io/vuejs/vuex-pathify/
+ * https://alligator.io/vuejs/vuex-persist-state/
+ */

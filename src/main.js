@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueStatic from 'vue-static'
-import App from './layouts/App.vue'
 import router from './router'
 import store from './store'
 import initSocketIO from './plugins/socket.io-plugin'
-import { insertFaviconsToDOM } from './utilities'
 import initIcons from './plugins/fontAwsomeIcons-plugin'
 import I18nSelect from './plugins/i18n-select-plugin'
+import { insertFaviconsToDOM } from './utilities'
+import LayoutApp from './layouts/App.vue'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
@@ -15,11 +15,11 @@ Vue.use(I18nSelect, { active: 'ee', languages: ['ee', 'en'], store })
 initSocketIO()
 initIcons('f-a')
 
-const options = {
+const appOptions = {
   store,
   router,
+  extends: LayoutApp,
   created: insertFaviconsToDOM([16, 32])
 }
 
-const AppClass = Vue.extend(App)
-new AppClass(options).$mount('#app-placeholder')
+new Vue(appOptions).$mount('#app-placeholder')
