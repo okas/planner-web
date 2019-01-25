@@ -6,10 +6,12 @@ import store from './store'
 import initSocketIO from './plugins/socket.io-plugin'
 import { insertFaviconsToDOM } from './utilities'
 import initIcons from './plugins/fontAwsomeIcons-plugin'
+import I18nSelect from './plugins/i18n-select-plugin'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 Vue.use(VueStatic)
+Vue.use(I18nSelect, { active: 'ee', languages: ['ee', 'en'], store })
 initSocketIO()
 initIcons('f-a')
 

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-const isDebug = process.env.NODE_ENV !== 'production'
-
-Vue.use(Vuex)
+import {
+  storeModule as i18nSelect,
+  i18nSelectVuexPlugin
+} from './plugins/i18n-select-plugin'
 
 /**
  * Needed for store instance access.
@@ -20,7 +20,7 @@ const state = {
  * M_IO_ prefix significates vue-socket.io events.
  * Mixed casing, because vue-socket.io plugin will us lowercase event=>mutation name!
  */
-const mutations = {
+const socketIOEvents = {
   M_IO_connect: s => {
     s.ioConnected = true
     s.ioId = store._vm.$socket.id
@@ -31,10 +31,16 @@ const mutations = {
   }
 }
 
+const mutations = {}
+
+Vue.use(Vuex)
+
 store = new Vuex.Store({
   strict: isDebug,
   state,
-  mutations
+  mutations: { ...mutations, ...socketIOEvents },
+  modules: { i18nSelect },
+  plugins: [i18nSelectVuexPlugin]
 })
 
 export default store

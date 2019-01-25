@@ -31,14 +31,20 @@
         </div>
         <div class="navbar-end">
           <RouterLink class="navbar-item is-tab" to="/about">Info</RouterLink>
+          <div class="navbar-item">
+            <i18n-select/>
         </div>
       </div>
+    </div>
     </div>
   </nav>
 </template>
 
 <script>
+import I18nSelect from '../plugins/i18n-select-plugin/I18nSelect'
+
 export default {
+  components: { I18nSelect },
   data() {
     return {
       isActive: false,

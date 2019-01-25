@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { i18Mixin } from '../plugins/i18n-select-plugin/'
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import Step1 from './DevicesPresetsEditorStep1Content'
 import Step2 from './DevicesPresetsEditorStep2Content'
@@ -71,6 +72,7 @@ import Step3 from './DevicesPresetsEditorStep3Content'
 import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
+  mixins: [i18Mixin],
   components: { Step1, Step2, Step3, Step4 },
   props: {
     presetForEdit: { type: Object, required: true }
@@ -128,6 +130,7 @@ export default {
     ioGetDeviceSelection() {
       this.$socket.emit(
         'get-devices-selection',
+        this.$language,
         data => (this.deviceSelection = data)
       )
     },
