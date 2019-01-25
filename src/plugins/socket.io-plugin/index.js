@@ -28,7 +28,7 @@ function enforceSocketIoClientConfig(config) {
       }": socket.io is connected just after setting up all the events, this setting will be enforced to "false".`
     )
   }
-  config.autoConnect = true
+  config.autoConnect = false
 }
 
 function enforceVueSocketIoConfig(config) {
