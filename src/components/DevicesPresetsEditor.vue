@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { i18Mixin } from '../plugins/i18n-select-plugin/'
+import { i18Mixin } from '../plugins/vue-i18n-select/'
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import Step1 from './DevicesPresetsEditorStep1Content'
 import Step2 from './DevicesPresetsEditorStep2Content'

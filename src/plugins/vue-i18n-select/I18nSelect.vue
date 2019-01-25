@@ -1,5 +1,5 @@
 <template>
-  <div class="i18n-select control has-icons-left">
+  <div class="vue-i18n-select control has-icons-left">
     <div class="select is-small is-rounded">
       <select v-model="$language">
         <option v-for="language in $languages" :key="language" :value="language" v-text="language"/>
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss">
-.i18n-select .select select {
+.vue-i18n-select .select select {
   background-color: hsl(45, 3%, 45%);
   border: $header-footer-border;
   color: $special2;

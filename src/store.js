@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {
   storeModule as i18nSelect,
-  i18nSelectVuexPlugin
-} from './plugins/i18n-select-plugin'
+  VuexI18nSelect
+} from './plugins/vue-i18n-select'
 
 /**
  * Needed for store instance access.
@@ -40,7 +40,7 @@ store = new Vuex.Store({
   state,
   mutations: { ...mutations, ...socketIOEvents },
   modules: { i18nSelect },
-  plugins: [i18nSelectVuexPlugin]
+  plugins: [VuexI18nSelect]
 })
 
 export default store
