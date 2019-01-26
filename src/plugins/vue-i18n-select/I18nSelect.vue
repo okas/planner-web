@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import { i18Mixin } from './index.js'
+import i18SelectMixin from './mixin'
 
 export default {
-  mixins: [i18Mixin],
+  mixins: [i18SelectMixin],
   props: { icon: { type: [String, Array], default: 'globe' } }
 }
 </script>

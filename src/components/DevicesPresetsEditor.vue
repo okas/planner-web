@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { i18Mixin } from '../plugins/vue-i18n-select/'
+import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import Step1 from './DevicesPresetsEditorStep1Content'
 import Step2 from './DevicesPresetsEditorStep2Content'
@@ -72,7 +72,7 @@ import Step3 from './DevicesPresetsEditorStep3Content'
 import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  mixins: [i18Mixin],
+  mixins: [i18SelectMixin],
   components: { Step1, Step2, Step3, Step4 },
   props: {
     presetForEdit: { type: Object, required: true }

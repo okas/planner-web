@@ -4,14 +4,14 @@ import router from './router'
 import store from './store'
 import initSocketIO from './socket.io'
 import initIcons from './faIcons'
-import VueI18nSelect from './plugins/vue-i18n-select'
+import { VueI18nSelect } from './plugins/vue-i18n-select'
 import { insertFaviconsToDOM } from './utilities'
 import LayoutApp from './layouts/App.vue'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 Vue.use(VueStatic)
-Vue.use(VueI18nSelect, { active: 'ee', languages: ['ee', 'en'], store })
+Vue.use(VueI18nSelect, { store, active: 'ee', languages: ['ee', 'en'] })
 initSocketIO(store)
 initIcons('f-a')
 

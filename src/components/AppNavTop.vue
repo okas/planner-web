@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import I18nSelect from '../plugins/vue-i18n-select/I18nSelect'
+import I18nSelect from '../plugins/vue-i18n-select'
 
 export default {
   components: { I18nSelect },
