@@ -3,7 +3,7 @@
     <header class="component-header">
       <slot name="header-title" :_class="{'has-text-warning': true}"/>
       <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetAllLamps">
-        <f-a icon="sync-alt"/>
+        <fa-i icon="sync-alt"/>
       </a>
     </header>
     <div class="rooms-grid">

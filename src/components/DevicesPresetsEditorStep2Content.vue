@@ -3,7 +3,7 @@
     <div class="field">
       <div class="control">
         <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="refresh">
-          <f-a icon="sync-alt"/>
+          <fa-i icon="sync-alt"/>
         </a>
       </div>
     </div>

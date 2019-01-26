@@ -2,8 +2,8 @@
   <footer id="app-footer" class="footer is-size-7 is-paddingless">
     <div class="container">
       <section class="permanent columns is-mobile is-marginless">
-        <div class="column is-4 is-offset-4 has-text-centered">
-          <span class="copyright is-paddingless">
+        <div class="copyright column is-4 is-offset-4 has-text-centered">
+          <span class>
             Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
             <a
               href="https://vuejs.org"
@@ -13,21 +13,20 @@
             </a>
           </span>
         </div>
-        <div class="column is-1 is-offset-3 is-paddingless has-text-centered">
-          <div class="status">
-            <span class="icon" :title="ioIconTitle" @click="quickDashRevelaed=!quickDashRevelaed">
-              <span class="fa-stack fa-lg">
-                <f-a
-                  class="fa-stack-1x"
-                  icon="cloud"
-                  :class="{'has-text-success': this.ioConnected}"
+        <div class="status column is-1 is-offset-3 has-text-centered">
+          <span class="icon" :title="ioIconTitle" @click="quickDashRevelaed=!quickDashRevelaed">
+            <fa-l class="fa-lg">
+              <fa-i class icon="cloud" :class="{'has-text-success': this.ioConnected}"/>
+              <transition name="fade">
+                <fa-i
+                  class="has-text-danger"
+                  icon="ban"
+                  transform="shrink-2 right-2 down-1"
+                  v-if="!this.ioConnected"
                 />
-                <transition name="fade">
-                  <f-a class="fa-stack-1x has-text-danger" icon="ban" v-if="!this.ioConnected"/>
-                </transition>
-              </span>
-            </span>
-          </div>
+              </transition>
+            </fa-l>
+          </span>
         </div>
       </section>
       <transition name="slide-fade">
@@ -97,10 +96,13 @@ $speed: 0.3s;
   border-top: $header-footer-border;
   z-index: 30;
   line-height: 1.5;
+  .column {
+    padding: 0.5rem;
+  }
   .permanent {
     margin: 0.7rem 0;
     .copyright {
-      vertical-align: middle;
+      padding-top: 0.75rem;
       .vue-logo {
         width: 16px;
         vertical-align: middle;
@@ -108,16 +110,14 @@ $speed: 0.3s;
     }
     .status {
       .icon {
-        .fa-stack {
-          .fa-ban {
-            &.fade-enter-active,
-            &.fade-leave-active {
-              transition: opacity $speed;
-            }
-            &.fade-enter,
-            &.fade-leave-to {
-              opacity: 0;
-            }
+        .fa-ban {
+          &.fade-enter-active,
+          &.fade-leave-active {
+            transition: opacity $speed;
+          }
+          &.fade-enter,
+          &.fade-leave-to {
+            opacity: 0;
           }
         }
       }

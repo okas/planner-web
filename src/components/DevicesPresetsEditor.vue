@@ -18,7 +18,7 @@
           <div class="step-marker">
             <span class="text" v-text="s.id"/>
             <span class="icon">
-              <f-a :icon="s.icon"/>
+              <fa-i :icon="s.icon"/>
             </span>
           </div>
           <div class="step-details">
@@ -31,21 +31,21 @@
           <div class="steps-action">
             <button class="button is-outlined is-success" @click="save">
               <span class="icon">
-                <f-a icon="check"/>
+                <fa-i icon="check"/>
               </span>
             </button>
           </div>
           <div class="steps-action">
             <button class="button is-outlined is-light" data-nav="previous">
               <span class="icon">
-                <f-a icon="chevron-left"/>
+                <fa-i icon="chevron-left"/>
               </span>
             </button>
           </div>
           <div class="steps-action">
             <button class="button is-outlined is-light" data-nav="next">
               <span class="icon">
-                <f-a icon="chevron-right"/>
+                <fa-i icon="chevron-right"/>
               </span>
             </button>
           </div>

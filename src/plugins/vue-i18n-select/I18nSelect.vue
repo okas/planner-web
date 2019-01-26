@@ -6,7 +6,7 @@
       </select>
     </div>
     <span class="icon is-left">
-      <f-a :icon="icon"/>
+      <fa-i :icon="icon"/>
     </span>
   </div>
 </template>

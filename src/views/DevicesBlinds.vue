@@ -4,7 +4,7 @@
       <slot name="header-title" :_class="'has-text-success'"/>
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
       <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetAllBlinds">
-        <f-a icon="sync-alt"/>
+        <fa-i icon="sync-alt"/>
       </a>
     </header>
     <div class="rooms-grid">

@@ -1,7 +1,7 @@
 <template>
   <div class="lamp box is-marginless">
     <h4 class="lamp-name is-size-6" v-text="lamp.name"/>
-    <f-a class="lamp-icon fa-2x" icon="lightbulb" :class="{'has-text-warning': !!lamp.state}"/>
+    <fa-i class="lamp-icon fa-2x" icon="lightbulb" :class="{'has-text-warning': !!lamp.state}"/>
     <div class="switch-container">
       <input
         class="switch is-thin is-rounded"

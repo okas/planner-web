@@ -4,7 +4,7 @@
       <slot name="header-title" :_class="'has-text-danger'"/>
       <p class="has-text-danger">Eelseadistuse haldus</p>
       <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetPresets">
-        <f-a icon="sync-alt"/>
+        <fa-i icon="sync-alt"/>
       </a>
     </header>
     <div class="presets-grid">
@@ -15,14 +15,14 @@
           <div class="control">
             <button class="button is-small is-outlined is-light" @click="editPreset(p)">
               <span class="icon">
-                <f-a icon="cog"/>
+                <fa-i icon="cog"/>
               </span>
             </button>
           </div>
           <div class="control">
             <button class="button is-small is-outlined is-light">
               <span class="icon">
-                <f-a icon="play"/>
+                <fa-i icon="play"/>
               </span>
             </button>
           </div>

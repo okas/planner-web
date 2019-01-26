@@ -2,13 +2,13 @@
   <div class="blind-remote grid box is-marginless">
     <h4 class="remote-label is-size-5 has-text-centered" v-text="blind.name"/>
     <button class="up button is-medium">
-      <f-a icon="chevron-up"/>
+      <fa-i icon="chevron-up"/>
     </button>
     <button class="stop button is-medium">
-      <f-a :icon="['far', 'square']"/>
+      <fa-i :icon="['far', 'square']"/>
     </button>
     <button class="down button is-medium">
-      <f-a icon="chevron-down"/>
+      <fa-i icon="chevron-down"/>
     </button>
     <div class="slider-wrapper">
       <div class="helper">
