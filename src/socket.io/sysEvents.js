@@ -30,17 +30,17 @@ export default function register(socket) {
     console.error(`socket.io event: "error" : [ ${error} ]`)
   })
 
-  socket.on('reconnect', attemptNumber => {
-    console.warn(`socket.io event: "reconnect" : [ ${attemptNumber} ]`)
-  })
+  // socket.on('reconnect', attemptNumber => {
+  //   console.warn(`socket.io event: "reconnect" : [ ${attemptNumber} ]`)
+  // })
 
-  socket.on('reconnecting', attemptNumber => {
-    console.warn(`socket.io event: "reconnecting" : [ ${attemptNumber} ]`)
-  })
+  // socket.on('reconnecting', attemptNumber => {
+  //   console.warn(`socket.io event: "reconnecting" : [ ${attemptNumber} ]`)
+  // })
 
-  socket.on('reconnect_error', error => {
-    console.error(`socket.io event: "reconnect_error" : [ ${error} ]`)
-  })
+  // socket.on('reconnect_error', error => {
+  //   console.error(`socket.io event: "reconnect_error" : [ ${error} ]`)
+  // })
 
   socket.on('reconnect_failed', () => {
     console.error('socket.io event: "reconnect_failed" ')
