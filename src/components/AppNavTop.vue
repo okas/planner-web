@@ -71,12 +71,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#app-top-nav * {
-  transition: 0.3s all !important;
-}
 #app-top-nav {
   border-bottom-right-radius: $header-footer-border-radius;
   border-bottom-left-radius: $header-footer-border-radius;
   border-bottom: $header-footer-border;
+  * {
+    transition: 0.3s all ease !important;
+  }
 }
 </style>
