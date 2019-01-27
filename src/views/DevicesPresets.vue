@@ -3,7 +3,13 @@
     <header class="component-header">
       <slot name="header-title" :_class="'has-text-danger'"/>
       <p class="has-text-danger">Eelseadistuse haldus</p>
-      <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetPresets">
+      <a
+        class="button"
+        role="button"
+        title="Värskenda serverist"
+        :disabled="!$store.state.ioConnected"
+        @click="ioGetPresets"
+      >
         <fa-i icon="sync-alt"/>
       </a>
     </header>
