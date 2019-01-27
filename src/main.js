@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueStatic from 'vue-static'
 import router from './router'
 import store from './store'
-import initSocketIO from './socket.io'
+import './socket.io'
 import './faIcons'
 import { VueI18nSelect } from './plugins/vue-i18n-select'
 import { insertFaviconsToDOM } from './utilities'
@@ -12,7 +12,6 @@ Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 Vue.use(VueStatic)
 Vue.use(VueI18nSelect, { store, active: 'ee', languages: ['ee', 'en'] })
-initSocketIO(store)
 
 const appOptions = {
   store,

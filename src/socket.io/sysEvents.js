@@ -1,10 +1,8 @@
-export default function register(socket) {
-  let id = undefined
-  const color = 'MediumPurple'
+const color = 'color:MediumPurple'
 
+export default function register(socket) {
   socket.on('connect', () => {
-    id = socket.id
-    console.info(`%c|-> [ ${id} ] : connected with id.`, `color:${color}`)
+    console.info(`%c|-> [ ${socket.id} ] : id.`, color)
   })
 
   socket.on('reconnect_attempt', attemptNumber => {
@@ -15,7 +13,7 @@ export default function register(socket) {
   })
 
   socket.on('disconnect', reason => {
-    console.info(`%c>-| [ ${id} ] : reason: "${reason}"`, `color:${color}`)
+    console.info(`%c>-| [ ${socket.id} ] : reason: "${reason}"`, color)
   })
 
   socket.on('connect_error', error => {
@@ -45,4 +43,7 @@ export default function register(socket) {
   socket.on('reconnect_failed', () => {
     console.error('socket.io event: "reconnect_failed" ')
   })
+
+  /* For chaining */
+  return socket
 }
