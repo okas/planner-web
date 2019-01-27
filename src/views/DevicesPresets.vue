@@ -29,7 +29,7 @@
         </div>
         <div class="devices-grid" v-for="d in p.devices" :key="d.id">
           <span class="order" v-text="p.setorder[d.id] || '='"/>
-          <span class="device-path" v-text="d.path"/>
+          <span class="device-path" v-text="d.name"/>
           <span class="device-value" v-text="d.val"/>
         </div>
       </article>
@@ -80,10 +80,7 @@ export default {
           id: 0,
           name: 'Magamistoa hommik',
           schedule: 'iga päev 08:00',
-          devices: [
-            { id: 0, path: 'Lamp 1 / Magamistuba', val: 1 },
-            { id: 1, path: 'Ruloo 1 / Magamistuba', val: 0.5 }
-          ],
+          devices: [],
           setorder: { 0: 1, 1: 2 }
         },
         {
@@ -91,10 +88,15 @@ export default {
           name: 'Elutoa hommik',
           schedule: 'iga päev 08:00',
           devices: [
-            { id: 0, path: 'Lamp 2 / Elutuba', val: 1 },
-            { id: 1, path: 'Lamp 2 / Elutuba', val: 1 },
-            { id: 2, path: 'Laua kohal 1 / Köök', val: 0.75 },
-            { id: 3, path: 'Ruloo 2 / Elutuba', val: 0.75 }
+            { id: 1, name: 'Lamp 1 / Elutuba', type: 'room_lamps', val: 1 },
+            { id: 2, name: 'Lamp 2 / Elutuba', type: 'room_lamps', val: 1 },
+            {
+              id: 3,
+              name: 'Laua kohal 1 / Köök',
+              type: 'room_lamps',
+              val: 0.75
+            },
+            { id: 4, name: 'Ruloo 2 / Elutuba', type: 'room_blinds', val: 0.75 }
           ],
           setorder: { 0: null, 1: 1, 2: 2 }
         },
@@ -103,8 +105,18 @@ export default {
           name: 'Jareki hommik',
           schedule: 'iga päev 06:30',
           devices: [
-            { id: 0, path: 'Laelamp / Jareki tuba', val: 1 },
-            { id: 1, path: 'Ruloo 1 / Jareki tuba', val: 0.5 }
+            {
+              id: 1,
+              name: 'Laelamp / Jareki tuba',
+              type: 'room_lamps',
+              val: 1
+            },
+            {
+              id: 2,
+              name: 'Ruloo 1 / Jareki tuba',
+              type: 'room_blinds',
+              val: 0.5
+            }
           ],
           setorder: { 0: null, 1: null }
         }

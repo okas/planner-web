@@ -7,14 +7,20 @@
         </a>
       </div>
     </div>
-    <div class="field is-horizontal">
+    <div class="field is-horizontal" v-for="devType in deviceSelection" :key="devType.type">
       <div class="field-label is-normal">
-        <label class="label has-text-grey">Seadmed</label>
+        <label class="label has-text-grey" v-text="devType.name"/>
       </div>
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input class="input" type="text" placeholder="--vali seadmed" ref="focus">
+            <tree-select
+              placeholder="vali seadmed"
+              :multiple="true"
+              :options="devType.items"
+              :normalizer="normalizer"
+              v-model="selectedDevices[devType.type]"
+            />
           </div>
         </div>
       </div>
@@ -23,11 +29,26 @@
 </template>
 
 <script>
+import TreeSelect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 export default {
-  props: { preset: { type: Object, required: true } },
+  components: { TreeSelect },
+  props: {
+    preset: { type: Object, required: true },
+    deviceSelection: { type: Array, required: true },
+    selectedDevices: { type: Object, required: true }
+  },
   methods: {
     refresh() {
       this.$emit('refreshDevices')
+    },
+    normalizer({ id, name, items }) {
+      return {
+        id,
+        label: name || id,
+        children: items
+      }
     }
   }
 }

@@ -57,6 +57,8 @@
             class="step-content"
             ref="step2"
             :preset.sync="preset"
+            :device-selection="deviceSelection"
+            :selected-devices="devicesGroupbyType"
             @refreshDevices="ioGetDeviceSelection"
           />
           <step3 class="step-content" ref="step3" :preset.sync="preset"/>
@@ -122,12 +124,50 @@ export default {
       ]
     }
   },
+  computed: {
+    devicesGroupbyType: {
+      get() {
+        return this.preset.devices.reduce((groupS, { type, id }) => {
+          const g = groupS[type] || (groupS[type] = [])
+          g.push(id)
+          return groupS
+        }, {})
+      }
+    }
+  },
   methods: {
     save() {
+      this.saveSelectedDevices()
       this.$emit('save', this.preset)
     },
     quit() {
       this.$emit('quit')
+    },
+    saveSelectedDevices() {
+      const deviceGroups = Object.entries(this.devicesGroupbyType)
+      const presetDevices = deviceGroups.reduce((acc, [type, ids]) => {
+        const devGroup = this.deviceSelection.find(g => g.type === type)
+        const flatDevicesWithRooms = devGroup.items.reduce(
+          (a, { id: room, items: devices }) => {
+            const devWithRoom = devices.map(d => {
+              return { ...d, room }
+            })
+            return a.concat(devWithRoom)
+          },
+          []
+        )
+        const devices = ids.map(id => {
+          const device = flatDevicesWithRooms.find(d => d.id == id)
+          return {
+            id,
+            type,
+            val: 0.55,
+            name: `${device.name} / ${device.room}`
+          }
+        })
+        return acc.concat(devices)
+      }, [])
+      this.preset.devices = presetDevices
     },
     ioGetDeviceSelection() {
       this.$socket.emit(
