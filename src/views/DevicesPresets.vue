@@ -33,7 +33,7 @@
             </button>
           </div>
         </div>
-        <div class="devices-grid" v-for="d in p.devices" :key="d.id">
+        <div class="devices-grid" v-for="d in p.devices" :key="`${d.type}|${d.id}`">
           <span class="order" v-text="p.setorder[d.id] || '='"/>
           <span class="device-path" v-text="d.name"/>
           <span class="device-value" v-text="d.val"/>
