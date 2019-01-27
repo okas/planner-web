@@ -176,7 +176,7 @@ export default {
         data => (this.deviceSelection = data)
       )
     },
-    showHandler(stepId) {
+    stepShowHandler(stepId) {
       /**
        * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
        */
@@ -196,7 +196,7 @@ export default {
     new BulmaSteps(this.$refs.stepsContainer, {
       // stepClickable: true, // experimenting, source has this option
       /* need to add Vue instance as a context to handler */
-      onShow: this.showHandler.bind(this)
+      onShow: this.stepShowHandler.bind(this)
     })
   }
 }
