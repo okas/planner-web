@@ -180,7 +180,7 @@ export default {
       /**
        * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
        */
-      if (stepId === 1) {
+      if (this.deviceSelection.length === 0 && stepId === 1) {
         this.ioGetDeviceSelection()
       }
       /* Select the element however needed. */
