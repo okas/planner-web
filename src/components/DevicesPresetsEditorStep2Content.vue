@@ -16,7 +16,10 @@
           <div class="control">
             <tree-select
               placeholder="vali seadmed"
+              value-consists-of="LEAF_PRIORITY"
+              :show-count="true"
               :multiple="true"
+              :disable-branch-nodes="true"
               :options="devType.items"
               :normalizer="normalizer"
               v-model="selectedDevices[devType.type]"
