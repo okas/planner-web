@@ -52,10 +52,15 @@
         </section>
         <!-- render step contents -->
         <section class="steps-content">
-          <step1 class="step-content" :preset.sync="preset"/>
-          <step2 class="step-content" :preset.sync="preset" @refreshDevices="refreshDevices"/>
-          <step3 class="step-content" :preset.sync="preset"/>
-          <step4 class="step-content" :preset.sync="preset"/>
+          <step1 class="step-content" ref="step1" :preset.sync="preset"/>
+          <step2
+            class="step-content"
+            ref="step2"
+            :preset.sync="preset"
+            @refreshDevices="ioGetDeviceSelection"
+          />
+          <step3 class="step-content" ref="step3" :preset.sync="preset"/>
+          <step4 class="step-content" ref="step4" :preset.sync="preset"/>
         </section>
       </section>
     </div>
@@ -118,9 +123,6 @@ export default {
     }
   },
   methods: {
-    refreshDevices() {
-      this.ioGetDeviceSelection()
-    },
     save() {
       this.$emit('save', this.preset)
     },
@@ -134,29 +136,28 @@ export default {
         data => (this.deviceSelection = data)
       )
     },
-    initBulmaSteps() {
-      new BulmaSteps(this.$refs.stepsContainer, {
-        // stepClickable: true, // experimenting, source has this option
-        /* need to add Vue instance as a context to handler */
-        onShow: showHandler.bind(this)
-      })
+    showHandler(stepId) {
       /**
-       * Manipulate focus of some element in modal to caputer ESC key event.
        * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
        */
-      function showHandler(stepId) {
-        /* Select the element however needed. */
-        try {
-          this.$children[stepId].$refs.focus.focus()
-        } catch {
-          /* If no focusable ref found on step content, then focus current modal. */
-          this.$refs.root.focus()
-        }
+      if (stepId === 1) {
+        this.ioGetDeviceSelection()
+      }
+      /* Select the element however needed. */
+      try {
+        this.$refs[`step${stepId + 1}`].$refs.focus.focus()
+      } catch {
+        /* If no focusable ref found on step content, then focus current modal. */
+        this.$refs.root.focus()
       }
     }
   },
   mounted() {
-    this.initBulmaSteps()
+    new BulmaSteps(this.$refs.stepsContainer, {
+      // stepClickable: true, // experimenting, source has this option
+      /* need to add Vue instance as a context to handler */
+      onShow: this.showHandler.bind(this)
+    })
   }
 }
 </script>
