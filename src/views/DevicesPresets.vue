@@ -3,15 +3,24 @@
     <header class="component-header">
       <slot name="header-title" :_class="'has-text-danger'"/>
       <p class="has-text-danger">Eelseadistuse haldus</p>
-      <a
-        class="button"
-        role="button"
-        title="Värskenda serverist"
-        :disabled="!$store.state.ioConnected"
-        @click="ioGetPresets"
-      >
-        <fa-i icon="sync-alt"/>
-      </a>
+      <div class="commands field is-grouped is-marginless">
+        <div class="control">
+          <a
+            class="button"
+            role="button"
+            title="Värskenda serverist"
+            :disabled="!$store.state.ioConnected"
+            @click="ioGetPresets"
+          >
+            <fa-i icon="sync-alt"/>
+          </a>
+        </div>
+        <div class="control">
+          <a class="button" role="button" title="Lisa automaattoiming" @click="create">
+            <fa-i icon="plus"/>
+          </a>
+        </div>
+      </div>
     </header>
     <div class="presets-grid">
       <article class="preset" v-for="p in presets" :key="p.id">
@@ -19,7 +28,7 @@
         <span class="schedule" v-text="p.schedule"/>
         <div class="commands field is-grouped is-marginless">
           <div class="control">
-            <button class="button is-small is-outlined is-light" @click="editPreset(p)">
+            <button class="button is-small is-outlined is-light" @click="modify(p)">
               <span class="icon">
                 <fa-i icon="cog"/>
               </span>
@@ -43,9 +52,9 @@
     <editor
       class="component"
       :class="{'is-active': modalShow}"
-      :preset-for-edit="presetForEdit"
-      @quit="quitEdit"
-      @save="savePreset"
+      :preset-for-edit="presetToWork"
+      @quit="quitEventHandler"
+      @save="saveEventHandler"
       v-if="modalShow"
     >
       <h2 class="title is-2 has-text-danger" slot="header-title">Muuda eelseadistust</h2>
@@ -62,35 +71,63 @@ export default {
   data() {
     return {
       presets: [],
-      presetForEdit: {},
+      presetToWork: null,
+      editorMode: '',
       modalShow: false
     }
   },
+  MODE_CREATE: 'create',
+  MODE_MODIFY: 'modify',
   methods: {
-    editPreset(preset) {
-      this.presetForEdit = preset
+    create() {
+      this.editorMode = this.MODE_CREATE
+      this.presetToWork = {
+        id: 0,
+        name: '',
+        schedule: '',
+        devices: [],
+        setorder: {}
+      }
       this.modalShow = true
     },
-    savePreset(preset) {
-      this.modalShow = false
-      Object.assign(this.presetForEdit, preset)
-      this.presetForEdit = null
+    modify(preset) {
+      this.editorMode = this.MODE_MODIFY
+      this.presetToWork = preset
+      this.modalShow = true
     },
-    quitEdit() {
-      this.presetForEdit = null
+    saveEventHandler(preset) {
       this.modalShow = false
+      if (this.editorMode === this.MODE_CREATE) {
+        this.saveCreated(preset)
+      } else if (this.editorMode === this.MODE_MODIFY) {
+        this.saveModified(preset)
+      }
+      this.editorMode = null
+      this.presetToWork = null
+    },
+    saveCreated(preset) {
+      // check if element is actually filled with somethig!
+      // ToDo save to API first, then add to local array
+      this.presets.push(preset)
+    },
+    saveModified(preset) {
+      Object.assign(this.presetToWork, preset)
+    },
+    quitEventHandler() {
+      this.modalShow = false
+      this.presetToWork = this.editorMode = null
     },
     ioGetPresets() {
       this.presets = [
         {
-          id: 0,
+          id: 1,
           name: 'Magamistoa hommik',
           schedule: 'iga päev 08:00',
           devices: [],
           setorder: { 0: 1, 1: 2 }
         },
         {
-          id: 1,
+          id: 2,
           name: 'Elutoa hommik',
           schedule: 'iga päev 08:00',
           devices: [
@@ -107,7 +144,7 @@ export default {
           setorder: { 0: null, 1: 1, 2: 2 }
         },
         {
-          id: 2,
+          id: 3,
           name: 'Jareki hommik',
           schedule: 'iga päev 06:30',
           devices: [

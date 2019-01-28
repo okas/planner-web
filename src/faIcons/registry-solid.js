@@ -13,7 +13,8 @@ import {
   faCheck,
   faCog,
   faPlay,
-  faGlobe
+  faGlobe,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -29,5 +30,6 @@ library.add(
   faCheck,
   faCog,
   faPlay,
-  faGlobe
+  faGlobe,
+  faPlus
 )
