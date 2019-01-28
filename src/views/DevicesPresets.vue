@@ -80,7 +80,7 @@ export default {
   MODE_MODIFY: 'modify',
   methods: {
     create() {
-      this.editorMode = this.MODE_CREATE
+      this.editorMode = this.$options.MODE_CREATE
       this.presetToWork = {
         id: 0,
         name: '',
@@ -91,22 +91,28 @@ export default {
       this.modalShow = true
     },
     modify(preset) {
-      this.editorMode = this.MODE_MODIFY
+      this.editorMode = this.$options.MODE_MODIFY
       this.presetToWork = preset
       this.modalShow = true
     },
     saveEventHandler(preset) {
       this.modalShow = false
-      if (this.editorMode === this.MODE_CREATE) {
+      if (this.editorMode === this.$options.MODE_CREATE) {
         this.saveCreated(preset)
-      } else if (this.editorMode === this.MODE_MODIFY) {
+      } else if (this.editorMode === this.$options.MODE_MODIFY) {
         this.saveModified(preset)
       }
-      this.editorMode = null
-      this.presetToWork = null
+      this.editorMode = this.presetToWork = null
     },
     saveCreated(preset) {
-      // check if element is actually filled with somethig!
+      if (
+        !preset.name &&
+        !preset.schedule &&
+        preset.devices.length === 0 &&
+        Object.keys(preset.setorder).length === 0
+      ) {
+        return
+      }
       // ToDo save to API first, then add to local array
       this.presets.push(preset)
     },
