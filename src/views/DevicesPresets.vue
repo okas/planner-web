@@ -120,7 +120,7 @@ export default {
           return
         }
         preset.id = id
-      this.presets.push(preset)
+        this.presets.push(preset)
       })
     },
     saveModified(preset) {
@@ -131,52 +131,9 @@ export default {
       this.presetToWork = this.editorMode = null
     },
     ioGetPresets() {
-      this.presets = [
-        {
-          id: 1,
-          name: 'Magamistoa hommik',
-          schedule: 'iga päev 08:00',
-          devices: [],
-          setorder: { 0: 1, 1: 2 }
-        },
-        {
-          id: 2,
-          name: 'Elutoa hommik',
-          schedule: 'iga päev 08:00',
-          devices: [
-            { id: 1, name: 'Lamp 1 / Elutuba', type: 'room_lamps', val: 1 },
-            { id: 2, name: 'Lamp 2 / Elutuba', type: 'room_lamps', val: 1 },
-            {
-              id: 3,
-              name: 'Laua kohal 1 / Köök',
-              type: 'room_lamps',
-              val: 0.75
-            },
-            { id: 4, name: 'Ruloo 2 / Elutuba', type: 'room_blinds', val: 0.75 }
-          ],
-          setorder: { 0: null, 1: 1, 2: 2 }
-        },
-        {
-          id: 3,
-          name: 'Jareki hommik',
-          schedule: 'iga päev 06:30',
-          devices: [
-            {
-              id: 1,
-              name: 'Laelamp / Jareki tuba',
-              type: 'room_lamps',
-              val: 1
-            },
-            {
-              id: 2,
-              name: 'Ruloo 1 / Jareki tuba',
-              type: 'room_blinds',
-              val: 0.5
-            }
-          ],
-          setorder: { 0: null, 1: null }
-        }
-      ]
+      this.$socket.emit('presets-get-all', data => {
+        this.presets = data
+      })
     }
   },
   created() {
