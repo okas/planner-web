@@ -102,7 +102,7 @@ export default {
       } else if (this.editorMode === this.$options.MODE_MODIFY) {
         this.saveModified(preset)
       }
-      this.editorMode = this.presetToWork = null
+      this.editorMode = null
     },
     saveCreated(preset) {
       if (
@@ -113,7 +113,7 @@ export default {
       ) {
         return
       }
-      // ToDo handle case when API do not return at all or error!
+      // ToDo handle case when API do not respond!
       this.$socket.emit('presets-add', preset, ({ id, error }) => {
         if (error) {
           console.error(`preset-add: API responded with error: [ ${error} ]`)
@@ -121,6 +121,7 @@ export default {
         }
         preset.id = id
         this.presets.push(preset)
+        this.presetToWork = null
       })
     },
     saveModified(preset) {
@@ -129,7 +130,14 @@ export default {
           console.error(`preset-update: API responded with error: [ ${error} ]`)
           return
         }
+        if (status !== 'ok') {
+          console.warn(
+            `API event 'preset-update' responded with status ${status}.`
+          )
+          return
+        }
         Object.assign(this.presetToWork, preset)
+        this.presetToWork = null
       })
     },
     quitEventHandler() {
