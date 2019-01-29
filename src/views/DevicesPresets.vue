@@ -124,7 +124,13 @@ export default {
       })
     },
     saveModified(preset) {
-      Object.assign(this.presetToWork, preset)
+      this.$socket.emit('preset-update', preset, ({ status, error }) => {
+        if (error) {
+          console.error(`preset-update: API responded with error: [ ${error} ]`)
+          return
+        }
+        Object.assign(this.presetToWork, preset)
+      })
     },
     quitEventHandler() {
       this.modalShow = false
