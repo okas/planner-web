@@ -113,8 +113,15 @@ export default {
       ) {
         return
       }
-      // ToDo save to API first, then add to local array
+      // ToDo handle case when API do not return at all or error!
+      this.$socket.emit('presets-add', preset, ({ id, error }) => {
+        if (error) {
+          console.error(`preset-add: API responded with error: [ ${error} ]`)
+          return
+        }
+        preset.id = id
       this.presets.push(preset)
+      })
     },
     saveModified(preset) {
       Object.assign(this.presetToWork, preset)
