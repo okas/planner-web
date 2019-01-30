@@ -23,7 +23,7 @@
       </div>
     </header>
     <div class="presets-grid">
-      <article class="preset" v-for="(preset, idx) in presets" :key="preset.id">
+      <article class="preset" v-for="(preset) in presets" :key="preset.id">
         <h3 class="name is-size-4" v-text="preset.name"/>
         <span class="schedule" v-text="preset.schedule"/>
         <div class="commands field is-grouped is-marginless">
@@ -31,7 +31,7 @@
             <button
               class="button is-small is-outlined is-light"
               title="Kustuta automaattoiming"
-              @click="remove(idx, preset)"
+              @click="removeConfirm(preset)"
             >
               <fa-i icon="times"/>
             </button>
@@ -62,6 +62,13 @@
         </div>
       </article>
     </div>
+    <remove-confirm
+      :class="{'is-active': modalRemoveConfirmShow}"
+      :preset-name="presetToWork.name"
+      @quit="quitEventHandler"
+      @remove="removeConfirmedHandler"
+      v-if="modalRemoveConfirmShow"
+    />
     <editor
       class="component"
       :class="{'is-active': modalShow}"
@@ -76,17 +83,19 @@
 </template>
 
 <script>
+import RemoveConfirm from '../components/DevicesPresetsRemoveConfirm'
 import Editor from '../components/DevicesPresetsEditor'
 
 export default {
   name: 'Presets',
-  components: { Editor },
+  components: { RemoveConfirm, Editor },
   data() {
     return {
       presets: [],
       presetToWork: null,
       editorMode: '',
-      modalShow: false
+      modalShow: false,
+      modalRemoveConfirmShow: false
     }
   },
   MODE_CREATE: 'create',
@@ -108,7 +117,16 @@ export default {
       this.presetToWork = preset
       this.modalShow = true
     },
-    remove(index, preset) {
+    removeConfirm(preset) {
+      this.presetToWork = preset
+      this.modalRemoveConfirmShow = true
+    },
+    removeConfirmedHandler() {
+      this.modalRemoveConfirmShow = false
+      this.remove(this.presetToWork)
+      this.presetToWork = null
+    },
+    remove(preset) {
       this.$socket.emit('preset-remove', preset.id, ({ status, error }) => {
         if (error) {
           console.error(`preset-remove: API responded with error: [ ${error} ]`)
@@ -123,7 +141,7 @@ export default {
           }
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
-        this.$delete(this.presets, index)
+        this.$delete(this.presets, this.presets.indexOf(preset))
       })
     },
     saveEventHandler(preset) {
@@ -172,7 +190,7 @@ export default {
       })
     },
     quitEventHandler() {
-      this.modalShow = false
+      this.modalShow = this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
     },
     ioGetPresets() {
