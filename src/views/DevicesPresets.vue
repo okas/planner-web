@@ -23,12 +23,25 @@
       </div>
     </header>
     <div class="presets-grid">
-      <article class="preset" v-for="p in presets" :key="p.id">
-        <h3 class="name is-size-4" v-text="p.name"/>
-        <span class="schedule" v-text="p.schedule"/>
+      <article class="preset" v-for="(preset, idx) in presets" :key="preset.id">
+        <h3 class="name is-size-4" v-text="preset.name"/>
+        <span class="schedule" v-text="preset.schedule"/>
         <div class="commands field is-grouped is-marginless">
           <div class="control">
-            <button class="button is-small is-outlined is-light" @click="modify(p)">
+            <button
+              class="button is-small is-outlined is-light"
+              title="Kustuta automaattoiming"
+              @click="remove(idx, preset)"
+            >
+              <fa-i icon="times"/>
+            </button>
+          </div>
+          <div class="control">
+            <button
+              class="button is-small is-outlined is-light"
+              title="Muuda automaattoiming"
+              @click="modify(preset)"
+            >
               <span class="icon">
                 <fa-i icon="cog"/>
               </span>
@@ -42,8 +55,8 @@
             </button>
           </div>
         </div>
-        <div class="devices-grid" v-for="d in p.devices" :key="`${d.type}|${d.id}`">
-          <span class="order" v-text="p.setorder[d.id] || '='"/>
+        <div class="devices-grid" v-for="d in preset.devices" :key="`${d.type}|${d.id}`">
+          <span class="order" v-text="preset.setorder[d.id] || '='"/>
           <span class="device-path" v-text="d.name"/>
           <span class="device-value" v-text="d.val"/>
         </div>
@@ -94,6 +107,24 @@ export default {
       this.editorMode = this.$options.MODE_MODIFY
       this.presetToWork = preset
       this.modalShow = true
+    },
+    remove(index, preset) {
+      this.$socket.emit('preset-remove', preset.id, ({ status, error }) => {
+        if (error) {
+          console.error(`preset-remove: API responded with error: [ ${error} ]`)
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event 'preset-remove' responded with status ${status}.`
+          )
+          if (status !== 'no-exist') {
+            return
+          }
+        }
+        // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
+        this.$delete(this.presets, index)
+      })
     },
     saveEventHandler(preset) {
       this.modalShow = false
