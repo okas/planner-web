@@ -58,7 +58,7 @@
         <div class="devices-grid" v-for="d in preset.devices" :key="`${d.type}|${d.id}`">
           <span class="order" v-text="preset.setorder[d.id] || '='"/>
           <span class="device-path" v-text="d.name"/>
-          <span class="device-value" v-text="d.val"/>
+          <span class="device-value" v-text="d.value"/>
         </div>
       </article>
     </div>
