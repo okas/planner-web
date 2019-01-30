@@ -171,7 +171,7 @@ export default {
     },
     ioGetDeviceSelection() {
       this.$socket.emit(
-        'get-devices-selection',
+        'presets-get-devices-selection',
         this.$language,
         data => (this.deviceSelection = data)
       )
