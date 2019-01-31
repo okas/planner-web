@@ -161,7 +161,7 @@ export default {
           return {
             id,
             type,
-            val: 0.55,
+            value: 0.55,
             name: `${device.name} / ${device.room}`
           }
         })
