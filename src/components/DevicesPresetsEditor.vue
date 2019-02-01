@@ -57,8 +57,8 @@
             class="step-content"
             ref="step2"
             :preset.sync="preset"
-            :device-selection="deviceSelection"
-            :selected-devices="devicesGroupbyType"
+            :device-selection="deviceSource"
+            :selected-devices="selectedDevicesGrouped"
             @refreshDevices="ioGetDeviceSelection"
           />
           <step3 class="step-content" ref="step3" :preset.sync="preset"/>
@@ -90,7 +90,7 @@ export default {
         /* this way internal state of editor is isolated from parent model changes */
         ...this.presetForEdit
       },
-      deviceSelection: []
+      deviceSource: []
     }
   },
   static() {
@@ -125,7 +125,7 @@ export default {
     }
   },
   computed: {
-    devicesGroupbyType: {
+    selectedDevicesGrouped: {
       get() {
         return this.preset.devices.reduce((groupS, { type, id }) => {
           const g = groupS[type] || (groupS[type] = [])
@@ -144,36 +144,36 @@ export default {
       this.$emit('quit')
     },
     saveSelectedDevices() {
-      const deviceGroups = Object.entries(this.devicesGroupbyType)
-      const presetDevices = deviceGroups.reduce((acc, [type, ids]) => {
-        const devGroup = this.deviceSelection.find(g => g.type === type)
-        const flatDevicesWithRooms = devGroup.items.reduce(
-          (a, { id: room, items: devices }) => {
-            const devWithRoom = devices.map(d => {
-              return { ...d, room }
-            })
-            return a.concat(devWithRoom)
-          },
-          []
-        )
-        const devices = ids.map(id => {
-          const device = flatDevicesWithRooms.find(d => d.id == id)
-          return {
-            id,
-            type,
-            value: 0.55,
-            name: `${device.name} / ${device.room}`
-          }
+      this.preset.devices = this.createNewPresetDevices()
+    },
+    createNewPresetDevices() {
+      return Object.entries(this.selectedDevicesGrouped).reduce(
+        (acc, group) => acc.concat(this.createNewTypeDevices(group)),
+        []
+      )
+    },
+    createNewTypeDevices([type, selectedDevIds]) {
+      const srcDevsWithRooms = this.flattenTypeDevicesWithRooms(type)
+      return selectedDevIds.map(id => {
+        const { name, room } = srcDevsWithRooms.find(d => d.id == id)
+        const { value } = this.preset.devices.find(d => d.id === id) || {}
+        return { id, type, name: `${name} / ${room}`, value }
+      })
+    },
+    flattenTypeDevicesWithRooms(type) {
+      const group = this.deviceSource.find(g => g.type === type)
+      return group.items.reduce((acc1, { id: room, items }) => {
+        const devicesWithRoom = items.map(device => {
+          return { ...device, room }
         })
-        return acc.concat(devices)
+        return acc1.concat(devicesWithRoom)
       }, [])
-      this.preset.devices = presetDevices
     },
     ioGetDeviceSelection() {
       this.$socket.emit(
         'presets-get-devices-selection',
         this.$language,
-        data => (this.deviceSelection = data)
+        data => (this.deviceSource = data)
       )
     },
     stepShowHandler(stepId) {
