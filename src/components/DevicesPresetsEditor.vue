@@ -56,10 +56,8 @@
           <step2
             class="step-content"
             ref="step2"
-            :preset.sync="preset"
-            :device-selection="deviceSource"
-            :selected-devices="selectedDevicesGrouped"
-            @refreshDevices="ioGetDeviceSelection"
+            :selected-devices="preset.devices"
+            @saveSelectedDevices="saveSelectedDevices"
           />
           <step3 class="step-content" ref="step3" :preset.sync="preset"/>
           <step4 class="step-content" ref="step4" :preset.sync="preset"/>
@@ -71,7 +69,6 @@
 </template>
 
 <script>
-import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import Step1 from './DevicesPresetsEditorStep1Content'
 import Step2 from './DevicesPresetsEditorStep2Content'
@@ -79,7 +76,6 @@ import Step3 from './DevicesPresetsEditorStep3Content'
 import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  mixins: [i18SelectMixin],
   components: { Step1, Step2, Step3, Step4 },
   props: {
     presetForEdit: { type: Object, required: true }
@@ -124,57 +120,15 @@ export default {
       ]
     }
   },
-  computed: {
-    selectedDevicesGrouped: {
-      get() {
-        return this.preset.devices.reduce((groupS, { type, id }) => {
-          const g = groupS[type] || (groupS[type] = [])
-          g.push(id)
-          return groupS
-        }, {})
-      }
-    }
-  },
   methods: {
     save() {
-      this.saveSelectedDevices()
       this.$emit('save', this.preset)
     },
     quit() {
       this.$emit('quit')
     },
-    saveSelectedDevices() {
-      this.preset.devices = this.createNewPresetDevices()
-    },
-    createNewPresetDevices() {
-      return Object.entries(this.selectedDevicesGrouped).reduce(
-        (acc, group) => acc.concat(this.createNewTypeDevices(group)),
-        []
-      )
-    },
-    createNewTypeDevices([type, selectedDevIds]) {
-      const srcDevsWithRooms = this.flattenTypeDevicesWithRooms(type)
-      return selectedDevIds.map(id => {
-        const { name, room } = srcDevsWithRooms.find(d => d.id == id)
-        const { value } = this.preset.devices.find(d => d.id === id) || {}
-        return { id, type, name: `${name} / ${room}`, value }
-      })
-    },
-    flattenTypeDevicesWithRooms(type) {
-      const group = this.deviceSource.find(g => g.type === type)
-      return group.items.reduce((acc1, { id: room, items }) => {
-        const devicesWithRoom = items.map(device => {
-          return { ...device, room }
-        })
-        return acc1.concat(devicesWithRoom)
-      }, [])
-    },
-    ioGetDeviceSelection() {
-      this.$socket.emit(
-        'presets-get-devices-selection',
-        this.$language,
-        data => (this.deviceSource = data)
-      )
+    saveSelectedDevices(newDevicesGrouped) {
+      this.preset.devices = newDevicesGrouped
     },
     stepShowHandler(stepId) {
       /**
@@ -187,9 +141,6 @@ export default {
         this.$refs.root.focus()
       }
     }
-  },
-  created() {
-    this.ioGetDeviceSelection()
   },
   mounted() {
     new BulmaSteps(this.$refs.stepsContainer, {
