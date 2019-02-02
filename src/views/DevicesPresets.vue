@@ -9,8 +9,8 @@
             class="button"
             role="button"
             title="Värskenda serverist"
-            :disabled="!$store.state.ioConnected"
-            @click="ioGetPresets"
+            :disabled="!ioConnected"
+            @click="!ioGetPresets"
           >
             <fa-i icon="sync-alt" />
           </a>
@@ -20,6 +20,7 @@
             class="button"
             role="button"
             title="Lisa automaattoiming"
+            :disabled="ioConnected"
             @click="create"
           >
             <fa-i icon="plus" />
@@ -94,6 +95,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import RemoveConfirm from '../components/DevicesPresetsRemoveConfirm'
 import Editor from '../components/DevicesPresetsEditor'
 
@@ -111,6 +113,9 @@ export default {
   },
   MODE_CREATE: 'create',
   MODE_MODIFY: 'modify',
+  computed: {
+    ...mapState(['ioConnected'])
+  },
   created() {
     this.ioGetPresets()
   },
