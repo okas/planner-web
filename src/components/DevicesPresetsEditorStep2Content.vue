@@ -8,18 +8,23 @@
           :disabled="!$store.state.ioConnected"
           @click="ioGetDeviceSelection"
         >
-          <fa-i icon="sync-alt"/>
+          <fa-i icon="sync-alt" />
         </a>
       </div>
     </div>
-    <div class="field is-horizontal" v-for="devType in deviceSelection" :key="devType.type">
+    <div
+      v-for="devType in deviceSelection"
+      :key="devType.type"
+      class="field is-horizontal"
+    >
       <div class="field-label is-normal">
-        <label class="label has-text-grey" v-text="devType.name"/>
+        <label class="label has-text-grey" v-text="devType.name" />
       </div>
       <div class="field-body">
         <div class="field">
           <div class="control">
             <tree-select
+              v-model="selectedDevicesObj[devType.type]"
               placeholder="vali seadmed"
               value-consists-of="LEAF_PRIORITY"
               :show-count="true"
@@ -27,7 +32,6 @@
               :disable-branch-nodes="true"
               :options="devType.items"
               :normalizer="treeselectNormalizer"
-              v-model="selectedDevicesObj[devType.type]"
               @close="save"
             />
           </div>
@@ -43,8 +47,8 @@ import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
-  mixins: [i18SelectMixin],
   components: { TreeSelect },
+  mixins: [i18SelectMixin],
   props: {
     selectedDevices: { type: Array, required: true }
   },
@@ -64,6 +68,15 @@ export default {
         }, {})
       }
     }
+  },
+  watch: {
+    deviceSelection(val) {
+      /* This will rename selected devices names, in case of source device name rename */
+      if (val.length > 0) this.save()
+    }
+  },
+  created() {
+    this.ioGetDeviceSelection()
   },
   methods: {
     save() {
@@ -105,15 +118,6 @@ export default {
         data => (this.deviceSelection = data)
       )
     }
-  },
-  watch: {
-    deviceSelection(val, oledVal) {
-      /* This will rename selected devices names, in case of source device name rename */
-      if (val.length > 0) this.save()
-    }
-  },
-  created() {
-    this.ioGetDeviceSelection()
   }
 }
 </script>

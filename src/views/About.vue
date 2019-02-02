@@ -22,7 +22,9 @@
           <h3 class="subtitle">Some quick resources</h3>
           <ul>
             <li>
-              <a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a>
+              <a href="https://github.com/vuejs/awesome-vue" target="_blank"
+                >awesome-vue</a
+              >
             </li>
           </ul>
         </section>

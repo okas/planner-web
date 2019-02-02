@@ -1,29 +1,29 @@
 <template>
   <div
     id="devicesPresetEditor"
+    ref="root"
     class="modal"
     tabindex="0"
-    ref="root"
     @keyup.stop.esc="quit"
     @keyup.stop.enter="save"
   >
     <div class="modal-background"></div>
     <div class="modal-content">
       <header class="component-header has-text-centered">
-        <slot name="header-title" :_class="'has-text-danger'"/>
+        <slot name="header-title" :_class="'has-text-danger'" />
       </header>
-      <section class="steps" ref="stepsContainer">
+      <section ref="stepsContainer" class="steps">
         <!-- render all steps based on viewmodel data -->
-        <div class="step-item" v-for="s in s_steps" :key="s.id">
+        <div v-for="s in s_steps" :key="s.id" class="step-item">
           <div class="step-marker">
-            <span class="text" v-text="s.id"/>
+            <span class="text" v-text="s.id" />
             <span class="icon">
-              <fa-i :icon="s.icon"/>
+              <fa-i :icon="s.icon" />
             </span>
           </div>
           <div class="step-details">
-            <p class="step-title" v-text="s.title"/>
-            <p v-text="s.description"/>
+            <p class="step-title" v-text="s.title" />
+            <p v-text="s.description" />
           </div>
         </div>
         <!-- render step actions/buttons -->
@@ -31,40 +31,40 @@
           <div class="steps-action">
             <button class="button is-outlined is-success" @click="save">
               <span class="icon">
-                <fa-i icon="check"/>
+                <fa-i icon="check" />
               </span>
             </button>
           </div>
           <div class="steps-action">
             <button class="button is-outlined is-light" data-nav="previous">
               <span class="icon">
-                <fa-i icon="chevron-left"/>
+                <fa-i icon="chevron-left" />
               </span>
             </button>
           </div>
           <div class="steps-action">
             <button class="button is-outlined is-light" data-nav="next">
               <span class="icon">
-                <fa-i icon="chevron-right"/>
+                <fa-i icon="chevron-right" />
               </span>
             </button>
           </div>
         </section>
         <!-- render step contents -->
         <section class="steps-content">
-          <step1 class="step-content" ref="step1" :preset.sync="preset"/>
+          <step1 ref="step1" class="step-content" :preset.sync="preset" />
           <step2
-            class="step-content"
             ref="step2"
+            class="step-content"
             :selected-devices="preset.devices"
             @saveSelectedDevices="saveSelectedDevices"
           />
-          <step3 class="step-content" ref="step3" :preset.sync="preset"/>
-          <step4 class="step-content" ref="step4" :preset.sync="preset"/>
+          <step3 ref="step3" class="step-content" :preset.sync="preset" />
+          <step4 ref="step4" class="step-content" :preset.sync="preset" />
         </section>
       </section>
     </div>
-    <button class="modal-close is-large" aria-label="close" @click="quit"/>
+    <button class="modal-close is-large" aria-label="close" @click="quit" />
   </div>
 </template>
 
@@ -120,6 +120,13 @@ export default {
       ]
     }
   },
+  mounted() {
+    new BulmaSteps(this.$refs.stepsContainer, {
+      // stepClickable: true, // experimenting, source has this option
+      /* need to add Vue instance as a context to handler */
+      onShow: this.stepShowHandler.bind(this)
+    })
+  },
   methods: {
     save() {
       this.$emit('save', this.preset)
@@ -141,13 +148,6 @@ export default {
         this.$refs.root.focus()
       }
     }
-  },
-  mounted() {
-    new BulmaSteps(this.$refs.stepsContainer, {
-      // stepClickable: true, // experimenting, source has this option
-      /* need to add Vue instance as a context to handler */
-      onShow: this.stepShowHandler.bind(this)
-    })
   }
 }
 </script>

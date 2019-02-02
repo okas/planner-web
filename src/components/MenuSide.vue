@@ -1,18 +1,22 @@
-// Credit: https://medium.com/@disjfa/creating-navigation-using-vue-router-59d0b12ab75f
+// Credit:
+https://medium.com/@disjfa/creating-navigation-using-vue-router-59d0b12ab75f
 
 <template>
   <nav id="menu-side" class="menu">
-    <section class="menu-level1" v-for="r in foundRoutes" :key="r.path">
-      <h1 class="menu-label" v-text="r.meta.title"/>
+    <section v-for="r in foundRoutes" :key="r.path" class="menu-level1">
+      <h1 class="menu-label" v-text="r.meta.title" />
       <ul class="menu-list">
-        <MenuSideNode v-for="c in r.children" :item="c" :key="c.path"/>
+        <MenuSideNode v-for="c in r.children" :key="c.path" :item="c" />
       </ul>
     </section>
-    <section class="notification is-paddingless is-danger" v-if="!foundRoutes.length">
-      <h3 class="menu-label has-text-weight-semibold" v-text="errTitle"/>
+    <section
+      v-if="!foundRoutes.length"
+      class="notification is-paddingless is-danger"
+    >
+      <h3 class="menu-label has-text-weight-semibold" v-text="errTitle" />
       <ul class="menu-list">
-        <li class="menu-item" v-text="errMessage"/>
-        <li class="menu-item" v-for="s in paths" :key="s" v-text="s"/>
+        <li class="menu-item" v-text="errMessage" />
+        <li v-for="s in paths" :key="s" class="menu-item" v-text="s" />
       </ul>
     </section>
   </nav>
@@ -21,14 +25,14 @@
 <script>
 import MenuSideNode from './MenuSideNode.vue'
 export default {
+  components: { MenuSideNode },
+  props: { selectedPaths: { type: [String, Array], required: true } },
   data() {
     return {
       errTitle: 'Viga menüü loomisel!',
       errMessage: 'Ruuteri pole teekondi:'
     }
   },
-  props: { selectedPaths: { type: [String, Array], required: true } },
-  components: { MenuSideNode },
   computed: {
     foundRoutes() {
       return this.$router.options.routes.filter(

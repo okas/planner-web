@@ -1,17 +1,26 @@
 <template>
   <section id="blinds">
     <header class="component-header">
-      <slot name="header-title" :_class="'has-text-success'"/>
+      <slot name="header-title" :_class="'has-text-success'" />
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
-      <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetAllBlinds">
-        <fa-i icon="sync-alt"/>
+      <a
+        class="button"
+        role="button"
+        :disabled="!$store.state.ioConnected"
+        @click="ioGetAllBlinds"
+      >
+        <fa-i icon="sync-alt" />
       </a>
     </header>
     <div class="rooms-grid">
-      <section class="room" v-for=" room of groupedBlinds" :key="room.id">
-        <h3 class="title is-4" v-text="room.id"/>
+      <section v-for="room of groupedBlinds" :key="room.id" class="room">
+        <h3 class="title is-4" v-text="room.id" />
         <div class="remotes-grid">
-          <remote v-for="blind in room.items" :key="blind.id" :blind.sync="blind"/>
+          <remote
+            v-for="blind in room.items"
+            :key="blind.id"
+            :blind.sync="blind"
+          />
         </div>
       </section>
     </div>
@@ -26,6 +35,10 @@ export default {
   data() {
     return { groupedBlinds: [] }
   },
+  created() {
+    // Can be combined with addtional component display while loading. "After Nav Fetch"
+    this.ioGetAllBlinds()
+  },
   methods: {
     ioGetAllBlinds() {
       this.$socket.emit(
@@ -33,10 +46,6 @@ export default {
         data => (this.groupedBlinds = data)
       )
     }
-  },
-  created() {
-    // Can be combined with addtional component display while loading. "After Nav Fetch"
-    this.ioGetAllBlinds()
   }
 }
 </script>

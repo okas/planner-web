@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <NavTop/>
-    <RouterView class="app-content section"/>
-    <Footer/>
+    <NavTop />
+    <RouterView class="app-content section" />
+    <Footer />
   </div>
 </template>
 

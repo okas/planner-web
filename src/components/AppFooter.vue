@@ -4,25 +4,30 @@
       <section class="permanent columns is-mobile is-marginless">
         <div class="copyright column is-4 is-offset-4 has-text-centered">
           <span class>
-            Copyright&nbsp;©&nbsp;&nbsp;{{years}}&nbsp;&nbsp;Powered by
-            <a
-              href="https://vuejs.org"
-              target="_blank"
-            >
-              <img class="vue-logo" src="../assets/logo_vue.png">
+            Copyright&nbsp;©&nbsp;&nbsp;{{ years }}&nbsp;&nbsp;Powered by
+            <a href="https://vuejs.org" target="_blank">
+              <img class="vue-logo" src="../assets/logo_vue.png" />
             </a>
           </span>
         </div>
         <div class="status column is-1 is-offset-3 has-text-centered">
-          <span class="icon" :title="ioIconTitle" @click="quickDashRevelaed=!quickDashRevelaed">
+          <span
+            class="icon"
+            :title="ioIconTitle"
+            @click="quickDashRevelaed = !quickDashRevelaed"
+          >
             <fa-l class="fa-lg">
-              <fa-i class icon="cloud" :class="{'has-text-success': this.ioConnected}"/>
+              <fa-i
+                class
+                icon="cloud"
+                :class="{ 'has-text-success': ioConnected }"
+              />
               <transition name="fade">
                 <fa-i
+                  v-if="!ioConnected"
                   class="has-text-danger"
                   icon="ban"
                   transform="shrink-2 right-2 down-1"
-                  v-if="!this.ioConnected"
                 />
               </transition>
             </fa-l>
@@ -30,14 +35,20 @@
         </div>
       </section>
       <transition name="slide-fade">
-        <section class="debug has-text-centered" v-if="quickDashRevelaed">
+        <section v-if="quickDashRevelaed" class="debug has-text-centered">
           <div class="tags has-addons">
             <div class="tag is-white">
               <b>SocketIO Client ID:&nbsp;</b>
-              <span :class="{'has-text-danger': !this.ioConnected}" v-text="ioIdOrNA"/>
+              <span
+                :class="{ 'has-text-danger': !ioConnected }"
+                v-text="ioIdOrNA"
+              />
             </div>
-            <div class="tag is-rounded" :class="[ioConnected ? 'is-success' : 'is-danger']">
-              <b v-text="ioIsNew"/>
+            <div
+              class="tag is-rounded"
+              :class="[ioConnected ? 'is-success' : 'is-danger']"
+            >
+              <b v-text="ioIsNew" />
             </div>
           </div>
         </section>

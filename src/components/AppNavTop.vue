@@ -8,31 +8,37 @@
       <div class="navbar-brand is-mobile">
         <RouterLink class="navbar-item is-tab" to="/" exact>
           Saar
-          <img class="app-logo" src="../assets/logo_tk.png">
+          <img class="app-logo" src="../assets/logo_tk.png" />
         </RouterLink>
         <a
           class="navbar-burger burger"
           role="button"
           aria-expanded="false"
           data-target="navbar-menu"
+          :class="{ 'is-active': isActive }"
           @click="toggleBurger"
-          :class="{'is-active': isActive}"
         >
-          <span aria-hidden="true"/>
-          <span aria-hidden="true"/>
-          <span aria-hidden="true"/>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </a>
       </div>
       <!-- Links from router should be rendered based on rout configuration.
       Like MenuSide component.-->
-      <div id="navbar-menu" class="navbar-menu" :class="{'is-active': isActive}">
+      <div
+        id="navbar-menu"
+        class="navbar-menu"
+        :class="{ 'is-active': isActive }"
+      >
         <div class="navbar-start">
-          <RouterLink class="navbar-item is-tab" to="/devices">Seadmed</RouterLink>
+          <RouterLink class="navbar-item is-tab" to="/devices"
+            >Seadmed</RouterLink
+          >
         </div>
         <div class="navbar-end">
           <RouterLink class="navbar-item is-tab" to="/about">Info</RouterLink>
           <div class="navbar-item">
-            <i18n-select/>
+            <i18n-select />
           </div>
         </div>
       </div>
@@ -51,6 +57,13 @@ export default {
       lastY: 0
     }
   },
+  created() {
+    document.querySelector('body').classList.add('has-navbar-fixed-top')
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     toggleBurger() {
       this.isActive = !this.isActive
@@ -59,13 +72,6 @@ export default {
       const y = window.scrollY
       this.lastY = y
     }
-  },
-  created() {
-    document.querySelector('body').classList.add('has-navbar-fixed-top')
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>

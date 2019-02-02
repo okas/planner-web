@@ -1,25 +1,25 @@
 <template>
   <div class="blind-remote grid box is-marginless">
-    <h4 class="remote-label is-size-5 has-text-centered" v-text="blind.name"/>
+    <h4 class="remote-label is-size-5 has-text-centered" v-text="blind.name" />
     <button class="up button is-medium">
-      <fa-i icon="chevron-up"/>
+      <fa-i icon="chevron-up" />
     </button>
     <button class="stop button is-medium">
-      <fa-i :icon="['far', 'square']"/>
+      <fa-i :icon="['far', 'square']" />
     </button>
     <button class="down button is-medium">
-      <fa-i icon="chevron-down"/>
+      <fa-i icon="chevron-down" />
     </button>
     <div class="slider-wrapper">
       <div class="helper">
         <input
+          v-model.number="blind.state"
           type="range"
           class="slider is-large is-circle"
           step="0.01"
           min="0"
           max="1"
-          v-model.number="blind.state"
-        >
+        />
       </div>
     </div>
   </div>

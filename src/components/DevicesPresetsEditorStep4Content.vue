@@ -7,7 +7,12 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input class="input" type="text" placeholder="--vali käivituse järjekord" ref="focus">
+            <input
+              ref="focus"
+              class="input"
+              type="text"
+              placeholder="--vali käivituse järjekord"
+            />
           </div>
         </div>
       </div>

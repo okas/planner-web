@@ -1,16 +1,21 @@
 <template>
   <section id="ligths">
     <header class="component-header">
-      <slot name="header-title" :_class="{'has-text-warning': true}"/>
-      <a class="button" role="button" :disabled="!$store.state.ioConnected" @click="ioGetAllLamps">
-        <fa-i icon="sync-alt"/>
+      <slot name="header-title" :_class="{ 'has-text-warning': true }" />
+      <a
+        class="button"
+        role="button"
+        :disabled="!$store.state.ioConnected"
+        @click="ioGetAllLamps"
+      >
+        <fa-i icon="sync-alt" />
       </a>
     </header>
     <div class="rooms-grid">
-      <section class="room" v-for="room in groupedLamps" :key="room.id">
-        <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id"/>
+      <section v-for="room in groupedLamps" :key="room.id" class="room">
+        <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id" />
         <div class="lamps-grid">
-          <lamp v-for="lamp in room.items" :key="lamp.id" :lamp.sync="lamp"/>
+          <lamp v-for="lamp in room.items" :key="lamp.id" :lamp.sync="lamp" />
         </div>
       </section>
     </div>
@@ -27,6 +32,10 @@ export default {
       groupedLamps: []
     }
   },
+  created() {
+    // Can be combined with addtional component display while loading. "After Nav Fetch"
+    this.ioGetAllLamps()
+  },
   methods: {
     ioGetAllLamps() {
       this.$socket.emit(
@@ -34,10 +43,6 @@ export default {
         data => (this.groupedLamps = data)
       )
     }
-  },
-  created() {
-    // Can be combined with addtional component display while loading. "After Nav Fetch"
-    this.ioGetAllLamps()
   }
 }
 </script>

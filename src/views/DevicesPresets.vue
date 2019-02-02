@@ -1,7 +1,7 @@
 <template>
   <section id="devpresets">
     <header class="component-header">
-      <slot name="header-title" :_class="'has-text-danger'"/>
+      <slot name="header-title" :_class="'has-text-danger'" />
       <p class="has-text-danger">Eelseadistuse haldus</p>
       <div class="commands field is-grouped is-marginless">
         <div class="control">
@@ -12,20 +12,25 @@
             :disabled="!$store.state.ioConnected"
             @click="ioGetPresets"
           >
-            <fa-i icon="sync-alt"/>
+            <fa-i icon="sync-alt" />
           </a>
         </div>
         <div class="control">
-          <a class="button" role="button" title="Lisa automaattoiming" @click="create">
-            <fa-i icon="plus"/>
+          <a
+            class="button"
+            role="button"
+            title="Lisa automaattoiming"
+            @click="create"
+          >
+            <fa-i icon="plus" />
           </a>
         </div>
       </div>
     </header>
     <div class="presets-grid">
-      <article class="preset" v-for="(preset) in presets" :key="preset.id">
-        <h3 class="name is-size-4" v-text="preset.name"/>
-        <span class="schedule" v-text="preset.schedule"/>
+      <article v-for="preset in presets" :key="preset.id" class="preset">
+        <h3 class="name is-size-4" v-text="preset.name" />
+        <span class="schedule" v-text="preset.schedule" />
         <div class="commands field is-grouped is-marginless">
           <div class="control">
             <button
@@ -33,7 +38,7 @@
               title="Kustuta automaattoiming"
               @click="removeConfirm(preset)"
             >
-              <fa-i icon="times"/>
+              <fa-i icon="times" />
             </button>
           </div>
           <div class="control">
@@ -43,41 +48,47 @@
               @click="modify(preset)"
             >
               <span class="icon">
-                <fa-i icon="cog"/>
+                <fa-i icon="cog" />
               </span>
             </button>
           </div>
           <div class="control">
             <button class="button is-small is-outlined is-light">
               <span class="icon">
-                <fa-i icon="play"/>
+                <fa-i icon="play" />
               </span>
             </button>
           </div>
         </div>
-        <div class="devices-grid" v-for="d in preset.devices" :key="`${d.type}|${d.id}`">
-          <span class="order" v-text="preset.setorder[d.id] || '='"/>
-          <span class="device-path" v-text="d.name"/>
-          <span class="device-value" v-text="d.value"/>
+        <div
+          v-for="d in preset.devices"
+          :key="`${d.type}|${d.id}`"
+          class="devices-grid"
+        >
+          <span class="order" v-text="preset.setorder[d.id] || '='" />
+          <span class="device-path" v-text="d.name" />
+          <span class="device-value" v-text="d.value" />
         </div>
       </article>
     </div>
     <remove-confirm
-      :class="{'is-active': modalRemoveConfirmShow}"
+      v-if="modalRemoveConfirmShow"
+      :class="{ 'is-active': modalRemoveConfirmShow }"
       :preset-name="presetToWork.name"
       @quit="quitEventHandler"
       @remove="removeConfirmedHandler"
-      v-if="modalRemoveConfirmShow"
     />
     <editor
+      v-if="modalShow"
       class="component"
-      :class="{'is-active': modalShow}"
+      :class="{ 'is-active': modalShow }"
       :preset-for-edit="presetToWork"
       @quit="quitEventHandler"
       @save="saveEventHandler"
-      v-if="modalShow"
     >
-      <h2 class="title is-2 has-text-danger" slot="header-title">Muuda eelseadistust</h2>
+      <h2 slot="header-title" class="title is-2 has-text-danger">
+        Muuda eelseadistust
+      </h2>
     </editor>
   </section>
 </template>
@@ -100,6 +111,9 @@ export default {
   },
   MODE_CREATE: 'create',
   MODE_MODIFY: 'modify',
+  created() {
+    this.ioGetPresets()
+  },
   methods: {
     create() {
       this.editorMode = this.$options.MODE_CREATE
@@ -198,9 +212,6 @@ export default {
         this.presets = data
       })
     }
-  },
-  created() {
-    this.ioGetPresets()
   }
 }
 </script>

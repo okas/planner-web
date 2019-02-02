@@ -2,11 +2,16 @@
   <div class="vue-i18n-select control has-icons-left">
     <div class="select is-small is-rounded">
       <select v-model="$language">
-        <option v-for="language in $languages" :key="language" :value="language" v-text="language"/>
+        <option
+          v-for="language in $languages"
+          :key="language"
+          :value="language"
+          v-text="language"
+        />
       </select>
     </div>
     <span class="icon is-left">
-      <fa-i :icon="icon"/>
+      <fa-i :icon="icon" />
     </span>
   </div>
 </template>
