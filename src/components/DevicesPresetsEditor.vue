@@ -61,7 +61,12 @@
             @reloadDeviceSelection="ioGetDeviceSelection"
             @saveSelectedDevices="saveSelectedDevices"
           />
-          <step3 ref="step3" class="step-content" :devices="preset.devices" />
+          <step3
+            ref="step3"
+            class="step-content"
+            :devices="preset.devices"
+            :device-selection="deviceSelection"
+          />
           <step4 ref="step4" class="step-content" :preset.sync="preset" />
         </section>
       </section>
