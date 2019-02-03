@@ -9,7 +9,7 @@
           <div class="control">
             <input
               ref="focus"
-              v-model.trim="preset.name"
+              v-model.lazy.trim="preset.name"
               class="input"
               type="text"
               :placeholder="s_placeholder1"
@@ -25,7 +25,11 @@
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <input v-model.trim="preset.schedule" class="input" type="text" />
+            <input
+              v-model.lazy.trim="preset.schedule"
+              class="input"
+              type="text"
+            />
           </div>
         </div>
       </div>
