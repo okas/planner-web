@@ -5,7 +5,7 @@
     "es6": true
   },
   "extends": [
-    "plugin:vue/strongly-recommended",
+    "plugin:vue/recommended",
     "@vue/prettier"
   ],
   "rules": {
@@ -21,10 +21,7 @@
         "message": "Unexpected property on console object was called"
       }
     ],
-    "vue/this-in-template": "error",
-    "vue/order-in-components": "error",
-    "vue/no-v-html": "warning",
-    "vue/attributes-order": "error"
+    "vue/no-v-html": "warning"
   },
   "parserOptions": {
     "parser": "babel-eslint",
