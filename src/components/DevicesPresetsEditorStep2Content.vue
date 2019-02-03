@@ -6,14 +6,14 @@
           class="button"
           role="button"
           :disabled="!$store.state.ioConnected"
-          @click="ioGetDeviceSelection"
+          @click="reload"
         >
           <fa-i icon="sync-alt" />
         </a>
       </div>
     </div>
     <div
-      v-for="devType in deviceSelection"
+      v-for="devType in roomGroupedDeviceSelection"
       :key="devType.type"
       class="field is-horizontal"
     >
@@ -31,7 +31,6 @@
               :multiple="true"
               :disable-branch-nodes="true"
               :options="devType.items"
-              :normalizer="treeselectNormalizer"
               @close="save"
             />
           </div>
@@ -50,11 +49,11 @@ export default {
   components: { TreeSelect },
   mixins: [i18SelectMixin],
   props: {
-    devices: { type: Array, required: true }
+    devices: { type: Array, required: true },
+    deviceSelection: { type: Array, required: true }
   },
   data() {
     return {
-      deviceSelection: [],
       initialSelected: JSON.parse(JSON.stringify(this.devices))
     }
   },
@@ -67,6 +66,14 @@ export default {
           return groups
         }, {})
       }
+    },
+    roomGroupedDeviceSelection() {
+      return this.deviceSelection.map(({ items, ...group }) => {
+        return {
+          ...group,
+          items: this.getRoomGroup(items)
+        }
+      })
     }
   },
   watch: {
@@ -75,48 +82,37 @@ export default {
       if (val.length > 0) this.save()
     }
   },
-  created() {
-    this.ioGetDeviceSelection()
-  },
   methods: {
+    reload() {
+      this.$emit('reloadDeviceSelection')
+    },
     save() {
       this.$emit('saveSelectedDevices', this.createNewPresetDevices())
     },
     createNewPresetDevices() {
       return Object.entries(this.selectedModels).reduce((accu, group) => {
-        Array.prototype.push.apply(accu, this.createNewTypeDevices(group))
+        Array.prototype.push.apply(accu, this.createPresetDevicesForType(group))
         return accu
       }, [])
     },
-    createNewTypeDevices([type, selectedDevIds]) {
-      const srcDevsWithRooms = this.flattenTypeDevicesWithRooms(type)
+    createPresetDevicesForType([type, selectedDevIds]) {
+      const deviceGroup = this.deviceSelection.find(g => g.type === type)
       return selectedDevIds.map(id => {
-        const { name, room } = srcDevsWithRooms.find(d => d.id == id)
+        const { name, room } = deviceGroup.items.find(d => d.id == id)
         const { value = 0 } = this.initialSelected.find(d => d.id === id) || {}
         return { id, type, name: `${name} / ${room}`, value }
       })
     },
-    flattenTypeDevicesWithRooms(type) {
-      const group = this.deviceSelection.find(g => g.type === type)
-      return group.items.reduce((accu, { id: room, items }) => {
-        Array.prototype.push.apply(
-          accu,
-          items.map(device => {
-            return { ...device, room }
-          })
-        )
-        return accu
+    getRoomGroup(deviceGroupItems) {
+      return deviceGroupItems.reduce((acc, { id, name: label, room }) => {
+        const group = acc.find(g => g.id === room)
+        if (group) {
+          group.children.push({ id, label })
+        } else {
+          acc.push({ id: room, label: room, children: [{ id, label }] })
+        }
+        return acc
       }, [])
-    },
-    treeselectNormalizer({ id, name, items }) {
-      return { id, label: name || id, children: items }
-    },
-    ioGetDeviceSelection() {
-      this.$socket.emit(
-        'presets-get-devices-selection',
-        this.$language,
-        data => (this.deviceSelection = data)
-      )
     }
   }
 }

@@ -57,6 +57,8 @@
             ref="step2"
             class="step-content"
             :devices="preset.devices"
+            :device-selection="deviceSelection"
+            @reloadDeviceSelection="ioGetDeviceSelection"
             @saveSelectedDevices="saveSelectedDevices"
           />
           <step3 ref="step3" class="step-content" :devices="preset.devices" />
@@ -82,7 +84,8 @@ export default {
   },
   data() {
     return {
-      preset: JSON.parse(JSON.stringify(this.presetForEdit))
+      preset: JSON.parse(JSON.stringify(this.presetForEdit)),
+      deviceSelection: []
     }
   },
   static() {
@@ -123,6 +126,9 @@ export default {
       onShow: this.stepShowHandler.bind(this)
     })
   },
+  created() {
+    this.ioGetDeviceSelection()
+  },
   methods: {
     save() {
       this.$emit('save', this.preset)
@@ -143,6 +149,13 @@ export default {
         /* If no focusable ref found on step content, then focus current modal. */
         this.$refs.root.focus()
       }
+    },
+    ioGetDeviceSelection() {
+      this.$socket.emit(
+        'presets-get-devices-selection',
+        this.$language,
+        data => (this.deviceSelection = data)
+      )
     }
   }
 }
