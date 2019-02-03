@@ -20,7 +20,7 @@
             class="button"
             role="button"
             title="Lisa automaattoiming"
-            :disabled="ioConnected"
+            :disabled="!ioConnected"
             @click="create"
           >
             <fa-i icon="plus" />
