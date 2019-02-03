@@ -75,11 +75,7 @@ export default {
   },
   data() {
     return {
-      preset: {
-        /* this way internal state of editor is isolated from parent model changes */
-        ...this.presetForEdit
-      },
-      deviceSource: []
+      preset: JSON.parse(JSON.stringify(this.presetForEdit))
     }
   },
   static() {
