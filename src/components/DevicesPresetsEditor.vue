@@ -53,6 +53,13 @@
         <!-- render step contents -->
         <section class="steps-content">
           <step1 ref="step1" class="step-content" :preset="preset" />
+          <step2
+            ref="step2"
+            class="step-content"
+            :devices="preset.devices"
+            @saveSelectedDevices="saveSelectedDevices"
+          />
+          <step3 ref="step3" class="step-content" :devices="preset.devices" />
           <step4 ref="step4" class="step-content" :preset.sync="preset" />
         </section>
       </section>
