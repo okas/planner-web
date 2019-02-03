@@ -24,7 +24,7 @@
         <div class="field">
           <div class="control">
             <tree-select
-              v-model="selectedDevicesObj[devType.type]"
+              v-model="selectedModels[devType.type]"
               placeholder="vali seadmed"
               value-consists-of="LEAF_PRIORITY"
               :show-count="true"
@@ -50,18 +50,18 @@ export default {
   components: { TreeSelect },
   mixins: [i18SelectMixin],
   props: {
-    selectedDevices: { type: Array, required: true }
+    devices: { type: Array, required: true }
   },
   data() {
     return {
       deviceSelection: [],
-      i_selected: [...this.selectedDevices]
+      initialSelected: JSON.parse(JSON.stringify(this.devices))
     }
   },
   computed: {
-    selectedDevicesObj: {
+    selectedModels: {
       get() {
-        return this.i_selected.reduce((groups, { type, id }) => {
+        return this.initialSelected.reduce((groups, { type, id }) => {
           const g = groups[type] || (groups[type] = [])
           g.push(id)
           return groups
@@ -83,7 +83,7 @@ export default {
       this.$emit('saveSelectedDevices', this.createNewPresetDevices())
     },
     createNewPresetDevices() {
-      return Object.entries(this.selectedDevicesObj).reduce((accu, group) => {
+      return Object.entries(this.selectedModels).reduce((accu, group) => {
         Array.prototype.push.apply(accu, this.createNewTypeDevices(group))
         return accu
       }, [])
@@ -92,7 +92,7 @@ export default {
       const srcDevsWithRooms = this.flattenTypeDevicesWithRooms(type)
       return selectedDevIds.map(id => {
         const { name, room } = srcDevsWithRooms.find(d => d.id == id)
-        const { value } = this.i_selected.find(d => d.id === id) || {}
+        const { value = 0 } = this.initialSelected.find(d => d.id === id) || {}
         return { id, type, name: `${name} / ${room}`, value }
       })
     },
