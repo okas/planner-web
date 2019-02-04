@@ -5,14 +5,8 @@
         <aside class="column is-narrow">
           <MenuSide :selected-paths="path" />
         </aside>
-        <RouterView class="column is-offset-1">
-          <h1
-            slot="header-title"
-            slot-scope="{ _class }"
-            class="title is-1"
-            :class="_class"
-            v-text="headerTitle"
-          />
+        <RouterView v-slot:header-title="{ _class }" class="column is-offset-1">
+          <h1 class="title is-1" :class="_class" v-text="headerTitle" />
         </RouterView>
       </div>
     </div>
