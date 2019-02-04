@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import {
   storeModule as i18nSelect,
   VuexI18nSelect
-} from './plugins/vue-i18n-select'
+} from '../plugins/vue-i18n-select'
 
 /**
  * Needed for store instance access.
