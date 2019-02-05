@@ -10,7 +10,7 @@
             role="button"
             title="Värskenda serverist"
             :disabled="!ioConnected"
-            @click="!ioGetPresets"
+            @click="apiDataLoad"
           >
             <fa-i icon="sync-alt" />
           </a>
@@ -67,7 +67,7 @@
           class="devices-grid"
         >
           <span class="order" v-text="preset.setorder[d.id] || '='" />
-          <span class="device-path" v-text="d.name" />
+          <span class="device-path" v-text="getDevName(d)" />
           <span class="device-value" v-text="d.value" />
         </div>
       </article>
@@ -96,20 +96,36 @@
 
 <script>
 import { mapState } from 'vuex'
+import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import RemoveConfirm from '../components/DevicesPresetsRemoveConfirm'
 import Editor from '../components/DevicesPresetsEditor'
 
 export default {
   name: 'Presets',
   components: { RemoveConfirm, Editor },
+  mixins: [i18SelectMixin],
   data() {
     return {
       presets: [],
       presetToWork: null,
       editorMode: '',
       modalShow: false,
-      modalRemoveConfirmShow: false
+      modalRemoveConfirmShow: false,
+      devicesData: []
     }
+  },
+  provide() {
+    return Object.defineProperties(
+      {},
+      {
+        getDevName: { value: this.getDevName },
+        ioGetDeviceData: { value: this.ioGetDeviceData },
+        devicesData: {
+          enumerable: true,
+          get: () => this.devicesData
+        }
+      }
+    )
   },
   MODE_CREATE: 'create',
   MODE_MODIFY: 'modify',
@@ -117,9 +133,13 @@ export default {
     ...mapState(['ioConnected'])
   },
   created() {
-    this.ioGetPresets()
+    this.apiDataLoad()
   },
   methods: {
+    apiDataLoad() {
+      this.ioGetDeviceData()
+      this.ioGetPresets()
+    },
     create() {
       this.editorMode = this.$options.MODE_CREATE
       this.presetToWork = {
@@ -212,10 +232,24 @@ export default {
       this.modalShow = this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
     },
+    getDevName({ id, type }) {
+      // ToDo add error handling in case of missing deviceData, etc.
+      const group = this.devicesData.find(g => g.type === type)
+      const { name, room } = group.items.find(d => d.id === id)
+      return `${name} / ${room}`
+    },
+
     ioGetPresets() {
       this.$socket.emit('presets-get-all', data => {
         this.presets = data
       })
+    },
+    ioGetDeviceData() {
+      this.$socket.emit(
+        'presets-get-devices-selection',
+        this.$language,
+        data => (this.devicesData = data)
+      )
     }
   }
 }

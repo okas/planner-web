@@ -6,7 +6,7 @@
           class="button"
           role="button"
           :disabled="!$store.state.ioConnected"
-          @click="reload"
+          @click="ioGetDeviceData"
         >
           <fa-i icon="sync-alt" />
         </a>
@@ -41,16 +41,14 @@
 </template>
 
 <script>
-import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
+  inject: ['devicesData', 'getDevName', 'ioGetDeviceData'],
   components: { TreeSelect },
-  mixins: [i18SelectMixin],
   props: {
-    devices: { type: Array, required: true },
-    deviceSelection: { type: Array, required: true }
+    devices: { type: Array, required: true }
   },
   data() {
     return {
@@ -68,24 +66,13 @@ export default {
       }
     },
     roomGroupedDeviceSelection() {
-      return this.deviceSelection.map(({ items, ...group }) => {
-        return {
-          ...group,
-          items: this.getRoomGroup(items)
-        }
-      })
-    }
-  },
-  watch: {
-    deviceSelection(val) {
-      /* This will rename selected devices names, in case of source device name rename */
-      if (val.length > 0) this.save()
+      return this.devicesData.map(({ items, ...group }) => ({
+        ...group,
+        items: this.getRoomGroup(items)
+      }))
     }
   },
   methods: {
-    reload() {
-      this.$emit('reloadDeviceSelection')
-    },
     save() {
       this.$emit('saveSelectedDevices', this.createNewPresetDevices())
     },
@@ -96,11 +83,9 @@ export default {
       }, [])
     },
     createPresetDevicesForType([type, selectedDevIds]) {
-      const deviceGroup = this.deviceSelection.find(g => g.type === type)
       return selectedDevIds.map(id => {
-        const { name, room } = deviceGroup.items.find(d => d.id == id)
         const { value = 0 } = this.initialSelected.find(d => d.id === id) || {}
-        return { id, type, name: `${name} / ${room}`, value }
+        return { id, type, value }
       })
     },
     getRoomGroup(deviceGroupItems) {
