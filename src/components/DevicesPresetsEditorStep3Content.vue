@@ -1,7 +1,7 @@
 <template>
   <div class="step-3 has-text-centered">
     <div v-for="d in devices" :key="`${d.type}|${d.id}`" class="devices-grid">
-      <span class="device-path" v-text="d.name" />
+      <span class="device-path" v-text="getDevName(d)" />
       <input
         v-model.number.lazy="d.value"
         class="slider is-info"
@@ -16,13 +16,13 @@
 
 <script>
 export default {
+  inject: ['devicesData', 'getDevName'],
   props: {
-    devices: { type: Array, required: true },
-    deviceSelection: { type: Array, required: true }
+    devices: { type: Array, required: true }
   },
   methods: {
     getStep({ id, type }) {
-      const group = this.deviceSelection.find(g => g.type === type)
+      const group = this.devicesData.find(g => g.type === type)
       if (!group) {
         return 1
       }
