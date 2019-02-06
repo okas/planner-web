@@ -31,7 +31,7 @@
               :multiple="true"
               :disable-branch-nodes="true"
               :options="devType.items"
-              @close="save"
+              @input="save"
             />
           </div>
         </div>
