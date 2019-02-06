@@ -20,16 +20,32 @@
     </div>
     <div class="field is-horizontal">
       <div class="field-label is-normal">
-        <label class="label has-text-grey">Ajastus</label>
+        <label class="label has-text-grey">Aktiivne</label>
       </div>
       <div class="field-body">
         <div class="field">
-          <div class="control">
+          <div class="control switch-container">
             <input
-              v-model.lazy.trim="preset.schedule"
-              class="input"
-              type="text"
+              id="editorSetAct"
+              v-model.lazy.trim="preset.active"
+              class="switch is-outlined"
+              type="checkbox"
             />
+            <label for="editorSetAct" />
+          </div>
+        </div>
+        <div class="field-label is-normal">
+          <label class="label has-text-grey">Ajastus</label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <input
+                v-model.lazy.trim="preset.schedule"
+                class="input"
+                type="text"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -46,3 +62,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.switch-container {
+  padding-top: 0.6rem;
+}
+</style>

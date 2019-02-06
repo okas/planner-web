@@ -33,6 +33,17 @@
         <h3 class="name is-size-4" v-text="preset.name" />
         <span class="schedule" v-text="preset.schedule" />
         <div class="commands field is-grouped is-marginless">
+          <div class="control switch-container">
+            <input
+              :id="`setAct|${preset.id}`"
+              type="checkbox"
+              :checked="preset.active"
+              :name="`setAct|${preset.id}`"
+              class="switch is-outlined"
+              @change="saveActiveState(preset, $event.target.checked)"
+            />
+            <label :for="`setAct|${preset.id}`" />
+          </div>
           <div class="control">
             <button
               class="button is-small is-outlined is-light"
@@ -145,6 +156,7 @@ export default {
       this.presetToWork = {
         id: 0,
         name: '',
+        active: true,
         schedule: '',
         devices: [],
         setorder: {}
@@ -228,6 +240,24 @@ export default {
         this.presetToWork = null
       })
     },
+    saveActiveState(preset, newState) {
+      const payload = { id: preset.id, active: newState }
+      this.$socket.emit('presets-set-active', payload, ({ status, error }) => {
+        if (error) {
+          console.error(
+            `presets-set-active: API responded with error: [ ${error} ]`
+          )
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event 'presets-set-active' responded with status ${status}.`
+          )
+          return
+        }
+        preset.active = newState
+      })
+    },
     quitEventHandler() {
       this.modalShow = this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
@@ -262,7 +292,7 @@ export default {
   grid-template-areas:
     'name name'
     'schd cmmd';
-  grid-template-columns: 15rem 10rem;
+  grid-template-columns: 15rem 12rem;
   .name {
     grid-area: name;
   }
@@ -280,5 +310,8 @@ export default {
     grid-template-columns: 2rem 12.5rem 1fr;
     grid-auto-rows: 1fr;
   }
+}
+.switch-container {
+  padding-top: 0.225rem;
 }
 </style>
