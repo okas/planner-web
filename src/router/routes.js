@@ -31,7 +31,10 @@ export default [
         path: 'presets',
         component: '../views/DevicesPresets.vue',
         name: 'dev-presets',
-        meta: { title: 'Eelseadistused', alt: 'Seadistused hulgijuhtimiseks' }
+        meta: {
+          title: 'Automaat',
+          alt: 'Seadistused automaatseteks tegevusteks'
+        }
       }
     ]
   },
