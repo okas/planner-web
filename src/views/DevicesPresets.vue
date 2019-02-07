@@ -77,7 +77,7 @@
           :key="`${d.type}|${d.id}`"
           class="devices-grid"
         >
-          <span class="order" v-text="preset.setorder[d.id] || '='" />
+          <!-- <span class="order" v-text="preset.setorder[d.id] || '='" /> -->
           <span class="device-path" v-text="getDevName(d)" />
           <span class="device-value" v-text="d.value" />
         </div>
@@ -158,8 +158,8 @@ export default {
         name: '',
         active: true,
         schedule: '',
-        devices: [],
-        setorder: {}
+        devices: []
+        // setorder: {}
       }
       this.modalShow = true
     },
@@ -208,8 +208,9 @@ export default {
       if (
         !preset.name &&
         !preset.schedule &&
-        preset.devices.length === 0 &&
-        Object.keys(preset.setorder).length === 0
+        preset.devices.length ===
+          0 /*  &&
+        Object.keys(preset.setorder).length === 0 */
       ) {
         return
       }
@@ -303,11 +304,12 @@ export default {
     grid-area: cmmd;
   }
   .devices-grid {
-    grid-column: 1 / 4;
+    // grid-column: 1 / 4;
+    grid-column: 1 / 3;
     display: grid;
     gap: 0.2rem;
     grid-auto-flow: column;
-    grid-template-columns: 2rem 12.5rem 1fr;
+    grid-template-columns: /* 2rem */ 12.5rem 1fr;
     grid-auto-rows: 1fr;
   }
 }
