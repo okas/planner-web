@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { setHtmlHeadTitle, resolveRouteOptionComponents } from './plugins'
-import rawRoutes from './rawRoutes'
+import rawRoutes from './routes'
 
 Vue.use(Router)
 
