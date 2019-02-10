@@ -29,16 +29,16 @@
         <!-- render step actions/buttons -->
         <section class="steps-actions">
           <div class="steps-action">
-            <button class="button is-outlined is-success" @click="save">
+            <button class="button is-outlined is-light" data-nav="previous">
               <span class="icon">
-                <fa-i icon="check" />
+                <fa-i icon="chevron-left" />
               </span>
             </button>
           </div>
           <div class="steps-action">
-            <button class="button is-outlined is-light" data-nav="previous">
+            <button class="button is-outlined is-success" @click="save">
               <span class="icon">
-                <fa-i icon="chevron-left" />
+                <fa-i icon="check" />
               </span>
             </button>
           </div>
@@ -167,5 +167,8 @@ export default {
 }
 .step-item:last-of-type.is-active .step-marker .icon {
   display: inherit;
+}
+.step-item.is-active .step-details {
+  color: $primary;
 }
 </style>
