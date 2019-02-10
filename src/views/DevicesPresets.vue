@@ -29,59 +29,13 @@
       </div>
     </header>
     <div class="presets-grid">
-      <article v-for="preset in presets" :key="preset.id" class="preset">
-        <h3 class="name is-size-4" v-text="preset.name" />
-        <span class="schedule" v-text="preset.schedule" />
-        <div class="commands field is-grouped is-marginless">
-          <div class="control switch-container">
-            <input
-              :id="`setAct|${preset.id}`"
-              type="checkbox"
-              :checked="preset.active"
-              :name="`setAct|${preset.id}`"
-              class="switch is-outlined"
-              @change="saveActiveState(preset, $event.target.checked)"
-            />
-            <label :for="`setAct|${preset.id}`" />
-          </div>
-          <div class="control">
-            <button
-              class="button is-small is-outlined is-light"
-              title="Kustuta automaattoiming"
-              @click="removeConfirm(preset)"
-            >
-              <fa-i icon="times" />
-            </button>
-          </div>
-          <div class="control">
-            <button
-              class="button is-small is-outlined is-light"
-              title="Muuda automaattoiming"
-              @click="modify(preset)"
-            >
-              <span class="icon">
-                <fa-i icon="cog" />
-              </span>
-            </button>
-          </div>
-          <div class="control">
-            <button class="button is-small is-outlined is-light">
-              <span class="icon">
-                <fa-i icon="play" />
-              </span>
-            </button>
-          </div>
-        </div>
-        <div
-          v-for="d in preset.devices"
-          :key="`${d.type}|${d.id}`"
-          class="devices-grid"
-        >
-          <!-- <span class="order" v-text="preset.setorder[d.id] || '='" /> -->
-          <span class="device-path" v-text="getDevName(d)" />
-          <span class="device-value" v-text="d.value" />
-        </div>
-      </article>
+      <item
+        v-for="p in presets"
+        :key="p.id"
+        :preset="p"
+        @modify="modify"
+        @removeConfirm="removeConfirm"
+      />
     </div>
     <remove-confirm
       v-if="modalRemoveConfirmShow"
@@ -108,12 +62,13 @@
 <script>
 import { mapState } from 'vuex'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
+import Item from '../components/DevicesPresetsItem'
 import RemoveConfirm from '../components/DevicesPresetsRemoveConfirm'
 import Editor from '../components/DevicesPresetsEditor'
 
 export default {
   name: 'Presets',
-  components: { RemoveConfirm, Editor },
+  components: { Item, RemoveConfirm, Editor },
   mixins: [i18SelectMixin],
   data() {
     return {
@@ -241,24 +196,6 @@ export default {
         this.presetToWork = null
       })
     },
-    saveActiveState(preset, newState) {
-      const payload = { id: preset.id, active: newState }
-      this.$socket.emit('presets-set-active', payload, ({ status, error }) => {
-        if (error) {
-          console.error(
-            `presets-set-active: API responded with error: [ ${error} ]`
-          )
-          return
-        }
-        if (status !== 'ok') {
-          console.warn(
-            `API event 'presets-set-active' responded with status ${status}.`
-          )
-          return
-        }
-        preset.active = newState
-      })
-    },
     quitEventHandler() {
       this.modalShow = this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
@@ -284,36 +221,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.preset {
-  margin-bottom: 3rem;
-  display: grid;
-  gap: 0.75rem;
-  grid-template-areas:
-    'name name'
-    'schd cmmd';
-  grid-template-columns: 15rem 12rem;
-  .name {
-    grid-area: name;
-  }
-  .schedule {
-    grid-area: schd;
-  }
-  .commands {
-    grid-area: cmmd;
-  }
-  .devices-grid {
-    // grid-column: 1 / 4;
-    grid-column: 1 / 3;
-    display: grid;
-    gap: 0.2rem;
-    grid-auto-flow: column;
-    grid-template-columns: /* 2rem */ 12.5rem 1fr;
-    grid-auto-rows: 1fr;
-  }
-}
-.switch-container {
-  padding-top: 0.225rem;
-}
-</style>
