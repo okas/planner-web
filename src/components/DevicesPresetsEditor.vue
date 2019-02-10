@@ -53,13 +53,14 @@
         <!-- render step contents -->
         <section class="steps-content">
           <naming ref="step1" class="step-content" :preset="preset" />
+          <timing ref="step2" class="step-content" :preset="preset" />
           <selection
-            ref="step2"
+            ref="step3"
             class="step-content"
             :devices="preset.devices"
             @saveSelectedDevices="saveSelectedDevices"
           />
-          <states ref="step3" class="step-content" :devices="preset.devices" />
+          <states ref="step4" class="step-content" :devices="preset.devices" />
           <!-- <step4 ref="step4" class="step-content" :preset.sync="preset" /> -->
         </section>
       </section>
@@ -71,12 +72,13 @@
 <script>
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import Naming from './DevicesPresetsEditorNaming'
+import Timing from './DevicesPresetsEditorTiming'
 import Selection from './DevicesPresetsEditorSelection'
 import States from './DevicesPresetsEditorStates'
 // import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  components: { Naming, Selection, States /* Step4 */ },
+  components: { Naming, Timing, Selection, States /* Step4 */ },
   props: {
     presetForEdit: { type: Object, required: true }
   },
@@ -96,12 +98,18 @@ export default {
         },
         {
           id: 2,
+          title: 'Ajastus',
+          description: 'Määra automaatse käivituse aeg.',
+          icon: 'check'
+        },
+        {
+          id: 3,
           title: 'Seadmed',
           description: 'Vali välja sedmed, mida on vaja juhtida.',
           icon: 'check'
         },
         {
-          id: 3,
+          id: 4,
           title: 'Olekud',
           description:
             'Määra seadmetele olek, millesse need käivitusel pannakse.',
