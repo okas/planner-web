@@ -25,26 +25,28 @@ export default {}
   display: grid;
   grid-gap: 7px;
   grid-template-rows: 40px 200px 40px;
-  grid-template-areas: 'h' 'x' 'f';
-}
+  grid-template-areas:
+    'h'
+    'x'
+    'f';
 .p-head {
   grid-area: h;
 }
 .p-container {
   grid-area: x;
-  // nested rules
   grid-gap: 5px;
   display: grid;
   grid-template-columns: 75px auto;
   grid-template-areas: 'a m';
-}
 .p-aside {
   grid-area: a;
 }
 .p-main {
   grid-area: m;
 }
+  }
 .p-footer {
   grid-area: f;
+}
 }
 </style>
