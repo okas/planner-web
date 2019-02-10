@@ -104,6 +104,13 @@ export default {
       return this.isIndetermined || this.selectedDays.every(d => d)
     }
   },
+  watch: {
+    selectedTime(val) {
+      if (this.preset.id === 0) {
+        this.preset.active = val ? true : false
+      }
+    }
+  },
   methods: {
     formatedTime(val) {
       this.selectedTime = val

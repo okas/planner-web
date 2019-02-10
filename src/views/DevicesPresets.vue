@@ -111,7 +111,7 @@ export default {
       this.presetToWork = {
         id: 0,
         name: '',
-        active: true,
+        active: false,
         schedule: '',
         devices: []
         // setorder: {}
