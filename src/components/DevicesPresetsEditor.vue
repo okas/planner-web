@@ -165,10 +165,6 @@ export default {
 .steps-action [data-nav][disabled] {
   display: none;
 }
-.step-item:last-of-type.is-active .step-marker {
-  color: $success;
-  border-color: $success;
-}
 .step-item:last-of-type.is-active .step-marker .icon {
   display: inherit;
 }
