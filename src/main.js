@@ -7,6 +7,7 @@ import './fa-icons'
 import { VueI18nSelect } from './plugins/vue-i18n-select'
 import { insertFaviconsToDOM } from './utilities'
 import LayoutApp from './layouts/App.vue'
+import './assets/app_imports.scss'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 

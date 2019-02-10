@@ -16,8 +16,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/app_imports.scss';
-
 .router-link-active {
   text-shadow: 0px 0px 20px #269294;
 }
