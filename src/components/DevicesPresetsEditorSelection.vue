@@ -1,5 +1,5 @@
 <template>
-  <div class="step-2 has-text-centered">
+  <div class="step-selection has-text-centered">
     <div class="field">
       <div class="control">
         <a

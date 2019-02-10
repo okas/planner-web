@@ -1,5 +1,5 @@
 <template>
-  <div class="step-3">
+  <div class="step-states">
     <div
       v-for="d in devices"
       :key="`${d.type}|${d.id}`"

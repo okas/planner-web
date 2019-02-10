@@ -52,14 +52,14 @@
         </section>
         <!-- render step contents -->
         <section class="steps-content">
-          <step1 ref="step1" class="step-content" :preset="preset" />
-          <step2
+          <naming ref="step1" class="step-content" :preset="preset" />
+          <selection
             ref="step2"
             class="step-content"
             :devices="preset.devices"
             @saveSelectedDevices="saveSelectedDevices"
           />
-          <step3 ref="step3" class="step-content" :devices="preset.devices" />
+          <states ref="step3" class="step-content" :devices="preset.devices" />
           <!-- <step4 ref="step4" class="step-content" :preset.sync="preset" /> -->
         </section>
       </section>
@@ -70,13 +70,13 @@
 
 <script>
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
-import Step1 from './DevicesPresetsEditorStep1Content'
-import Step2 from './DevicesPresetsEditorStep2Content'
-import Step3 from './DevicesPresetsEditorStep3Content'
+import Naming from './DevicesPresetsEditorNaming'
+import Selection from './DevicesPresetsEditorSelection'
+import States from './DevicesPresetsEditorStates'
 // import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  components: { Step1, Step2, Step3 /* Step4 */ },
+  components: { Naming, Selection, States /* Step4 */ },
   props: {
     presetForEdit: { type: Object, required: true }
   },
