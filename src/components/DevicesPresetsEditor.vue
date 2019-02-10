@@ -93,7 +93,7 @@ export default {
         {
           id: 1,
           title: 'Nimetus',
-          description: 'Määra nimi ja millal seadmeid juhtima hakatakse.',
+          description: 'Määra automaadi nimi.',
           icon: 'check'
         },
         {
@@ -105,14 +105,13 @@ export default {
         {
           id: 3,
           title: 'Seadmed',
-          description: 'Vali välja sedmed, mida on vaja juhtida.',
+          description: 'Vali välja juhitavad seadmed.',
           icon: 'check'
         },
         {
           id: 4,
           title: 'Olekud',
-          description:
-            'Määra seadmetele olek, millesse need käivitusel pannakse.',
+          description: 'Määra seadmetele olekud tegevuse lõpuks.',
           icon: 'flag'
         }
         // {
