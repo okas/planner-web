@@ -4,7 +4,7 @@
       <div class="field-label">
         <label for="timeSelector" class="label has-text-grey">Ajastus</label>
       </div>
-      <div class="field-body">
+      <div class="time field-body">
         <div class="field">
           <timeselector
             id="timeSelector"
@@ -28,12 +28,13 @@
           </div>
           <div class="field-body">
             <div class="field">
-              <div class="control">
+              <div class="control" :title="activeTitle">
                 <input
                   id="editorSetAct"
-                  v-model.lazy.trim="preset.active"
+                  v-model.lazy="preset.active"
                   class="switch is-outlined"
                   type="checkbox"
+                  :disabled="!selectedTime"
                 />
                 <label for="editorSetAct" />
               </div>
@@ -44,7 +45,7 @@
     </div>
     <div class="weekdays field is-horizontal">
       <div class="field-label">
-        <label class="label has-text-grey" v-text="'Päevad'" />
+        <label class="label has-text-grey">Päevad</label>
       </div>
       <div class="field-body">
         <div class="field is-grouped is-grouped-multiline">
@@ -102,13 +103,14 @@ export default {
     },
     runeveryDay() {
       return this.isIndetermined || this.selectedDays.every(d => d)
+    },
+    activeTitle() {
+      return !this.selectedTime ? '! Määra aeg, et automaat aktiveerida' : ''
     }
   },
   watch: {
     selectedTime(val) {
-      if (this.preset.id === 0) {
-        this.preset.active = val ? true : false
-      }
+      this.preset.active = val ? true : false
     }
   },
   methods: {
