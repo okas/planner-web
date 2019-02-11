@@ -171,4 +171,7 @@ export default {
 .step-item.is-active .step-details {
   color: $primary;
 }
+.step-item:last-of-type.is-active .step-marker .icon {
+  color: $success;
+}
 </style>
