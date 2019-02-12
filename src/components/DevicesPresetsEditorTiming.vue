@@ -31,7 +31,7 @@
               <div class="control" :title="activeTitle">
                 <input
                   id="editorSetAct"
-                  v-model.lazy="preset.active"
+                  v-model="preset.active"
                   class="switch is-outlined"
                   type="checkbox"
                   :disabled="!selectedTime"
