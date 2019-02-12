@@ -3,13 +3,14 @@
     <h3 class="name is-size-4" v-text="preset.name" />
     <span class="schedule" v-text="preset.schedule" />
     <div class="commands field is-grouped is-marginless">
-      <div class="control switch-container">
+      <div class="switch-container control" :title="activeTitle">
         <input
           :id="`setAct|${preset.id}`"
+          v-model="preset.active"
           class="switch is-outlined"
           type="checkbox"
-          :checked="preset.active"
           :name="`setAct|${preset.id}`"
+          :disabled="disableSetActive"
           @change="saveActiveState(preset, $event.target.checked)"
         />
         <label :for="`setAct|${preset.id}`" />
@@ -58,6 +59,21 @@
 export default {
   inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },
+  computed: {
+    disableSetActive() {
+      return !this.preset.schedule && !this.$store.state.ioConnected
+    },
+    activeTitle() {
+      return !this.preset.active ? 'Määra aeg' : ''
+    }
+  },
+  watch: {
+    'preset.schedule'(val) {
+      if (!val) {
+        this.preset.active = val ? true : false
+      }
+    }
+  },
   methods: {
     saveActiveState(preset, newState) {
       const payload = { id: preset.id, active: newState }
