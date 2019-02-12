@@ -102,50 +102,48 @@ export default {
       return !this.selectedDaysOfWeek.includes(true)
     },
     activeTitle() {
-      return !this.selectedTime ? '! Määra aeg, et automaat aktiveerida' : ''
+      return !this.preset.active ? '! Määra aeg, et automaat aktiveerida' : ''
     }
   },
   watch: {
-    selectedTime(val) {
-      this.setSchedule({ time: val })
+    selectedTime: 'handleSelectedTime',
+    selectedDaysOfWeek: 'handleSelectedDaysOfWeek',
+    'preset.schedule'(val) {
       this.preset.active = val ? true : false
-    },
-    selectedDaysOfWeek(val) {
-      this.setSchedule({ daysOfWeek: val })
     }
   },
   methods: {
-    setSchedule({ time = null, daysOfWeek = null }) {
-      let fields
+    getOrCreateCronFields() {
       if (this.preset.schedule) {
-        fields = this.preset.schedule
+        return this.preset.schedule
           .split(' ')
           .reverse()
           .slice(0, 5)
           .reverse()
       } else {
-        this.preset.schedule = '* * * * *'
-        fields = this.preset.schedule.split(' ')
+        return new Array(5).fill('*')
       }
-      this.setScheduleTime(time, fields)
-      this.setScheduleDaysOfWeek(daysOfWeek, fields)
+    },
+    handleSelectedTime(val) {
+      if (!val) {
+        this.preset.schedule = null
+        return
+      }
+      const fields = this.getOrCreateCronFields()
+      const [h, m] = val.split(':')
+      fields[0] = m.replace(/^0/, '')
+      fields[1] = h.replace(/^0/, '')
       this.preset.schedule = fields.join(' ')
     },
-    setScheduleTime(time, fields) {
-      if (time) {
-        const [h, m] = time.split(':')
-        fields[0] = m.replace(/^0/, '')
-        fields[1] = h.replace(/^0/, '')
+    handleSelectedDaysOfWeek(val) {
+      if (!val || !this.selectedTime) {
+        this.preset.schedule = null
+        return
       }
-    },
-    setScheduleDaysOfWeek(daysOfWeek, fields) {
-      if (daysOfWeek) {
-        const weekDays = daysOfWeek.reduce(
-          (acc, v, i) => (acc += v ? `,${i}` : ''),
-          ''
-        )
-        fields[4] = weekDays.substring(1) || '*'
-      }
+      const fields = this.getOrCreateCronFields()
+      const weekDays = val.reduce((acc, v, i) => (acc += v ? `,${i}` : ''), '')
+      fields[4] = weekDays.substring(1) || '*'
+      this.preset.schedule = fields.join(' ')
     },
     formatedTime(val) {
       this.selectedTime = val
