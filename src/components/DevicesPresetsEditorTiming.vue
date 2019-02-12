@@ -49,7 +49,12 @@
       </div>
       <div class="field-body">
         <div class="field is-grouped is-grouped-multiline">
-          <div v-for="wd of weekInfo" :key="wd.id" class="control">
+          <div
+            v-for="wd of weekInfo"
+            :key="wd.id"
+            class="control"
+            :title="activeTitle"
+          >
             <input
               :id="`wd|${wd.id}`"
               v-model="selectedDaysOfWeek[wd.id]"
@@ -57,6 +62,7 @@
               type="checkbox"
               :name="`wd|${wd.id}`"
               :indeterminate.prop="isIndetermined"
+              :disabled="!selectedTime"
             />
             <label :for="`wd|${wd.id}`" v-text="wd.name" />
           </div>
@@ -102,7 +108,7 @@ export default {
       return !this.selectedDaysOfWeek.includes(true)
     },
     activeTitle() {
-      return !this.preset.active ? '! Määra aeg, et automaat aktiveerida' : ''
+      return !this.preset.active ? 'Määra aeg' : ''
     }
   },
   watch: {
