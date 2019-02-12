@@ -52,7 +52,7 @@
           <div v-for="wd of weekInfo" :key="wd.id" class="control">
             <input
               :id="`wd|${wd.id}`"
-              v-model="selectedDays[wd.id]"
+              v-model="selectedDaysOfWeek[wd.id]"
               class="is-checkradio has-no-border"
               type="checkbox"
               :name="`wd|${wd.id}`"
@@ -76,10 +76,10 @@ export default {
   props: { preset: { type: Object, required: true } },
   data() {
     return {
-      selectedDays: Array(7),
+      selectedDaysOfWeek: Array(7),
       selectedTime: null,
       displayFormat: 'HH:mm',
-      returnFormat: 'H:m',
+      returnFormat: 'HH:mm', //Bug, non-padded numbers do not work
       selectedTimeInterval: { h: 1, m: 5 }
     }
   },
@@ -99,10 +99,7 @@ export default {
       return result
     },
     isIndetermined() {
-      return !this.selectedDays.includes(true)
-    },
-    runeveryDay() {
-      return this.isIndetermined || this.selectedDays.every(d => d)
+      return !this.selectedDaysOfWeek.includes(true)
     },
     activeTitle() {
       return !this.selectedTime ? '! Määra aeg, et automaat aktiveerida' : ''
@@ -110,10 +107,46 @@ export default {
   },
   watch: {
     selectedTime(val) {
+      this.setSchedule({ time: val })
       this.preset.active = val ? true : false
+    },
+    selectedDaysOfWeek(val) {
+      this.setSchedule({ daysOfWeek: val })
     }
   },
   methods: {
+    setSchedule({ time = null, daysOfWeek = null }) {
+      let fields
+      if (this.preset.schedule) {
+        fields = this.preset.schedule
+          .split(' ')
+          .reverse()
+          .slice(0, 5)
+          .reverse()
+      } else {
+        this.preset.schedule = '* * * * *'
+        fields = this.preset.schedule.split(' ')
+      }
+      this.setScheduleTime(time, fields)
+      this.setScheduleDaysOfWeek(daysOfWeek, fields)
+      this.preset.schedule = fields.join(' ')
+    },
+    setScheduleTime(time, fields) {
+      if (time) {
+        const [h, m] = time.split(':')
+        fields[0] = m.replace(/^0/, '')
+        fields[1] = h.replace(/^0/, '')
+      }
+    },
+    setScheduleDaysOfWeek(daysOfWeek, fields) {
+      if (daysOfWeek) {
+        const weekDays = daysOfWeek.reduce(
+          (acc, v, i) => (acc += v ? `,${i}` : ''),
+          ''
+        )
+        fields[4] = weekDays.substring(1) || '*'
+      }
+    },
     formatedTime(val) {
       this.selectedTime = val
     },
