@@ -14,8 +14,8 @@
             :return-format="returnFormat"
             :pad-time="true"
             :interval="selectedTimeInterval"
-            @formatedTime="formatedTime"
-            @cleared="clearSelectedTime"
+            @formatedTime="handleFormatedTime"
+            @cleared="handleClearSelectedTime"
           >
             <span slot="clear-ico" class="icon">
               <fa-i icon="times" />
@@ -86,15 +86,17 @@ export default {
       selectedTime: null,
       displayFormat: 'HH:mm',
       returnFormat: 'HH:mm', //Bug, non-padded numbers do not work
-      selectedTimeInterval: { h: 1, m: 5 }
+      selectedTimeInterval: { h: 1, m: 5 },
+      cronModel: null
     }
   },
   computed: {
     weekInfo() {
+      // ToDo: consider flattening (to object or to array with primitives)
       const dayMilSecs = 86400000
       const weekStartRelatedtoEpochSecs = dayMilSecs - 5 * dayMilSecs
-      let result = Array(7)
-      for (let i = 0; i < 7; i++) {
+      let result = Array(this.selectedDaysOfWeek.length)
+      for (let i = 0; i < result.length; i++) {
         result[i] = {
           id: i,
           name: new Date(
@@ -108,24 +110,23 @@ export default {
       return !this.selectedDaysOfWeek.includes(true)
     },
     activeTitle() {
-      return !this.preset.active ? 'Määra aeg' : ''
+      return !this.selectedTime ? 'Määra aeg' : ''
     }
   },
   watch: {
+    cronModel: { deep: true, handler: 'handleCronModel' },
     selectedTime: 'handleSelectedTime',
     selectedDaysOfWeek: 'handleSelectedDaysOfWeek',
-    'preset.schedule'(val) {
-      this.preset.active = val ? true : false
-    }
+    'preset.schedule': 'handlePresetSchedule'
+  },
+  created() {
+    const [minute, hour, dayMonth, month, dayWeek] = this.getCronFields()
+    this.cronModel = { minute, hour, dayMonth, month, dayWeek }
   },
   methods: {
-    getOrCreateCronFields() {
+    getCronFields() {
       if (this.preset.schedule) {
-        return this.preset.schedule
-          .split(' ')
-          .reverse()
-          .slice(0, 5)
-          .reverse()
+        return this.preset.schedule.split(' ')
       } else {
         return new Array(5).fill('*')
       }
@@ -135,26 +136,28 @@ export default {
         this.preset.schedule = null
         return
       }
-      const fields = this.getOrCreateCronFields()
       const [h, m] = val.split(':')
-      fields[0] = m.replace(/^0/, '')
-      fields[1] = h.replace(/^0/, '')
-      this.preset.schedule = fields.join(' ')
+      this.cronModel.minute = m.replace(/^0/, '') //ToDo hovmani changes would fire Obiect.assign()
+      this.cronModel.hour = h.replace(/^0/, '')
     },
     handleSelectedDaysOfWeek(val) {
       if (!val || !this.selectedTime) {
-        this.preset.schedule = null
+        this.preset.schedule = null // ToDo, do it elsewhere?
         return
       }
-      const fields = this.getOrCreateCronFields()
-      const weekDays = val.reduce((acc, v, i) => (acc += v ? `,${i}` : ''), '')
-      fields[4] = weekDays.substring(1) || '*'
-      this.preset.schedule = fields.join(' ')
+      const days = val.reduce((acc, v, i) => (acc += v ? `,${i}` : ''), '')
+      this.cronModel.dayWeek = days.substring(1) || '*'
     },
-    formatedTime(val) {
+    handleCronModel(val) {
+      this.preset.schedule = Object.values(val).join(' ')
+    },
+    handlePresetSchedule(val) {
+      this.preset.active = val ? true : false
+    },
+    handleFormatedTime(val) {
       this.selectedTime = val
     },
-    clearSelectedTime() {
+    handleClearSelectedTime() {
       this.selectedTime = null
     }
   }
