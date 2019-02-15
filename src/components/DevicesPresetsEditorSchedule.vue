@@ -35,7 +35,7 @@
                   v-model="preset.active"
                   class="switch is-outlined"
                   type="checkbox"
-                  :disabled="!preset.schedule"
+                  :disabled="!cronModel"
                 />
                 <label for="editorSetAct" />
               </div>
@@ -63,7 +63,7 @@
               type="checkbox"
               :name="`wd|${wd.id}`"
               :indeterminate.prop="isIndetermined"
-              :disabled="!preset.schedule"
+              :disabled="!cronModel"
             />
             <label :for="`wd|${wd.id}`" v-text="wd.name" />
           </div>
@@ -113,7 +113,7 @@ export default {
       return !this.selectedDaysOfWeek.includes(true)
     },
     activeTitle() {
-      return this.preset.schedule ? '' : this.placeHolderText
+      return this.cronModel ? '' : this.placeHolderText
     }
   },
   watch: {
