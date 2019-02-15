@@ -53,7 +53,7 @@
         <!-- render step contents -->
         <section class="steps-content">
           <naming ref="step1" class="step-content" :preset="preset" />
-          <timing ref="step2" class="step-content" :preset="preset" />
+          <schedule ref="step2" class="step-content" :preset="preset" />
           <selection
             ref="step3"
             class="step-content"
@@ -72,13 +72,13 @@
 <script>
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import Naming from './DevicesPresetsEditorNaming'
-import Timing from './DevicesPresetsEditorTiming'
+import Schedule from './DevicesPresetsEditorSchedule'
 import Selection from './DevicesPresetsEditorSelection'
 import States from './DevicesPresetsEditorStates'
 // import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  components: { Naming, Timing, Selection, States /* Step4 */ },
+  components: { Naming, Schedule, Selection, States /* Step4 */ },
   props: {
     presetForEdit: { type: Object, required: true }
   },
