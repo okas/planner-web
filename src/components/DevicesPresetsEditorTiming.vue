@@ -136,6 +136,7 @@ export default {
       this.initCronModel(this.preset.schedule)
     }
     this.initTime()
+    this.initWeekDays()
     this.setInitialTimePlaceholder()
   },
   methods: {
@@ -152,6 +153,14 @@ export default {
       time.setMinutes(this.cronModel.minute)
       time.setHours(this.cronModel.hour)
       this.initialTime = time
+    },
+    initWeekDays() {
+      if (!this.cronModel) {
+        return
+      }
+      this.cronModel.dayWeek
+        .split(',')
+        .forEach(d => (this.selectedDaysOfWeek[d] = true))
     },
     ensureCronModel() {
       if (!this.preset.schedule) {
