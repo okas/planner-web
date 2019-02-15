@@ -178,7 +178,7 @@ export default {
     handleFormatedTime(val) {
       const [h, m] = val.split(':')
       this.ensureCronModel()
-      this.cronModel.minute = m.replace(/^0/, '') //ToDo hovmani changes would fire Obiect.assign()
+      this.cronModel.minute = m.replace(/^0/, '')
       this.cronModel.hour = h.replace(/^0/, '')
     },
     handleClearSelectedTime() {
