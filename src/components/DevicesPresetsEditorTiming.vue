@@ -9,7 +9,8 @@
           <timeselector
             id="timeSelector"
             class="control"
-            placeholder="vali aeg"
+            :placeholder="placeholderTimeSelect"
+            :value="initialTime"
             :display-format="displayFormat"
             :return-format="returnFormat"
             :pad-time="true"
@@ -34,7 +35,7 @@
                   v-model="preset.active"
                   class="switch is-outlined"
                   type="checkbox"
-                  :disabled="!selectedTime"
+                  :disabled="!preset.schedule"
                 />
                 <label for="editorSetAct" />
               </div>
@@ -62,7 +63,7 @@
               type="checkbox"
               :name="`wd|${wd.id}`"
               :indeterminate.prop="isIndetermined"
-              :disabled="!selectedTime"
+              :disabled="!preset.schedule"
             />
             <label :for="`wd|${wd.id}`" v-text="wd.name" />
           </div>
@@ -83,10 +84,12 @@ export default {
   data() {
     return {
       selectedDaysOfWeek: Array(7),
-      selectedTime: null,
+      initialTime: null,
       displayFormat: 'HH:mm',
       returnFormat: 'HH:mm', //Bug, non-padded numbers do not work
       selectedTimeInterval: { h: 1, m: 5 },
+      placeHolderText: 'Määra aeg',
+      placeholderTimeSelect: '',
       cronModel: null
     }
   },
@@ -110,55 +113,63 @@ export default {
       return !this.selectedDaysOfWeek.includes(true)
     },
     activeTitle() {
-      return !this.selectedTime ? 'Määra aeg' : ''
+      return this.preset.schedule ? '' : this.placeHolderText
     }
   },
   watch: {
-    cronModel: { deep: true, handler: 'handleCronModel' },
-    selectedTime: 'handleSelectedTime',
-    selectedDaysOfWeek: 'handleSelectedDaysOfWeek',
-    'preset.schedule': 'handlePresetSchedule'
-  },
-  created() {
-    const [minute, hour, dayMonth, month, dayWeek] = this.getCronFields()
-    this.cronModel = { minute, hour, dayMonth, month, dayWeek }
-  },
-  methods: {
-    getCronFields() {
-      if (this.preset.schedule) {
-        return this.preset.schedule.split(' ')
-      } else {
-        return new Array(5).fill('*')
+    cronModel: {
+      deep: true,
+      handler(val) {
+        this.preset.schedule = val ? Object.values(val).join(' ') : null
       }
     },
-    handleSelectedTime(val) {
-      if (!val) {
-        this.preset.schedule = null
-        return
-      }
-      const [h, m] = val.split(':')
-      this.cronModel.minute = m.replace(/^0/, '') //ToDo hovmani changes would fire Obiect.assign()
-      this.cronModel.hour = h.replace(/^0/, '')
-    },
-    handleSelectedDaysOfWeek(val) {
-      if (!val || !this.selectedTime) {
-        this.preset.schedule = null // ToDo, do it elsewhere?
-        return
-      }
+    selectedDaysOfWeek(val) {
       const days = val.reduce((acc, v, i) => (acc += v ? `,${i}` : ''), '')
       this.cronModel.dayWeek = days.substring(1) || '*'
     },
-    handleCronModel(val) {
-      this.preset.schedule = Object.values(val).join(' ')
-    },
-    handlePresetSchedule(val) {
+    'preset.schedule'(val) {
       this.preset.active = val ? true : false
+    }
+  },
+  created() {
+    if (this.preset.schedule) {
+      this.initCronModel(this.preset.schedule)
+    }
+    this.initTime()
+    this.setInitialTimePlaceholder()
+  },
+  methods: {
+    initCronModel(cronExpr) {
+      const [minute, hour, dayMonth, month, dayWeek] = cronExpr.split(' ')
+      this.cronModel = { minute, hour, dayMonth, month, dayWeek }
+    },
+    initTime() {
+      if (!this.cronModel || !this.cronModel.minute || !this.cronModel.hour) {
+        this.initialTime = null
+        return
+      }
+      let time = new Date()
+      time.setMinutes(this.cronModel.minute)
+      time.setHours(this.cronModel.hour)
+      this.initialTime = time
+    },
+    ensureCronModel() {
+      if (!this.preset.schedule) {
+        this.initCronModel('* * * * *')
+      }
+    },
+    setInitialTimePlaceholder() {
+      this.placeholderTimeSelect = this.initialTime ? '' : this.placeHolderText
     },
     handleFormatedTime(val) {
-      this.selectedTime = val
+      const [h, m] = val.split(':')
+      this.ensureCronModel()
+      this.cronModel.minute = m.replace(/^0/, '') //ToDo hovmani changes would fire Obiect.assign()
+      this.cronModel.hour = h.replace(/^0/, '')
     },
     handleClearSelectedTime() {
-      this.selectedTime = null
+      this.cronModel = null
+      this.placeholderTimeSelect = this.placeHolderText
     }
   }
 }
