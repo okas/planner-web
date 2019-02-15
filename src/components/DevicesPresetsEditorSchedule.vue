@@ -120,15 +120,19 @@ export default {
     cronModel: {
       deep: true,
       handler(val) {
-        this.preset.schedule = val ? Object.values(val).join(' ') : null
+        if (val) {
+          // cronModel order is important
+          this.preset.schedule = Object.values(val).join(' ')
+          this.preset.active = true
+        } else {
+          this.preset.schedule = null
+          this.preset.active = false
+        }
       }
     },
     selectedDaysOfWeek(val) {
       const days = val.reduce((acc, v, i) => (acc += v ? `,${i}` : ''), '')
       this.cronModel.dayWeek = days.substring(1) || '*'
-    },
-    'preset.schedule'(val) {
-      this.preset.active = val ? true : false
     }
   },
   created() {
@@ -142,6 +146,7 @@ export default {
   methods: {
     initCronModel(cronExpr) {
       const [minute, hour, dayMonth, month, dayWeek] = cronExpr.split(' ')
+      // cronModel order is important
       this.cronModel = { minute, hour, dayMonth, month, dayWeek }
     },
     initTime() {
