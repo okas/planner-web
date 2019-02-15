@@ -138,8 +138,9 @@ export default {
   created() {
     if (this.preset.schedule) {
       this.initCronModel(this.preset.schedule)
+      this.setInitialTime()
     }
-    this.initTime()
+
     this.initWeekDays()
     this.setInitialTimePlaceholder()
   },
@@ -149,9 +150,8 @@ export default {
       // cronModel order is important
       this.cronModel = { minute, hour, dayMonth, month, dayWeek }
     },
-    initTime() {
-      if (!this.cronModel || !this.cronModel.minute || !this.cronModel.hour) {
-        this.initialTime = null
+    setInitialTime() {
+      if (!this.cronModel.minute || !this.cronModel.hour) {
         return
       }
       let time = new Date()
