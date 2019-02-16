@@ -1,5 +1,5 @@
 <template>
-  <div class="step-timing has-text-centered">
+  <div class="step-timing has-text-centered" :title="preset.schedule">
     <div class="weekdays field is-horizontal">
       <div class="field-label">
         <label for="timeSelector" class="label has-text-grey">Ajastus</label>

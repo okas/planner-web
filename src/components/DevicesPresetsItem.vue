@@ -1,7 +1,7 @@
 <template>
   <article class="preset-item">
     <h3 class="name is-size-4" v-text="preset.name" />
-    <span class="schedule" v-text="cronDescription" />
+    <span class="schedule" :title="preset.schedule" v-text="cronDescription" />
     <div class="commands field is-grouped is-marginless">
       <div class="switch-container control" :title="activeTitle">
         <input
