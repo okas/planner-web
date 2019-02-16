@@ -1,7 +1,7 @@
 <template>
   <article class="preset-item">
     <h3 class="name is-size-4" v-text="preset.name" />
-    <span class="schedule" v-text="preset.schedule" />
+    <span class="schedule" v-text="cronDescription" />
     <div class="commands field is-grouped is-marginless">
       <div class="switch-container control" :title="activeTitle">
         <input
@@ -56,10 +56,15 @@
 </template>
 
 <script>
+import cronstrue from 'cronstrue'
+
 export default {
   inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },
   computed: {
+    cronDescription() {
+      return cronstrue.toString(this.preset.schedule)
+    },
     disableSetActive() {
       return !this.preset.schedule && !this.$store.state.ioConnected
     },
