@@ -142,7 +142,6 @@ export default {
       this.initCronModel(this.preset.schedule)
       this.setInitialTime()
     }
-
     this.initWeekDays()
     this.setInitialTimePlaceholder()
   },
