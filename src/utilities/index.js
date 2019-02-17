@@ -19,3 +19,20 @@ export function insertFaviconsToDOM(sizes, assestsDir = './assets') {
     )
   })
 }
+
+/**
+ * Python-like range function, for numbers only.
+ * @param [start] Range start. Default: `0`.
+ * @param {number} end Range end, excluded (like Python!).
+ * @param [end] Step, nagative is supported. Default: `1`.
+ * @returns generator of numbers.
+ * @throws if arguments are not numbers or convertable to numbers.
+ */
+export function* range(start = 0, end, step = 1) {
+  start = Number(start)
+  end = Number(end)
+  step = Number(step)
+  yield start
+  if (start === end - 1 || start === end) return
+  yield* range(start + step, end)
+}
