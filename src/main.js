@@ -12,7 +12,7 @@ import './assets/app_imports.scss'
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 Vue.use(VueStatic)
-Vue.use(VueI18nSelect, { store, active: 'et', languages: ['et', 'en'] })
+Vue.use(VueI18nSelect, { store, active: 'et', languages: ['et', 'en', 'es'] })
 
 const appOptions = {
   store,
