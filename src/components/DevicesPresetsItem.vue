@@ -56,14 +56,18 @@
 </template>
 
 <script>
-import cronstrue from 'cronstrue'
+import { i18SelectMixin } from '../plugins/vue-i18n-select/'
+import cronstrue from 'cronstrue/i18n'
 
 export default {
   inject: ['getDevName'],
+  mixins: [i18SelectMixin],
   props: { preset: { type: Object, required: true } },
   computed: {
     cronDescription() {
-      return cronstrue.toString(this.preset.schedule)
+      return cronstrue.toString(this.preset.schedule, {
+        locale: this.$language
+      })
     },
     disableSetActive() {
       return !this.preset.schedule && !this.$store.state.ioConnected
