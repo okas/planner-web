@@ -83,7 +83,7 @@ export default {
   props: { preset: { type: Object, required: true } },
   data() {
     return {
-      selectedDaysOfWeek: Array(7),
+      selectedDaysOfWeek: Array(7).fill(false),
       initialTime: null,
       displayFormat: 'HH:mm',
       returnFormat: 'HH:mm', //Bug, non-padded numbers do not work
@@ -98,7 +98,7 @@ export default {
       // ToDo: consider flattening (to object or to array with primitives)
       const dayMilSecs = 86400000
       const weekStartRelatedtoEpochSecs = dayMilSecs - 5 * dayMilSecs
-      let result = Array(this.selectedDaysOfWeek.length)
+      let result = Array(7)
       for (let i = 0; i < result.length; i++) {
         result[i] = {
           id: i,
@@ -118,8 +118,13 @@ export default {
   },
   watch: {
     selectedDaysOfWeek(val) {
-      const days = val.reduce((acc, v, i) => (acc += v ? `,${i}` : ''), '')
-      this.cronModel.dayWeek = days.substring(1) || '*'
+      let weekDaysField
+      if (val.length === 7 && (val.every(d => !d) || val.every(d => d))) {
+        weekDaysField = '*'
+      } else {
+        weekDaysField = this.calculateCronDaysOfWeek(val)
+      }
+      this.cronModel.dayWeek = weekDaysField
     },
     cronModel: {
       deep: true,
@@ -161,12 +166,28 @@ export default {
       this.initialTime = time
     },
     initWeekDays() {
-      if (!this.cronModel) {
+      if (!this.cronModel || this.cronModel.dayWeek === '*') {
         return
       }
-      this.cronModel.dayWeek
-        .split(',')
-        .forEach(d => (this.selectedDaysOfWeek[d] = true))
+      this.cronModel.dayWeek.split(',').forEach(listItem => {
+        if (listItem.startsWith('-') || listItem.endsWith('-')) {
+          throw `Day of week: range: wrong value found in range expression: [ ${
+            this.cronModel.dayWeek
+          } ]`
+        } else if (listItem === '-') {
+          throw 'Day of week: day filed: wrong value as filed list item "-".'
+        }
+        let [start, end] = listItem.split('-')
+        start = Number(start)
+        end = Number(end)
+        if (Number.isNaN(end)) {
+          this.selectedDaysOfWeek[start] = true
+        } else if (start >= end) {
+          throw `Day of week: range: need that [ start < end ]; found [ start:${start}, end:${end}  ]`
+        } else {
+          this.selectedDaysOfWeek.fill(true, start, end + 1)
+        }
+      })
     },
     ensureCronModel() {
       if (!this.preset.schedule) {
@@ -175,6 +196,35 @@ export default {
     },
     setInitialTimePlaceholder() {
       this.placeholderTimeSelect = this.initialTime ? '' : this.placeHolderText
+    },
+    calculateCronDaysOfWeek(selection) {
+      let lastInRange = null
+      let prevIdx = null
+      let result = selection.reduce((acc, selected, i) => {
+        if (selected) {
+          if (prevIdx !== null && i === prevIdx + 1) {
+            if (lastInRange === null) {
+              acc += '-'
+            }
+            lastInRange = i
+          } else {
+            if (lastInRange !== null) {
+              acc += lastInRange
+              lastInRange = null
+            }
+            acc += `,${i}`
+          }
+          prevIdx = i
+        }
+        return acc
+      }, '')
+      if (result.endsWith('-')) {
+        result += lastInRange
+      }
+      if (result.startsWith(',')) {
+        result = result.substring(1)
+      }
+      return result
     },
     handleFormatedTime(val) {
       const [h, m] = val.split(':')
