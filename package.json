@@ -15,7 +15,7 @@
     "@riophae/vue-treeselect": "0.0.38",
     "bulma": "^0.7.4",
     "bulma-extensions": "^6.2.2",
-    "cronstrue": "^1.61.0",
+    "cronstrue": "git+https://github.com/okas/cRonstrue.git",
     "socket.io-client": "^2.2.0",
     "vue": "^2.6.8",
     "vue-router": "^3.0.2",
