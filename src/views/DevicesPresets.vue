@@ -53,7 +53,7 @@
       @save="saveEventHandler"
     >
       <h2 slot="header-title" class="title is-2 has-text-danger">
-        Muuda eelseadistust
+        <span v-text="editorTitle" />
       </h2>
     </editor>
   </section>
@@ -96,6 +96,17 @@ export default {
   MODE_CREATE: 'create',
   MODE_MODIFY: 'modify',
   computed: {
+    editorTitle() {
+      // ToDo i18n
+      switch (this.editorMode) {
+        case this.$options.MODE_CREATE:
+          return 'Loo eelseadistus'
+        case this.$options.MODE_MODIFY:
+          return 'Muuda eelseadistust'
+        default:
+          return ''
+      }
+    },
     ...mapState(['ioConnected'])
   },
   created() {
