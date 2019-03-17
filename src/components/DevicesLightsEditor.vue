@@ -1,0 +1,78 @@
+<template>
+  <div id="quickviewLamp" class="quickview">
+    <header class="quickview-header">
+      <slot name="header-title" :_class="'title'" />
+      <span class="delete" data-dismiss="quickview" @click="quit" />
+    </header>
+    <div class="quickview-body">
+      <div class="quickview-block">
+        <div class="field">
+          <label class="label">Nimi</label>
+          <div class="control">
+            <input
+              v-model="lampForEdit.name"
+              class="input"
+              type="text"
+              placeholder="Text input"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Ruum</label>
+          <div class="control">
+            <div class="select">
+              <select v-model="lampForEdit.room">
+                <option disabled value>vali</option>
+                <option
+                  v-for="r in existingrooms"
+                  :key="r"
+                  :value="r"
+                  v-text="r"
+                />
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="quickview-footer">
+      <div class="field is-grouped">
+        <div class="control">
+          <button
+            class="button is-outlined is-success"
+            data-dismiss="quickview"
+            @click="save"
+          >
+            <span class="icon">
+              <fa-i icon="check" />
+            </span>
+          </button>
+        </div>
+        <div class="control">
+          <button class="button is-text" data-dismiss="quickview" @click="quit">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    lampForEdit: { type: Object, required: true },
+    existingrooms: { type: Array, required: true }
+  },
+  methods: {
+    quit() {
+      this.$emit('quit')
+    },
+    save() {
+      this.$emit('save', this.lampForEdit)
+    }
+  }
+}
+</script>
+
+<style lang="scss"></style>
