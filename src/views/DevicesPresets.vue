@@ -4,28 +4,8 @@
       <slot name="header-title" :_class="'has-text-danger'" />
       <p class="has-text-danger">Eelseadistuse haldus</p>
       <div class="commands field is-grouped is-marginless">
-        <div class="control">
-          <a
-            class="button"
-            role="button"
-            title="Värskenda serverist"
-            :disabled="!ioConnected"
-            @click="apiDataLoad"
-          >
-            <fa-i icon="sync-alt" />
-          </a>
-        </div>
-        <div class="control">
-          <a
-            class="button"
-            role="button"
-            title="Lisa automaattoiming"
-            :disabled="!ioConnected"
-            @click="create"
-          >
-            <fa-i icon="plus" />
-          </a>
-        </div>
+        <button-reload title="Värskenda serverist" @click="apiDataLoad" />
+        <button-add title="Lisa automaattoiming" @click="create" />
       </div>
     </header>
     <div class="presets-grid">
@@ -62,13 +42,15 @@
 <script>
 import { mapState } from 'vuex'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
+import ButtonReload from '../components/ButtonReload'
+import ButtonAdd from '../components/ButtonAdd'
 import Item from '../components/DevicesPresetsItem'
 import RemoveConfirm from '../components/DevicesPresetsRemoveConfirm'
 import Editor from '../components/DevicesPresetsEditor'
 
 export default {
   name: 'Presets',
-  components: { Item, RemoveConfirm, Editor },
+  components: { ButtonAdd, ButtonReload, Item, RemoveConfirm, Editor },
   mixins: [i18SelectMixin],
   data() {
     return {
