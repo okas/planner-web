@@ -13,25 +13,25 @@
               v-model="lampForEdit.name"
               class="input"
               type="text"
-              placeholder="Text input"
+              placeholder="sisesta nimi"
             />
           </div>
         </div>
         <div class="field">
-          <label class="label">Ruum</label>
+          <label class="label" for="selectedroom">Ruum</label>
           <div class="control">
-            <div class="select">
-              <select v-model="lampForEdit.room">
-                <option disabled value>vali</option>
-                <option
-                  v-for="r in existingrooms"
-                  :key="r"
-                  :value="r"
-                  v-text="r"
-                />
-              </select>
-            </div>
+            <input
+              id="selectedroom"
+              v-model="lampForEdit.room"
+              class="input"
+              type="text"
+              list="existingrooms"
+              placeholder="vali või sisesta uus ruum"
+            />
           </div>
+          <datalist id="existingrooms">
+            <option v-for="r in existingrooms" :key="r" :value="r" />
+          </datalist>
         </div>
       </div>
     </div>
