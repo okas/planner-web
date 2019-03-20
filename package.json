@@ -8,16 +8,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.15",
-    "@fortawesome/free-regular-svg-icons": "^5.7.2",
-    "@fortawesome/free-solid-svg-icons": "^5.7.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.16",
+    "@fortawesome/free-regular-svg-icons": "^5.8.0",
+    "@fortawesome/free-solid-svg-icons": "^5.8.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@riophae/vue-treeselect": "0.0.38",
     "bulma": "^0.7.4",
     "bulma-extensions": "^6.2.4",
     "cronstrue": "git+https://github.com/okas/cRonstrue.git",
     "socket.io-client": "^2.2.0",
-    "vue": "^2.6.9",
+    "vue": "^2.6.10",
     "vue-router": "^3.0.2",
     "vue-socket.io": "^3.0.7",
     "vue-static": "0.0.5",
@@ -34,7 +34,7 @@
     "eslint-plugin-vue": "^5.2.2",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.9"
+    "vue-template-compiler": "^2.6.10"
   },
   "browserslist": [
     "> 1%",
