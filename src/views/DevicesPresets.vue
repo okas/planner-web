@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
@@ -56,7 +55,8 @@ export default {
     return {
       presets: [],
       presetToWork: null,
-      editorMode: '',
+      editorMode: null,
+      editorTitle: '',
       modalShow: false,
       modalRemoveConfirmShow: false,
       devicesData: []
@@ -77,19 +77,23 @@ export default {
   },
   MODE_CREATE: 'create',
   MODE_MODIFY: 'modify',
-  computed: {
-    editorTitle() {
+  watch: {
+    editorMode(val) {
       // ToDo i18n
-      switch (this.editorMode) {
+      switch (val) {
         case this.$options.MODE_CREATE:
-          return 'Loo eelseadistus'
+          this.editorTitle = 'Loo eelseadistus'
+          this.modalShow = true
+          break
         case this.$options.MODE_MODIFY:
-          return 'Muuda eelseadistust'
+          this.editorTitle = 'Muuda eelseadistust'
+          this.modalShow = true
+          break
         default:
-          return ''
+          this.editorTitle = ''
+          this.modalShow = false
       }
-    },
-    ...mapState(['ioConnected'])
+    }
   },
   created() {
     this.apiDataLoad()
@@ -109,12 +113,10 @@ export default {
         devices: []
         // setorder: {}
       }
-      this.modalShow = true
     },
     modify(preset) {
       this.editorMode = this.$options.MODE_MODIFY
       this.presetToWork = preset
-      this.modalShow = true
     },
     removeConfirm(preset) {
       this.presetToWork = preset
@@ -144,7 +146,6 @@ export default {
       })
     },
     saveEventHandler(preset) {
-      this.modalShow = false
       if (this.editorMode === this.$options.MODE_CREATE) {
         this.saveCreated(preset)
       } else if (this.editorMode === this.$options.MODE_MODIFY) {
@@ -190,7 +191,7 @@ export default {
       })
     },
     quitEventHandler() {
-      this.modalShow = this.modalRemoveConfirmShow = false
+      this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
     },
     getDevName({ id, type }) {
