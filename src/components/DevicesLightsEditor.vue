@@ -2,7 +2,7 @@
   <div id="quickviewLamp" class="quickview">
     <header class="quickview-header">
       <slot name="header-title" :_class="'title'" />
-      <span class="delete" data-dismiss="quickview" @click="quit" />
+      <span class="delete" @click="quit" />
     </header>
     <div class="quickview-body">
       <div class="quickview-block">
@@ -10,7 +10,7 @@
           <label class="label">Nimi</label>
           <div class="control">
             <input
-              v-model="lampForEdit.name"
+              v-model="lamp.name"
               class="input"
               type="text"
               placeholder="sisesta nimi"
@@ -22,7 +22,7 @@
           <div class="control">
             <input
               id="selectedroom"
-              v-model="lampForEdit.room"
+              v-model="lamp.room"
               class="input"
               type="text"
               list="existingrooms"
@@ -64,15 +64,18 @@ export default {
     lampForEdit: { type: Object, required: true },
     existingrooms: { type: Array, required: true }
   },
+  data() {
+    return {
+      lamp: this.lampForEdit
+    }
+  },
   methods: {
     quit() {
       this.$emit('quit')
     },
     save() {
-      this.$emit('save', this.lampForEdit)
+      this.$emit('save', this.lamp)
     }
   }
 }
 </script>
-
-<style lang="scss"></style>

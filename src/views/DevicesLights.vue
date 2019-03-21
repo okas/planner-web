@@ -4,12 +4,7 @@
       <slot name="header-title" :_class="'has-text-warning'" />
       <div class="commands field is-grouped is-marginless">
         <button-reload title="Värskenda serverist" @click="ioGetAllLamps" />
-        <button-add
-          data-target="quickviewLamp"
-          data-show="quickview"
-          title="Lisa automaattoiming"
-          @click="create"
-        />
+        <button-add title="Lisa automaattoiming" @click="create" />
       </div>
     </header>
     <div class="rooms-grid">
@@ -21,9 +16,13 @@
       </section>
     </div>
     <editor
+      v-if="modalShow"
       v-slot:header-title="{ _class }"
+      :class="isActiveClass"
       :lamp-for-edit="lampToWork"
       :existingrooms="existingrooms"
+      @hook:mounted="editorMounted"
+      @hook:destroyed="editorDestroyed"
       @quit="quitEventHandler"
       @save="saveEventHandler"
     >
@@ -35,11 +34,12 @@
 </template>
 
 <script>
-import BulmaQuickview from 'bulma-extensions/bulma-quickview/src/js'
+// Todo disable edited lamp while editor is open!
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Lamp from '../components/DevicesLightsLamp'
 import Editor from '../components/DevicesLightsEditor'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'Lights',
@@ -47,57 +47,73 @@ export default {
   data() {
     return {
       groupedLamps: [],
-      lampToWork: this.getEmptyLamp(),
-      editorMode: ''
+      lampToWork: {},
+      editorMode: '',
+      editorTitle: '',
+      modalShow: false,
+      isActiveClass: ''
     }
   },
   MODE_CREATE: 'create',
   MODE_MODIFY: 'modify',
   computed: {
-    editorTitle() {
-      // ToDo i18n
-      switch (this.editorMode) {
-        case this.$options.MODE_CREATE:
-          return 'Loo lamp'
-        case this.$options.MODE_MODIFY:
-          return 'Muuda lampi'
-        default:
-          return ''
-      }
-    },
     existingrooms() {
       return this.groupedLamps.map(g => g.id)
+    }
+  },
+  watch: {
+    editorMode(val) {
+      // ToDo i18n
+      switch (val) {
+        case this.$options.MODE_CREATE:
+          this.editorTitle = 'Loo lamp'
+          this.modalShow = true
+          break
+        case this.$options.MODE_MODIFY:
+          this.editorTitle = 'Muuda lampi'
+          this.modalShow = true
+          break
+        default:
+          this.closeEditor()
+      }
     }
   },
   created() {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllLamps()
   },
-  mounted() {
-    BulmaQuickview.attach()
-  },
   methods: {
-    getEmptyLamp() {
-      return {
+    editorMounted() {
+      this.$nextTick(() => (this.isActiveClass = 'is-active'))
+    },
+    closeEditor() {
+      this.isActiveClass = ''
+      this.editorTitle = ''
+      setTimeout(() => (this.modalShow = false), 1000)
+    },
+    editorDestroyed() {
+      this.lampToWork = null
+    },
+    create() {
+      this.lampToWork = {
         id: 0,
         name: '',
         room: '', // ToDo room selection in future, or query to get existing rooms (browser).
         valuestep: 1 // Todo non-dimmable lamps have 1, dimmable valu between 0-0.5 (0.5 means 2 steps, smaller vale means more granual lamp controllability)
       }
-    },
-    create() {
       this.editorMode = this.$options.MODE_CREATE
-      this.lampToWork = this.getEmptyLamp()
     },
     quitEventHandler() {
-      this.lampToWork = this.getEmptyLamp()
       this.editorMode = null
     },
     saveEventHandler(lamp) {
-      if (this.editorMode === this.$options.MODE_CREATE) {
-        this.saveCreated(lamp)
-      } else if (this.editorMode === this.$options.MODE_MODIFY) {
-        this.saveModified(lamp)
+      switch (this.editorMode) {
+        case this.$options.MODE_CREATE:
+          this.saveCreated(lamp)
+          break
+        case this.$options.MODE_MODIFY:
+          this.saveModified(lamp)
+          break
       }
       this.editorMode = null
     },
@@ -124,7 +140,6 @@ export default {
         } else {
           this.groupedLamps.push({ id: lamp.room, items: [lamp] })
         }
-        this.lampToWork = this.getEmptyLamp()
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
