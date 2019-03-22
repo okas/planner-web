@@ -16,18 +16,36 @@
         :false-value="0"
       />
       <label class="switch-label" :for="`l${lamp.id}`" />
+      <button-edit
+        title="Muuda lampi"
+        class="is-small is-text"
+        @click="modify"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import ButtonEdit from '../components/ButtonEdit'
+
 export default {
-  props: { lamp: { type: Object, required: true } }
+  components: { ButtonEdit },
+  props: { lamp: { type: Object, required: true } },
+  methods: {
+    modify() {
+      this.$emit('modify')
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '../assets/devices_lights.scss';
+
+.edit:hover {
+  color: initial;
+  background-color: initial;
+}
 
 .lamp {
   display: grid;

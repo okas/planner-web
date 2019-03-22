@@ -4,14 +4,19 @@
       <slot name="header-title" :_class="'has-text-warning'" />
       <div class="commands field is-grouped is-marginless">
         <button-reload title="Värskenda serverist" @click="ioGetAllLamps" />
-        <button-add title="Lisa automaattoiming" @click="create" />
+        <button-add title="Lisa lamp" @click="create" />
       </div>
     </header>
     <div class="rooms-grid">
       <section v-for="room in groupedLamps" :key="room.id" class="room">
         <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id" />
         <div class="lamps-grid">
-          <lamp v-for="lamp in room.items" :key="lamp.id" :lamp.sync="lamp" />
+          <lamp
+            v-for="lamp in room.items"
+            :key="lamp.id"
+            :lamp="lamp"
+            @modify="modify({ room: room.id, lamp })"
+          ></lamp>
         </div>
       </section>
     </div>
@@ -22,7 +27,6 @@
       :lamp-for-edit="lampToWork"
       :existingrooms="existingrooms"
       @hook:mounted="editorMounted"
-      @hook:destroyed="editorDestroyed"
       @quit="quitEventHandler"
       @save="saveEventHandler"
     >
@@ -47,7 +51,7 @@ export default {
   data() {
     return {
       groupedLamps: [],
-      lampToWork: {},
+      lampToWork: null,
       editorMode: '',
       editorTitle: '',
       modalShow: false,
@@ -66,12 +70,10 @@ export default {
       // ToDo i18n
       switch (val) {
         case this.$options.MODE_CREATE:
-          this.editorTitle = 'Loo lamp'
-          this.modalShow = true
+          this.openEditorWithTitle('Loo lamp')
           break
         case this.$options.MODE_MODIFY:
-          this.editorTitle = 'Muuda lampi'
-          this.modalShow = true
+          this.openEditorWithTitle('Muuda lampi')
           break
         default:
           this.closeEditor()
@@ -83,25 +85,36 @@ export default {
     this.ioGetAllLamps()
   },
   methods: {
-    editorMounted() {
-      this.$nextTick(() => (this.isActiveClass = 'is-active'))
+    openEditorWithTitle(title) {
+      this.editorTitle = title
+      this.modalShow = true
     },
     closeEditor() {
       this.isActiveClass = ''
       this.editorTitle = ''
-      setTimeout(() => (this.modalShow = false), 1000)
+      setTimeout(() => {
+        this.modalShow = false
+        this.lampToWork = null
+      }, 1000)
     },
-    editorDestroyed() {
-      this.lampToWork = null
+    async editorMounted() {
+      await this.$nextTick()
+      this.isActiveClass = 'is-active'
     },
     create() {
       this.lampToWork = {
         id: 0,
         name: '',
-        room: '', // ToDo room selection in future, or query to get existing rooms (browser).
+        room: '',
         valuestep: 1 // Todo non-dimmable lamps have 1, dimmable valu between 0-0.5 (0.5 means 2 steps, smaller vale means more granual lamp controllability)
       }
+      // ToDo avoid editor race, allow one at the time!
       this.editorMode = this.$options.MODE_CREATE
+    },
+    modify({ room, lamp }) {
+      // ToDo avoid editor race, allow one at the time!
+      this.lampToWork = { room, ...lamp }
+      this.editorMode = this.$options.MODE_MODIFY
     },
     quitEventHandler() {
       this.editorMode = null
@@ -118,30 +131,59 @@ export default {
       this.editorMode = null
     },
     saveCreated(lamp) {
-      if (
-        !lamp.room &&
-        !lamp.name
-        // Todo `&&...` add checks here
-      ) {
-        // ToDo say it with toast/snackbar/notification!
-        return
-      }
       // ToDo handle case when API do not respond!
       this.$socket.emit('lamp-add', lamp, ({ id, errors }) => {
-        if (errors) {
-          console.error(`lamp-add: API responded with errors: [${errors}]`)
+        if (errors && errors.length > 0) {
+          console.error(`lamp-add: API responded with errors: [ ${errors} ]`)
           // ToDo say it with toast/snackbar/notification!
           return
         }
         lamp.id = id
-        const group = this.groupedLamps.find(x => x.id == lamp.room)
-        if (group) {
-          group.items.push(lamp)
+        const { room, ...nLamp } = lamp
+        this.upsertLampToGroup(room, nLamp)
+      })
+      // ToDo say it with toast/snackbar/notification if event times out!
+    },
+    saveModified(lamp) {
+      const oldLamp = this.lampToWork
+      this.$socket.emit('lamp-update', lamp, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`lamp-update: API responded with errors: [ ${errors} ]`)
+          // ToDo say it with toast/snackbar/notification if event times out!
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event 'lamp-update' responded with status [ ${status} ].`
+          )
+          // ToDo say it with toast/snackbar/notification if event times out!
+          return
+        }
+        const { room: mRoom, ...mLamp } = lamp
+        const oldGroup = this.groupedLamps.find(x => x.id == oldLamp.room)
+        if (oldLamp.room === mRoom) {
+          Object.assign(oldGroup.items.find(l => l.id == oldLamp.id), mLamp)
         } else {
-          this.groupedLamps.push({ id: lamp.room, items: [lamp] })
+          if (oldGroup.items.length == 1) {
+            this.groupedLamps.splice(this.groupedLamps.indexOf(oldGroup), 1)
+          } else {
+            oldGroup.items.splice(
+              oldGroup.items.findIndex(x => x.id == oldLamp.id),
+              1
+            )
+          }
+          this.upsertLampToGroup(mRoom, mLamp)
         }
       })
       // ToDo say it with toast/snackbar/notification if event times out!
+    },
+    upsertLampToGroup(room, lamp) {
+      const group = this.groupedLamps.find(x => x.id == room)
+      if (group) {
+        group.items.push(lamp)
+      } else {
+        this.groupedLamps.push({ id: room, items: [lamp] })
+      }
     },
     ioGetAllLamps() {
       this.$socket.emit(
