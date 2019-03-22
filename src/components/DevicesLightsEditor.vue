@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      lamp: this.lampForEdit
+      lamp: JSON.parse(JSON.stringify(this.lampForEdit))
     }
   },
   methods: {
