@@ -1,21 +1,18 @@
-<template>
-  <div class="control">
-    <a
-      class="button"
-      role="button"
-      :disabled="disabled"
-      v-bind="$attrs"
-      v-on="$listeners"
-    >
-      <fa-i icon="plus" />
-    </a>
-  </div>
+<template functional>
+  <a
+    class="button"
+    role="button"
+    :disabled="data.disabled"
+    :class="[data.class, data.staticClass]"
+    v-bind="data.attrs"
+    v-on="listeners"
+  >
+    <fa-i icon="plus" />
+  </a>
 </template>
 
 <script>
+// Todo remove wrapper
 import disabledIoNotConnected from '../mixins/disabled-ioNotConnected.js'
-export default {
-  mixins: [disabledIoNotConnected],
-  inheritAttrs: false
-}
+export default { mixins: [disabledIoNotConnected] }
 </script>

@@ -3,8 +3,12 @@
     <header class="component-header">
       <slot name="header-title" :_class="'has-text-warning'" />
       <div class="commands field is-grouped is-marginless">
-        <button-reload title="Värskenda serverist" @click="ioGetAllLamps" />
-        <button-add title="Lisa lamp" @click="create" />
+        <div class="control">
+          <button-reload title="Värskenda serverist" @click="ioGetAllLamps" />
+        </div>
+        <div class="control">
+          <button-add title="Lisa lamp" @click="create" />
+        </div>
       </div>
     </header>
     <div class="rooms-grid">

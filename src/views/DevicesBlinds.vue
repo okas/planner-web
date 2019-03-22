@@ -3,14 +3,11 @@
     <header class="component-header">
       <slot name="header-title" :_class="'has-text-success'" />
       <p class="has-text-success">Roloode süsteemi armatuurlaud</p>
-      <a
-        class="button"
-        role="button"
-        :disabled="!$store.state.ioConnected"
-        @click="ioGetAllBlinds"
-      >
-        <fa-i icon="sync-alt" />
-      </a>
+      <div class="commands field is-grouped is-marginless">
+        <div class="control">
+          <button-reload title="Värskenda serverist" @click="ioGetAllBlinds" />
+        </div>
+      </div>
     </header>
     <div class="rooms-grid">
       <section v-for="room of groupedBlinds" :key="room.id" class="room">
@@ -28,10 +25,12 @@
 </template>
 
 <script>
+import ButtonReload from '../components/ButtonReload'
 import Remote from '../components/DevicesBlindsRemote'
+
 export default {
   name: 'Blinds',
-  components: { Remote },
+  components: { ButtonReload, Remote },
   data() {
     return { groupedBlinds: [] }
   },

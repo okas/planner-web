@@ -4,8 +4,12 @@
       <slot name="header-title" :_class="'has-text-danger'" />
       <p class="has-text-danger">Eelseadistuse haldus</p>
       <div class="commands field is-grouped is-marginless">
-        <button-reload title="Värskenda serverist" @click="apiDataLoad" />
-        <button-add title="Lisa automaattoiming" @click="create" />
+        <div class="control">
+          <button-reload title="Värskenda serverist" @click="apiDataLoad" />
+        </div>
+        <div class="control">
+          <button-add title="Lisa automaattoiming" @click="create" />
+        </div>
       </div>
     </header>
     <div class="presets-grid">
