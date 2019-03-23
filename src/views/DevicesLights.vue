@@ -28,10 +28,12 @@
       v-if="modalShow"
       v-slot:header-title="{ _class }"
       :class="isActiveClass"
+      :mode="editorMode"
       :lamp-for-edit="lampToWork"
       :existingrooms="existingrooms"
       @hook:mounted="editorMounted"
       @quit="quitEventHandler"
+      @remove="removeEventHandler"
       @save="saveEventHandler"
     >
       <h4 class="title is-2 has-text-warning" :class="_class">
@@ -122,6 +124,28 @@ export default {
     quitEventHandler() {
       this.editorMode = null
     },
+    removeEventHandler() {
+      const oldLamp = this.lampToWork
+      this.editorMode = null
+      const event = 'lamp-remove'
+      this.$socket.emit(event, oldLamp.id, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with error: [ ${errors} ]`)
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event '${event}' responded with status [ ${status} ].`
+          )
+          if (status !== 'no-exist') {
+            return
+          }
+        }
+        // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
+        const oldGroup = this.groupedLamps.find(x => x.id == oldLamp.room)
+        this.deleteFromOldRoom(oldGroup.items, oldLamp)
+      })
+    },
     saveEventHandler(lamp) {
       switch (this.editorMode) {
         case constants.MODE_CREATE:
@@ -167,18 +191,18 @@ export default {
         if (oldLamp.room === mRoom) {
           Object.assign(oldGroup.items.find(l => l.id == oldLamp.id), mLamp)
         } else {
-          if (oldGroup.items.length == 1) {
-            this.groupedLamps.splice(this.groupedLamps.indexOf(oldGroup), 1)
-          } else {
-            oldGroup.items.splice(
-              oldGroup.items.findIndex(x => x.id == oldLamp.id),
-              1
-            )
-          }
+          this.deleteFromOldRoom(oldGroup.items, oldLamp)
           this.upsertLampToGroup(mRoom, mLamp)
         }
       })
       // ToDo say it with toast/snackbar/notification if event times out!
+    },
+    deleteFromOldRoom(roomLamps, lamp) {
+      if (roomLamps.length == 1) {
+        this.groupedLamps.splice(this.groupedLamps.indexOf(roomLamps), 1)
+      } else {
+        roomLamps.splice(roomLamps.findIndex(x => x.id == lamp.id), 1)
+      }
     },
     upsertLampToGroup(room, lamp) {
       const group = this.groupedLamps.find(x => x.id == room)

@@ -2,7 +2,7 @@
   <div id="quickviewLamp" class="quickview">
     <header class="quickview-header">
       <slot name="header-title" :_class="'title'" />
-      <span class="delete" @click="quit" />
+      <button class="delete" title="Katkesta" @click="quit" />
     </header>
     <div class="quickview-body">
       <div class="quickview-block">
@@ -38,20 +38,26 @@
     <footer class="quickview-footer">
       <div class="field is-grouped">
         <div class="control">
-          <button
-            class="button is-outlined is-success"
-            data-dismiss="quickview"
+          <button-ok
+            class="is-outlined is-success"
+            title="Kinnita"
             @click="save"
-          >
-            <span class="icon">
-              <fa-i icon="check" />
-            </span>
-          </button>
+          />
         </div>
         <div class="control">
-          <button class="button is-text" data-dismiss="quickview" @click="quit">
-            Cancel
-          </button>
+          <button
+            class="button is-text"
+            title="Katkesta"
+            @click="quit"
+            v-text="canceltext"
+          />
+        </div>
+        <div v-if="showRemoveButton" class="control">
+          <button-remove-confirm
+            class="is-outlined"
+            title="Kustuta lamp"
+            @confirm="remove"
+          />
         </div>
       </div>
     </footer>
@@ -59,8 +65,17 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import { MODE_MODIFY } from '../constants/uiEditorConstants.js'
+import { i18SelectMixin } from '../plugins/vue-i18n-select/'
+import ButtonOk from '../components/ButtonOk'
+import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
+
 export default {
+  components: { ButtonOk, ButtonRemoveConfirm },
+  mixins: [i18SelectMixin],
   props: {
+    mode: { type: String, default: null },
     lampForEdit: { type: Object, required: true },
     existingrooms: { type: Array, required: true }
   },
@@ -69,9 +84,27 @@ export default {
       lamp: JSON.parse(JSON.stringify(this.lampForEdit))
     }
   },
+  computed: {
+    showRemoveButton() {
+      return this.mode === MODE_MODIFY
+    },
+    canceltext() {
+      switch (this.$language) {
+        case 'et':
+          return 'Katkesta'
+        case 'es':
+          return 'Canclear'
+        default:
+          return 'Cancel'
+      }
+    }
+  },
   methods: {
     quit() {
       this.$emit('quit')
+    },
+    remove() {
+      this.$emit('remove')
     },
     save() {
       this.$emit('save', this.lamp)
