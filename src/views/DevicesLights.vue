@@ -43,6 +43,7 @@
 
 <script>
 // Todo disable edited lamp while editor is open!
+import * as constants from '../constants/uiEditorConstants.js'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Lamp from '../components/DevicesLightsLamp'
@@ -62,8 +63,6 @@ export default {
       isActiveClass: ''
     }
   },
-  MODE_CREATE: 'create',
-  MODE_MODIFY: 'modify',
   computed: {
     existingrooms() {
       return this.groupedLamps.map(g => g.id)
@@ -73,10 +72,10 @@ export default {
     editorMode(val) {
       // ToDo i18n
       switch (val) {
-        case this.$options.MODE_CREATE:
+        case constants.MODE_CREATE:
           this.openEditorWithTitle('Loo lamp')
           break
-        case this.$options.MODE_MODIFY:
+        case constants.MODE_MODIFY:
           this.openEditorWithTitle('Muuda lampi')
           break
         default:
@@ -113,22 +112,22 @@ export default {
         valuestep: 1 // Todo non-dimmable lamps have 1, dimmable valu between 0-0.5 (0.5 means 2 steps, smaller vale means more granual lamp controllability)
       }
       // ToDo avoid editor race, allow one at the time!
-      this.editorMode = this.$options.MODE_CREATE
+      this.editorMode = constants.MODE_CREATE
     },
     modify({ room, lamp }) {
       // ToDo avoid editor race, allow one at the time!
       this.lampToWork = { room, ...lamp }
-      this.editorMode = this.$options.MODE_MODIFY
+      this.editorMode = constants.MODE_MODIFY
     },
     quitEventHandler() {
       this.editorMode = null
     },
     saveEventHandler(lamp) {
       switch (this.editorMode) {
-        case this.$options.MODE_CREATE:
+        case constants.MODE_CREATE:
           this.saveCreated(lamp)
           break
-        case this.$options.MODE_MODIFY:
+        case constants.MODE_MODIFY:
           this.saveModified(lamp)
           break
       }

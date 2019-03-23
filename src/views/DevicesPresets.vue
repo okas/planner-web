@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import * as constants from '../constants/uiEditorConstants.js'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
@@ -79,17 +80,15 @@ export default {
       }
     )
   },
-  MODE_CREATE: 'create',
-  MODE_MODIFY: 'modify',
   watch: {
     editorMode(val) {
       // ToDo i18n
       switch (val) {
-        case this.$options.MODE_CREATE:
+        case constants.MODE_CREATE:
           this.editorTitle = 'Loo eelseadistus'
           this.modalShow = true
           break
-        case this.$options.MODE_MODIFY:
+        case constants.MODE_MODIFY:
           this.editorTitle = 'Muuda eelseadistust'
           this.modalShow = true
           break
@@ -108,7 +107,7 @@ export default {
       this.ioGetPresets()
     },
     create() {
-      this.editorMode = this.$options.MODE_CREATE
+      this.editorMode = constants.MODE_CREATE
       this.presetToWork = {
         id: 0,
         name: '',
@@ -119,7 +118,7 @@ export default {
       }
     },
     modify(preset) {
-      this.editorMode = this.$options.MODE_MODIFY
+      this.editorMode = constants.MODE_MODIFY
       this.presetToWork = preset
     },
     removeConfirm(preset) {
@@ -150,9 +149,9 @@ export default {
       })
     },
     saveEventHandler(preset) {
-      if (this.editorMode === this.$options.MODE_CREATE) {
+      if (this.editorMode === constants.MODE_CREATE) {
         this.saveCreated(preset)
-      } else if (this.editorMode === this.$options.MODE_MODIFY) {
+      } else if (this.editorMode === constants.MODE_MODIFY) {
         this.saveModified(preset)
       }
       this.editorMode = null
