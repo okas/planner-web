@@ -1,13 +1,15 @@
 <template functional>
   <a
-    class="edit button"
     role="button"
+    class="edit button"
     :disabled="data.disabled"
     :class="[data.class, data.staticClass]"
     v-bind="data.attrs"
     v-on="listeners"
   >
-    <fa-i icon="cog" />
+    <i class="icon">
+      <fa-i class="fa-lg" icon="cog" />
+    </i>
   </a>
 </template>
 

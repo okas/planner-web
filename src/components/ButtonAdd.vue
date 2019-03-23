@@ -1,18 +1,19 @@
 <template functional>
   <a
-    class="button"
     role="button"
+    class="add button"
     :disabled="data.disabled"
     :class="[data.class, data.staticClass]"
     v-bind="data.attrs"
     v-on="listeners"
   >
-    <fa-i icon="plus" />
+    <i class="icon">
+      <fa-i class="fa-lg" icon="plus" />
+    </i>
   </a>
 </template>
 
 <script>
-// Todo remove wrapper
 import disabledIoNotConnected from '../mixins/disabled-ioNotConnected.js'
 export default { mixins: [disabledIoNotConnected] }
 </script>
