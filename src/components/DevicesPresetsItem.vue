@@ -21,24 +21,24 @@
           title="Kustuta automaattoiming"
           @click="$emit('removeConfirm', preset)"
         >
-          <fa-i icon="times" />
+          <i class="icon">
+            <fa-i class="fa-lg" icon="trash" />
+          </i>
         </button>
       </div>
       <div class="control">
-        <button
-          class="button is-small is-outlined is-light"
+        <button-edit
           title="Muuda automaattoiming"
+          class="is-small is-outlined is-light"
           @click="$emit('modify', preset)"
-        >
-          <span class="icon">
-            <fa-i icon="cog" />
-          </span>
-        </button>
+        />
       </div>
       <div class="control">
         <button class="button is-small is-outlined is-light">
           <span class="icon">
-            <fa-i icon="play" />
+            <i class="icon">
+              <fa-i class="fa-lg" icon="play" />
+            </i>
           </span>
         </button>
       </div>
@@ -58,9 +58,11 @@
 <script>
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import cronstrue from 'cronstrue/i18n'
+import ButtonEdit from '../components/ButtonEdit'
 
 export default {
   inject: ['getDevName'],
+  components: { ButtonEdit },
   mixins: [i18SelectMixin],
   props: { preset: { type: Object, required: true } },
   computed: {

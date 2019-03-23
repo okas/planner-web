@@ -36,11 +36,7 @@
             </button>
           </div>
           <div class="steps-action">
-            <button class="button is-outlined is-success" @click="save">
-              <span class="icon">
-                <fa-i icon="check" />
-              </span>
-            </button>
+            <button-ok class="is-outlined is-success" @click="save" />
           </div>
           <div class="steps-action">
             <button class="button is-outlined is-light" data-nav="next">
@@ -71,6 +67,7 @@
 
 <script>
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
+import ButtonOk from '../components/ButtonOk'
 import Naming from './DevicesPresetsEditorNaming'
 import Schedule from './DevicesPresetsEditorSchedule'
 import Selection from './DevicesPresetsEditorSelection'
@@ -78,7 +75,7 @@ import States from './DevicesPresetsEditorStates'
 // import Step4 from './DevicesPresetsEditorStep4Content'
 
 export default {
-  components: { Naming, Schedule, Selection, States /* Step4 */ },
+  components: { ButtonOk, Naming, Schedule, Selection, States /* Step4 */ },
   props: {
     presetForEdit: { type: Object, required: true }
   },
