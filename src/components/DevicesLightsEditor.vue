@@ -1,5 +1,11 @@
 <template>
-  <div id="quickviewLamp" class="quickview">
+  <div
+    id="lampEditor"
+    class="quickview"
+    tabindex="0"
+    @keyup.stop.esc="quit"
+    @keyup.stop.enter="save"
+  >
     <header class="quickview-header">
       <slot name="header-title" :_class="'title'" />
       <button class="delete" title="Katkesta" @click="quit" />
@@ -10,6 +16,7 @@
           <label class="label">Nimi</label>
           <div class="control">
             <input
+              ref="focus"
               v-model="lamp.name"
               class="input"
               type="text"
@@ -98,6 +105,9 @@ export default {
           return 'Cancel'
       }
     }
+  },
+  mounted() {
+    this.$refs.focus.focus()
   },
   methods: {
     quit() {
