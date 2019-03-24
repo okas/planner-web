@@ -1,5 +1,6 @@
 <template functional>
-  <a
+  <component
+    :is="prop.tag"
     role="button"
     class="cancel button"
     :class="[data.class, data.staticClass]"
@@ -9,5 +10,9 @@
     <i class="icon">
       <fa-i class="fa-lg" icon="times" />
     </i>
-  </a>
+  </component>
 </template>
+
+<script>
+export default { props: { tag: { type: String, default: 'a' } } }
+</script>

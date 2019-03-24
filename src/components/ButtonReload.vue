@@ -1,5 +1,6 @@
 <template>
-  <a
+  <component
+    :is="tag"
     role="button"
     class="reload button"
     :disabled="disabled"
@@ -9,10 +10,14 @@
     <i class="icon">
       <fa-i class="fa-lg" icon="sync-alt" />
     </i>
-  </a>
+  </component>
 </template>
 
 <script>
 import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
-export default { mixins: [disabled, removeDOMListeners] }
+
+export default {
+  mixins: [disabled, removeDOMListeners],
+  props: { tag: { type: String, default: 'a' } }
+}
 </script>

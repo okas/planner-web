@@ -1,5 +1,6 @@
 <template>
-  <a
+  <component
+    :is="tag"
     role="button"
     class="remove-confirm button"
     :class="confirmed ? 'is-warning' : 'is-danger'"
@@ -11,7 +12,7 @@
     <i class="icon">
       <fa-i class="fa-lg" :icon="confirmed ? 'trash' : 'exclamation-circle'" />
     </i>
-  </a>
+  </component>
 </template>
 
 <script>
@@ -19,6 +20,7 @@ import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
 
 export default {
   mixins: [disabled, removeDOMListeners],
+  props: { tag: { type: String, default: 'a' } },
   data() {
     return {
       confirmed: true
