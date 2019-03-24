@@ -5,6 +5,7 @@
     class="remove-confirm button"
     :class="confirmed ? 'is-warning' : 'is-danger'"
     :disabled="disabled"
+    :aria-disabled="disabled"
     v-bind="$attrs"
     v-on="listenersToggled"
     @click.prevent.stop="changeState"

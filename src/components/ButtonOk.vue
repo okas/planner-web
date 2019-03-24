@@ -4,6 +4,7 @@
     role="button"
     class="ok button"
     :disabled="disabled"
+    :aria-disabled="disabled"
     v-bind="$attrs"
     v-on="listenersToggled"
   >

@@ -4,6 +4,7 @@
     role="button"
     class="edit button"
     :disabled="disabled"
+    :aria-disabled="disabled"
     v-bind="$attrs"
     v-on="listenersToggled"
   >
