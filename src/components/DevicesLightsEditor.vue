@@ -2,7 +2,6 @@
   <div
     id="lampEditor"
     class="quickview"
-    tabindex="0"
     @keyup.stop.esc="quit"
     @keyup.stop.enter="save"
   >
@@ -16,8 +15,8 @@
           <label class="label">Nimi</label>
           <div class="control">
             <input
-              ref="focus"
               v-model="lamp.name"
+              v-focus
               class="input"
               type="text"
               placeholder="sisesta nimi"
@@ -73,14 +72,15 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
-import { MODE_MODIFY } from '../constants/uiEditorConstants.js'
+import { MODE_MODIFY } from '../constants/uiEditorConstants'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
+import { FocusDirectiveMixin } from '../directives/focus'
 import ButtonOk from '../components/ButtonOk'
 import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
 
 export default {
   components: { ButtonOk, ButtonRemoveConfirm },
-  mixins: [i18SelectMixin],
+  mixins: [i18SelectMixin, FocusDirectiveMixin],
   props: {
     mode: { type: String, default: null },
     lampForEdit: { type: Object, required: true },
@@ -105,9 +105,6 @@ export default {
           return 'Cancel'
       }
     }
-  },
-  mounted() {
-    this.$refs.focus.focus()
   },
   methods: {
     quit() {
