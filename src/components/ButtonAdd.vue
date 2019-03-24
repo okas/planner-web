@@ -1,11 +1,11 @@
-<template functional>
+<template>
   <a
     role="button"
     class="add button"
-    :disabled="data.disabled"
-    :class="[data.class, data.staticClass]"
-    v-bind="data.attrs"
-    v-on="listeners"
+    :disabled="disabled"
+    :aria-disabled="disabled"
+    v-bind="$attrs"
+    v-on="listenersToggled"
   >
     <i class="icon">
       <fa-i class="fa-lg" icon="plus" />
@@ -14,6 +14,6 @@
 </template>
 
 <script>
-import disabledIoNotConnected from '../mixins/disabled-ioNotConnected.js'
-export default { mixins: [disabledIoNotConnected] }
+import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
+export default { mixins: [disabled, removeDOMListeners] }
 </script>
