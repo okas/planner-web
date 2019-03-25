@@ -1,9 +1,7 @@
 <template>
   <div
     id="devicesPresetEditor"
-    ref="root"
     class="modal"
-    tabindex="0"
     @keyup.stop.esc="quit"
     @keyup.stop.enter="save"
   >
@@ -48,6 +46,11 @@
         </section>
         <!-- render step contents -->
         <section class="steps-content">
+          <naming
+            class="step-content"
+            :preset="preset"
+            :is-active="0 === currentStep"
+          />
           <naming ref="step1" class="step-content" :preset="preset" />
           <schedule ref="step2" class="step-content" :preset="preset" />
           <selection
@@ -81,7 +84,8 @@ export default {
   },
   data() {
     return {
-      preset: JSON.parse(JSON.stringify(this.presetForEdit))
+      preset: JSON.parse(JSON.stringify(this.presetForEdit)),
+      currentStep: 0
     }
   },
   static() {
@@ -137,16 +141,11 @@ export default {
     saveSelectedDevices(newDevicesGrouped) {
       this.preset.devices = newDevicesGrouped
     },
+    /**
+     * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
+     */
     stepShowHandler(stepId) {
-      /**
-       * @param stepId 0-based index of .step-item element; they allign with .step-content elements.
-       */
-      try {
-        this.$refs[`step${stepId + 1}`].$refs.focus.focus()
-      } catch {
-        /* If no focusable ref found on step content, then focus current modal. */
-        this.$refs.root.focus()
-      }
+      this.currentStep = stepId
     }
   }
 }

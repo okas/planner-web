@@ -8,8 +8,8 @@
         <div class="field">
           <div class="control">
             <input
-              ref="focus"
               v-model.lazy.trim="preset.name"
+              v-focus="isActive"
               class="input"
               type="text"
               :placeholder="s_placeholder1"
@@ -22,8 +22,14 @@
 </template>
 
 <script>
+import { FocusDirectiveMixin } from '../directives/focus'
+
 export default {
-  props: { preset: { type: Object, required: true } },
+  mixins: [FocusDirectiveMixin],
+  props: {
+    preset: { type: Object, required: true },
+    isActive: { type: Boolean }
+  },
   static() {
     return { s_placeholder1: 'sisesta tekst' }
   }

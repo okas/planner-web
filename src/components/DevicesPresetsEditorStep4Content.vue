@@ -8,7 +8,6 @@
         <div class="field">
           <div class="control">
             <input
-              ref="focus"
               class="input"
               type="text"
               placeholder="--vali käivituse järjekord"
