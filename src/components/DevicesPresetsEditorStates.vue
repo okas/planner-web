@@ -27,7 +27,8 @@
 export default {
   inject: ['devicesData', 'getDevName'],
   props: {
-    devices: { type: Array, required: true }
+    devices: { type: Array, required: true },
+    isActive: { type: Boolean }
   },
   methods: {
     getStep({ id, type }) {

@@ -51,16 +51,23 @@
             :preset="preset"
             :is-active="0 === currentStep"
           />
-          <naming ref="step1" class="step-content" :preset="preset" />
-          <schedule ref="step2" class="step-content" :preset="preset" />
+          <schedule
+            class="step-content"
+            :preset="preset"
+            :is-active="1 === currentStep"
+          />
           <selection
-            ref="step3"
             class="step-content"
             :devices="preset.devices"
+            :is-active="2 === currentStep"
             @saveSelectedDevices="saveSelectedDevices"
           />
-          <states ref="step4" class="step-content" :devices="preset.devices" />
-          <!-- <step4 ref="step4" class="step-content" :preset.sync="preset" /> -->
+          <states
+            class="step-content"
+            :devices="preset.devices"
+            :is-active="3 === currentStep"
+          />
+          <!-- <step4 class="step-content" :preset.sync="preset" /> -->
         </section>
       </section>
     </div>

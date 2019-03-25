@@ -20,5 +20,10 @@
 </template>
 
 <script>
-export default { props: { preset: { type: Object, required: true } } }
+export default {
+  props: {
+    preset: { type: Object, required: true },
+    isActive: { type: Boolean }
+  }
+}
 </script>

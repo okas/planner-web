@@ -80,7 +80,10 @@ import Timeselector from 'vue-timeselector'
 export default {
   components: { Timeselector },
   mixins: [i18SelectMixin],
-  props: { preset: { type: Object, required: true } },
+  props: {
+    preset: { type: Object, required: true },
+    isActive: { type: Boolean }
+  },
   data() {
     return {
       selectedDaysOfWeek: Array(7).fill(false),

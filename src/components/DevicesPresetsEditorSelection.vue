@@ -48,7 +48,8 @@ export default {
   inject: ['devicesData', 'getDevName', 'ioGetDeviceData'],
   components: { TreeSelect },
   props: {
-    devices: { type: Array, required: true }
+    devices: { type: Array, required: true },
+    isActive: { type: Boolean }
   },
   data() {
     return {
