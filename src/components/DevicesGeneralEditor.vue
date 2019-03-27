@@ -1,6 +1,6 @@
 <template>
   <div
-    id="lampEditor"
+    :id="editorId"
     class="quickview"
     @keyup.stop.esc="quit"
     @keyup.stop.enter="save"
@@ -15,7 +15,7 @@
           <label class="label">Nimi</label>
           <div class="control">
             <input
-              v-model="lamp.name"
+              v-model="device.name"
               v-focus
               class="input"
               type="text"
@@ -28,7 +28,7 @@
           <div class="control">
             <input
               id="selectedroom"
-              v-model="lamp.room"
+              v-model="device.room"
               class="input"
               type="text"
               list="existingrooms"
@@ -61,7 +61,7 @@
         <div v-if="showRemoveButton" class="control">
           <button-remove-confirm
             class="is-outlined"
-            title="Kustuta lamp"
+            title="Kustuta"
             @confirm="remove"
           />
         </div>
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import { MODE_MODIFY } from '../constants/uiEditorConstants'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import { FocusDirectiveMixin } from '../directives/focus'
@@ -83,12 +82,13 @@ export default {
   mixins: [i18SelectMixin, FocusDirectiveMixin],
   props: {
     mode: { type: String, default: null },
-    lampForEdit: { type: Object, required: true },
-    existingrooms: { type: Array, required: true }
+    deviceForEdit: { type: Object, required: true },
+    existingrooms: { type: Array, required: true },
+    editorId: { type: String, default: 'generalEditor' }
   },
   data() {
     return {
-      lamp: JSON.parse(JSON.stringify(this.lampForEdit))
+      device: JSON.parse(JSON.stringify(this.deviceForEdit))
     }
   },
   computed: {
@@ -114,7 +114,7 @@ export default {
       this.$emit('remove')
     },
     save() {
-      this.$emit('save', this.lamp)
+      this.$emit('save', this.device)
     }
   }
 }

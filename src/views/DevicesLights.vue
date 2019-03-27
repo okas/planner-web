@@ -29,8 +29,9 @@
       v-slot:header-title="{ _class }"
       :class="isActiveClass"
       :mode="editorMode"
-      :lamp-for-edit="lampToWork"
+      :device-for-edit="lampToWork"
       :existingrooms="existingrooms"
+      editor-id="lampEditor"
       @hook:mounted="editorMounted"
       @quit="quitEventHandler"
       @remove="removeEventHandler"
@@ -49,7 +50,7 @@ import * as constants from '../constants/uiEditorConstants.js'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Lamp from '../components/DevicesLightsLamp'
-import Editor from '../components/DevicesLightsEditor'
+import Editor from '../components/DevicesGeneralEditor'
 import { setTimeout } from 'timers'
 
 export default {
