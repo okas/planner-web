@@ -7,6 +7,9 @@
         <div class="control">
           <button-reload title="Värskenda serverist" @click="ioGetAllBlinds" />
         </div>
+        <div class="control">
+          <button-add title="Lisa ruloo" @click="create" />
+        </div>
       </div>
     </header>
     <div class="rooms-grid">
@@ -21,24 +24,172 @@
         </div>
       </section>
     </div>
+    <transition :css="$options.tCss" @enter="tEnter" @leave="tLeave">
+      <editor
+        v-if="modalShow"
+        :mode="editorMode"
+        :device-for-edit="blindToWork"
+        :existing-rooms="existingRooms"
+        editor-id="blindEditor"
+        :editor-title="editorTitle"
+        @quit="quitEventHandler"
+        @remove="removeEventHandler"
+        @save="saveEventHandler"
+      />
+    </transition>
   </section>
 </template>
 
 <script>
+import * as constants from '../constants/uiEditorConstants'
 import ButtonReload from '../components/ButtonReload'
+import ButtonAdd from '../components/ButtonAdd'
 import Remote from '../components/DevicesBlindsRemote'
+import Editor, { transitionMixin } from '../components/DevicesGeneralEditor'
 
 export default {
   name: 'Blinds',
-  components: { ButtonReload, Remote },
+  components: { ButtonReload, ButtonAdd, Remote, Editor },
+  mixins: [transitionMixin],
   data() {
-    return { groupedBlinds: [] }
+    return {
+      groupedBlinds: [],
+      blindToWork: null,
+      editorMode: '',
+      editorTitle: '',
+      modalShow: false
+    }
+  },
+  computed: {
+    existingRooms() {
+      return this.groupedBlinds.map(g => g.id)
+    }
+  },
+  watch: {
+    editorMode(val) {
+      // ToDo i18n
+      if (val === constants.MODE_CREATE) {
+        this.editorTitle = 'Loo ruloo'
+        this.modalShow = true
+      } else if (val === constants.MODE_MODIFY) {
+        this.editorTitle = 'Muuda rulood'
+        this.modalShow = true
+      } else {
+        this.modalShow = false
+      }
+    }
   },
   created() {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllBlinds()
   },
   methods: {
+    create() {
+      this.blindToWork = {
+        id: 0,
+        name: '',
+        room: '',
+        valuestep: 0.01
+      }
+      this.editorMode = constants.MODE_CREATE
+    },
+    modify({ room, blind }) {
+      this.blindToWork = { room, ...blind }
+      this.editorMode = constants.MODE_MODIFY
+    },
+    quitEventHandler() {
+      this.editorMode = null
+    },
+    removeEventHandler() {
+      const oldBlind = this.blindToWork
+      this.editorMode = null
+      const event = 'blind-remove'
+      this.$socket.emit(event, oldBlind.id, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with error: [ ${errors} ]`)
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event '${event}' responded with status [ ${status} ].`
+          )
+          if (status !== 'no-exist') {
+            return
+          }
+        }
+        // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
+        const oldGroup = this.groupedBlinds.find(x => x.id == oldBlind.room)
+        this.deleteFromOldRoom(oldGroup.items, oldBlind)
+      })
+    },
+    saveEventHandler(blind) {
+      switch (this.editorMode) {
+        case constants.MODE_CREATE:
+          this.saveCreated(blind)
+          break
+        case constants.MODE_MODIFY:
+          this.saveModified(blind)
+          break
+      }
+      this.editorMode = null
+    },
+    saveCreated(blind) {
+      const event = 'blind-add'
+      // ToDo handle case when API do not respond!
+      this.$socket.emit(event, blind, ({ id, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: [ ${errors} ]`)
+          // ToDo say it with toast/snackbar/notification!
+          return
+        }
+        blind.id = id
+        const { room, ...nBlind } = blind
+        this.upsertBlindToGroup(room, nBlind)
+      })
+      // ToDo say it with toast/snackbar/notification if event times out!
+    },
+    saveModified(blind) {
+      const event = 'blind-update'
+      const oldBlind = this.blindToWork
+      this.$socket.emit(event, blind, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: [ ${errors} ]`)
+          // ToDo say it with toast/snackbar/notification if event times out!
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event '${event}' responded with status [ ${status} ].`
+          )
+          // ToDo say it with toast/snackbar/notification if event times out!
+          return
+        }
+        const { room: mRoom, ...mBlind } = blind
+        const oldGroup = this.groupedBlinds.find(x => x.id == oldBlind.room)
+        if (oldBlind.room === mRoom) {
+          Object.assign(oldGroup.items.find(l => l.id == oldBlind.id), mBlind)
+        } else {
+          this.deleteFromOldRoom(oldGroup.items, oldBlind)
+          this.upsertBlindToGroup(mRoom, mBlind)
+        }
+      })
+      // ToDo say it with toast/snackbar/notification if event times out!
+    },
+    deleteFromOldRoom(roomBlinds, blind) {
+      if (roomBlinds.length == 1) {
+        this.groupedBlinds.splice(this.groupedBlinds.indexOf(roomBlinds), 1)
+      } else {
+        roomBlinds.splice(roomBlinds.findIndex(x => x.id == blind.id), 1)
+      }
+    },
+    upsertBlindToGroup(room, blind) {
+      const group = this.groupedBlinds.find(x => x.id == room)
+      if (group) {
+        group.items.push(blind)
+      } else {
+        this.groupedBlinds.push({ id: room, items: [blind] })
+      }
+    },
     ioGetAllBlinds() {
       this.$socket.emit(
         'get-all-room_blinds',
