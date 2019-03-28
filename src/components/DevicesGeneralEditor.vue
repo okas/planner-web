@@ -6,7 +6,11 @@
     @keyup.stop.enter="save"
   >
     <header class="quickview-header">
-      <slot name="header-title" :_class="'title'" />
+      <slot name="header-title" :_class="'title'">
+        <h4 class="title has-text-primary">
+          <span v-text="editorTitle" />
+        </h4>
+      </slot>
       <button class="delete" title="Katkesta" @click="quit" />
     </header>
     <div class="quickview-body">
@@ -36,7 +40,7 @@
             />
           </div>
           <datalist id="existingrooms">
-            <option v-for="r in existingrooms" :key="r" :value="r" />
+            <option v-for="r in existingRooms" :key="r" :value="r" />
           </datalist>
         </div>
       </div>
@@ -83,12 +87,13 @@ export default {
   props: {
     mode: { type: String, default: null },
     deviceForEdit: { type: Object, required: true },
-    existingrooms: { type: Array, required: true },
-    editorId: { type: String, default: 'generalEditor' }
+    existingRooms: { type: Array, required: true },
+    editorId: { type: String, default: 'generalEditor' },
+    editorTitle: { type: String, default: 'Editor' }
   },
   data() {
     return {
-      device: JSON.parse(JSON.stringify(this.deviceForEdit))
+      device: this.cloneInput(this.deviceForEdit)
     }
   },
   computed: {
@@ -106,6 +111,15 @@ export default {
       }
     }
   },
+  watch: {
+    deviceForEdit(newValue, oldValue) {
+      if (newValue.id === oldValue.id) {
+        return
+      }
+      // Todo notify the change to user.
+      this.device = this.cloneInput(newValue)
+    }
+  },
   methods: {
     quit() {
       this.$emit('quit')
@@ -115,6 +129,23 @@ export default {
     },
     save() {
       this.$emit('save', this.device)
+    },
+    cloneInput(input) {
+      return JSON.parse(JSON.stringify(input))
+    }
+  }
+}
+
+export const transitionMixin = {
+  isActiveClass: 'is-active',
+  tCss: true,
+  methods: {
+    async tEnter(el) {
+      await this.$nextTick()
+      el.classList.add(this.$options.isActiveClass)
+    },
+    tLeave(el) {
+      el.classList.remove(this.$options.isActiveClass)
     }
   }
 }

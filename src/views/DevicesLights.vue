@@ -24,65 +24,58 @@
         </div>
       </section>
     </div>
-    <editor
-      v-if="modalShow"
-      v-slot:header-title="{ _class }"
-      :class="isActiveClass"
-      :mode="editorMode"
-      :device-for-edit="lampToWork"
-      :existingrooms="existingrooms"
-      editor-id="lampEditor"
-      @hook:mounted="editorMounted"
-      @quit="quitEventHandler"
-      @remove="removeEventHandler"
-      @save="saveEventHandler"
-    >
-      <h4 class="title is-2 has-text-warning" :class="_class">
-        <span v-text="editorTitle" />
-      </h4>
-    </editor>
+    <transition :css="$options.tCss" @enter="tEnter" @leave="tLeave">
+      <editor
+        v-if="modalShow"
+        :mode="editorMode"
+        :device-for-edit="lampToWork"
+        :existing-rooms="existingRooms"
+        editor-id="lampEditor"
+        :editor-title="editorTitle"
+        @quit="quitEventHandler"
+        @remove="removeEventHandler"
+        @save="saveEventHandler"
+      />
+    </transition>
   </section>
 </template>
 
 <script>
-// Todo disable edited lamp while editor is open!
 import * as constants from '../constants/uiEditorConstants.js'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Lamp from '../components/DevicesLightsLamp'
-import Editor from '../components/DevicesGeneralEditor'
-import { setTimeout } from 'timers'
+import Editor, { transitionMixin } from '../components/DevicesGeneralEditor'
 
 export default {
   name: 'Lights',
   components: { ButtonReload, ButtonAdd, Lamp, Editor },
+  mixins: [transitionMixin],
   data() {
     return {
       groupedLamps: [],
       lampToWork: null,
       editorMode: '',
       editorTitle: '',
-      modalShow: false,
-      isActiveClass: ''
+      modalShow: false
     }
   },
   computed: {
-    existingrooms() {
+    existingRooms() {
       return this.groupedLamps.map(g => g.id)
     }
   },
   watch: {
     editorMode(val) {
       // ToDo i18n
-      switch (val) {
-        case constants.MODE_CREATE:
-          this.openEditorWithTitle('Loo lamp')
-          break
-        case constants.MODE_MODIFY:
-          this.openEditorWithTitle('Muuda lampi')
-          break
-        default:
-          this.closeEditor()
+      if (val === constants.MODE_CREATE) {
+        this.editorTitle = 'Loo lamp'
+        this.modalShow = true
+      } else if (val === constants.MODE_MODIFY) {
+        this.editorTitle = 'Muuda lampi'
+        this.modalShow = true
+      } else {
+        this.modalShow = false
       }
     }
   },
@@ -91,34 +84,16 @@ export default {
     this.ioGetAllLamps()
   },
   methods: {
-    openEditorWithTitle(title) {
-      this.editorTitle = title
-      this.modalShow = true
-    },
-    closeEditor() {
-      this.isActiveClass = ''
-      this.editorTitle = ''
-      setTimeout(() => {
-        this.modalShow = false
-        this.lampToWork = null
-      }, 1000)
-    },
-    async editorMounted() {
-      await this.$nextTick()
-      this.isActiveClass = 'is-active'
-    },
     create() {
       this.lampToWork = {
         id: 0,
         name: '',
         room: '',
-        valuestep: 1 // Todo non-dimmable lamps have 1, dimmable valu between 0-0.5 (0.5 means 2 steps, smaller vale means more granual lamp controllability)
+        valuestep: 1 // Todo non-dimmable lamps have 1, dimmable valu between 0-0.5
       }
-      // ToDo avoid editor race, allow one at the time!
       this.editorMode = constants.MODE_CREATE
     },
     modify({ room, lamp }) {
-      // ToDo avoid editor race, allow one at the time!
       this.lampToWork = { room, ...lamp }
       this.editorMode = constants.MODE_MODIFY
     },
