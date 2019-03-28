@@ -2,6 +2,7 @@
   <div
     :id="editorId"
     class="quickview"
+    tabindex="0"
     @keyup.stop.esc="quit"
     @keyup.stop.enter="save"
   >
