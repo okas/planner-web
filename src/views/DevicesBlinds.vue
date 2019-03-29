@@ -19,7 +19,8 @@
           <remote
             v-for="blind in room.items"
             :key="blind.id"
-            :blind.sync="blind"
+            :blind="blind"
+            @modify="modify({ room: room.id, blind })"
           />
         </div>
       </section>
