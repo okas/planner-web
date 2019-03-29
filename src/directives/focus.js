@@ -11,11 +11,10 @@ export const Focus = {
     if (binding.value === binding.oldValue) {
       return
     }
+    await vNode.context.$nextTick()
     if (binding.value) {
-      await vNode.context.$nextTick()
       el.focus()
     } else {
-      await vNode.context.$nextTick()
       el.blur()
     }
   }
