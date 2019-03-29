@@ -135,9 +135,10 @@ export default {
     },
     saveCreated(lamp) {
       // ToDo handle case when API do not respond!
-      this.$socket.emit('lamp-add', lamp, ({ id, errors }) => {
+      const event = 'lamp-add'
+      this.$socket.emit(event, lamp, ({ id, errors }) => {
         if (errors && errors.length > 0) {
-          console.error(`lamp-add: API responded with errors: [ ${errors} ]`)
+          console.error(`${event}: API responded with errors: [ ${errors} ]`)
           // ToDo say it with toast/snackbar/notification!
           return
         }
@@ -148,16 +149,17 @@ export default {
       // ToDo say it with toast/snackbar/notification if event times out!
     },
     saveModified(lamp) {
+      const event = 'lamp-update'
       const oldLamp = this.lampToWork
-      this.$socket.emit('lamp-update', lamp, ({ status, errors }) => {
+      this.$socket.emit(event, lamp, ({ status, errors }) => {
         if (errors && errors.length > 0) {
-          console.error(`lamp-update: API responded with errors: [ ${errors} ]`)
+          console.error(`${event}: API responded with errors: [ ${errors} ]`)
           // ToDo say it with toast/snackbar/notification if event times out!
           return
         }
         if (status !== 'ok') {
           console.warn(
-            `API event 'lamp-update' responded with status [ ${status} ].`
+            `API event '${event}' responded with status [ ${status} ].`
           )
           // ToDo say it with toast/snackbar/notification if event times out!
           return
