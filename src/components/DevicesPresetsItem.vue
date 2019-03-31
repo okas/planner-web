@@ -67,9 +67,11 @@ export default {
   props: { preset: { type: Object, required: true } },
   computed: {
     cronDescription() {
-      return cronstrue.toString(this.preset.schedule, {
+      return this.preset.schedule
+        ? cronstrue.toString(this.preset.schedule, {
         locale: this.$language
       })
+        : ''
     },
     disableSetActive() {
       return !this.preset.schedule || !this.$store.state.ioConnected
