@@ -36,7 +36,8 @@ export default {
       if (!group) {
         return 1
       }
-      return group.items.find(d => d.id === id).valuestep || 1
+      const device = group.items.find(d => d.id === id)
+      return device ? device.valuestep : 1
     }
   }
 }
