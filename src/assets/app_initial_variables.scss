@@ -52,8 +52,10 @@ $footer-padding: 0;
 $footer-background-color: $black-ter;
 
 $box-background-color: $grey-dark;
-$box-shadow: 0 2px 3px 1px hsla(0, 0%, 100%, 0.15),
+$box-shadow:
+  0 2px 3px 1px hsla(0, 0%, 100%, 0.15),
   0 0 0 1px hsla(0, 0%, 100%, 0.15);
+$box-shadow-warning: 0 0 0 1px $warning;
 $box-color: $special3;
 
 //!--- bulma-extensions scss styles ----
