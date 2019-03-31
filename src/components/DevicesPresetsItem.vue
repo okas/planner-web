@@ -1,5 +1,8 @@
 <template>
-  <article class="preset-item">
+  <article
+    class="preset-item box"
+    :class="{ 'has-missing-devices': hasMissingDevices }"
+  >
     <h3 class="name is-size-4" v-text="preset.name" />
     <span class="schedule" :title="preset.schedule" v-text="cronDescription" />
     <div class="commands field is-grouped is-marginless">
@@ -43,15 +46,7 @@
         </button>
       </div>
     </div>
-    <div
-      v-for="d in preset.devices"
-      :key="`${d.type}|${d.id}`"
-      class="devices-grid"
-    >
-      <!-- <span class="order" v-text="preset.setorder[d.id] || '='" /> -->
-      <span class="device-path" v-text="getDevName(d)" />
-      <span class="device-value" v-text="d.value" />
-    </div>
+    <device v-for="d in devices" :key="`${d.type}.${d.id}`" :device="d" />
   </article>
 </template>
 
@@ -59,13 +54,20 @@
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import cronstrue from 'cronstrue/i18n'
 import ButtonEdit from '../components/ButtonEdit'
+import Device from '../components/DevicesPresetsItemDevice'
 
 export default {
-  inject: ['getDevName'],
-  components: { ButtonEdit },
+  components: { ButtonEdit, Device },
   mixins: [i18SelectMixin],
+  inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },
   computed: {
+    devices() {
+      return this.preset.devices.map(pd => ({
+        ...pd,
+        name: this.getDevName(pd, true)
+      }))
+    },
     cronDescription() {
       return this.preset.schedule
         ? cronstrue.toString(this.preset.schedule, {
@@ -78,6 +80,9 @@ export default {
     },
     activeTitle() {
       return !this.preset.active ? 'Määra aeg' : ''
+    },
+    hasMissingDevices() {
+      return this.devices.some(d => !d.name)
     }
   },
   watch: {
@@ -119,6 +124,9 @@ export default {
     'name name'
     'schd cmmd';
   grid-template-columns: 15rem 12rem;
+  &.has-missing-devices {
+    box-shadow: $box-shadow-warning;
+  }
   .name {
     grid-area: name;
   }
