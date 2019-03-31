@@ -38,11 +38,9 @@
       </div>
       <div class="control">
         <button class="button is-small is-outlined is-light">
-          <span class="icon">
             <i class="icon">
               <fa-i class="fa-lg" icon="play" />
             </i>
-          </span>
         </button>
       </div>
     </div>
@@ -79,6 +77,7 @@ export default {
       return !this.preset.schedule || !this.$store.state.ioConnected
     },
     activeTitle() {
+      // ToDo i18n
       return !this.preset.active ? 'Määra aeg' : ''
     },
     hasMissingDevices() {
@@ -115,7 +114,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .preset-item {
   margin-bottom: 3rem;
   display: grid;
@@ -135,21 +134,9 @@ export default {
   }
   .commands {
     grid-area: cmmd;
+    .switch-container {
+      padding-top: 0.225rem;
   }
-  .devices-grid {
-    // grid-column: 1 / 4;
-    grid-column: 1 / 3;
-    display: grid;
-    gap: 0.2rem;
-    grid-auto-flow: column;
-    grid-template-columns: /* 2rem */ 12.5rem 1fr;
-    grid-auto-rows: 1fr;
   }
-}
-</style>
-
-<style lang="scss" scoped>
-.switch-container {
-  padding-top: 0.225rem;
 }
 </style>
