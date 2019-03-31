@@ -72,7 +72,7 @@ export default {
       })
     },
     disableSetActive() {
-      return !this.preset.schedule && !this.$store.state.ioConnected
+      return !this.preset.schedule || !this.$store.state.ioConnected
     },
     activeTitle() {
       return !this.preset.active ? 'Määra aeg' : ''
