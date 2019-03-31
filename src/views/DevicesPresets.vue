@@ -197,11 +197,17 @@ export default {
       this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
     },
-    getDevName({ id, type }) {
-      // ToDo add error handling in case of missing deviceData, etc.
+    getDevice(id, type) {
       const group = this.devicesData.find(g => g.type === type)
-      const { name, room } = group.items.find(d => d.id === id)
-      return `${name} / ${room}`
+      if (!group) {
+        return null
+      }
+      const device = group.items.find(d => d.id === id)
+      return device ? { ...device, typeName: group.name } : null
+    },
+    getDevName({ id, type }) {
+      const dev = this.getDevice(id, type)
+      return dev ? `${dev.typeName} / ${dev.room} / ${dev.name}` : null
     },
     ioGetPresets() {
       this.$socket.emit('presets-get-all', data => {
