@@ -45,7 +45,7 @@ import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
-  inject: ['devicesData', 'getDevName', 'ioGetDeviceData'],
+  inject: ['devicesData', 'ioGetDeviceData'],
   components: { TreeSelect },
   props: {
     devices: { type: Array, required: true },
