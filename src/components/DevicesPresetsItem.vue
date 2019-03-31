@@ -38,9 +38,9 @@
       </div>
       <div class="control">
         <button class="button is-small is-outlined is-light">
-            <i class="icon">
-              <fa-i class="fa-lg" icon="play" />
-            </i>
+          <i class="icon">
+            <fa-i class="fa-lg" icon="play" />
+          </i>
         </button>
       </div>
     </div>
@@ -69,8 +69,8 @@ export default {
     cronDescription() {
       return this.preset.schedule
         ? cronstrue.toString(this.preset.schedule, {
-        locale: this.$language
-      })
+            locale: this.$language
+          })
         : ''
     },
     disableSetActive() {
@@ -136,7 +136,7 @@ export default {
     grid-area: cmmd;
     .switch-container {
       padding-top: 0.225rem;
-  }
+    }
   }
 }
 </style>
