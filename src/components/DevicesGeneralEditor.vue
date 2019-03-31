@@ -52,6 +52,7 @@
           <button-ok
             class="is-outlined is-success"
             title="Kinnita"
+            tag="button"
             @click="save"
           />
         </div>
