@@ -40,11 +40,8 @@ export default {
       if (this.disabled) {
         return
       }
-      // Checking before state toggle, so need to get opposite of curretn state.
-      if (!this.confirmed) {
-        this.$emit('confirm')
-      }
       this.confirmed = !this.confirmed
+      this.$emit(this.confirmed ? 'confirm' : 'ask')
     }
   }
 }
