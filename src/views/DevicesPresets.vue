@@ -157,19 +157,12 @@ export default {
       this.editorMode = null
     },
     saveCreated(preset) {
-      if (
-        !preset.name &&
-        !preset.schedule &&
-        preset.devices.length ===
-          0 /*  &&
-        Object.keys(preset.setorder).length === 0 */
-      ) {
-        return
-      }
+      const event = 'presets-add'
       // ToDo handle case when API do not respond!
-      this.$socket.emit('presets-add', preset, ({ id, error }) => {
-        if (error) {
-          console.error(`preset-add: API responded with error: [ ${error} ]`)
+      this.$socket.emit(event, preset, ({ id, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: [ ${errors} ]`)
+          // ToDo say it with toast/snackbar/notification!
           return
         }
         preset.id = id
@@ -178,15 +171,15 @@ export default {
       })
     },
     saveModified(preset) {
-      this.$socket.emit('preset-update', preset, ({ status, error }) => {
-        if (error) {
-          console.error(`preset-update: API responded with error: [ ${error} ]`)
+      // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
+      const event = 'preset-update'
+      this.$socket.emit(event, preset, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with error: [ ${errors} ]`)
           return
         }
         if (status !== 'ok') {
-          console.warn(
-            `API event 'preset-update' responded with status ${status}.`
-          )
+          console.warn(`API event '${event}' responded with status ${status}.`)
           return
         }
         Object.assign(this.presetToWork, preset)
