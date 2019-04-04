@@ -3,7 +3,7 @@
     :is="tag"
     role="button"
     class="remove-confirm button"
-    :class="confirmed ? 'is-warning' : 'is-danger'"
+    :class="ask ? 'is-danger' : 'is-warning'"
     :disabled="disabled"
     :aria-disabled="disabled"
     v-bind="$attrs"
@@ -11,7 +11,7 @@
     @click.prevent.stop="changeState"
   >
     <i class="icon">
-      <fa-i class="fa-lg" :icon="confirmed ? 'trash' : 'exclamation-circle'" />
+      <fa-i class="fa-lg" :icon="ask ? 'exclamation-circle' : 'trash'" />
     </i>
   </component>
 </template>
@@ -21,17 +21,17 @@ import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
 
 export default {
   mixins: [disabled, removeDOMListeners],
-  props: { tag: { type: String, default: 'a' } },
+  model: { event: 'change' },
+  props: {
+    tag: { type: String, default: 'a' },
+    value: { type: Boolean, default: false }
+  },
   data() {
-    return {
-      confirmed: true
-    }
+    return { ask: this.value }
   },
   watch: {
-    disabled(newValue) {
-      if (newValue) {
-        this.confirmed = true
-      }
+    value(newValue) {
+      this.ask = newValue
     }
   },
   methods: {
@@ -40,8 +40,8 @@ export default {
       if (this.disabled) {
         return
       }
-      this.confirmed = !this.confirmed
-      this.$emit(this.confirmed ? 'confirm' : 'ask')
+      this.ask = !this.ask
+      this.$emit('change', this.ask)
     }
   }
 }

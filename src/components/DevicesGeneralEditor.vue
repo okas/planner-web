@@ -64,9 +64,10 @@
         </div>
         <div v-if="showRemoveButton" class="control">
           <button-remove-confirm
+            v-model="showDependents"
             class="is-outlined"
-            title="Kustuta"
-            @confirm="remove"
+            :title="removeConfirmTitle"
+            @change="changeHandler"
           />
         </div>
       </div>
@@ -93,7 +94,7 @@ export default {
   },
   data() {
     return {
-      device: this.cloneInput(this.deviceForEdit)
+      showDependents: false
     }
   },
   computed: {
@@ -104,11 +105,9 @@ export default {
       switch (this.$language) {
         case 'et':
           return 'Katkesta'
-        case 'es':
-          return 'Canclear'
-        default:
-          return 'Cancel'
-      }
+    },
+    removeConfirmTitle() {
+      return this.showDependents ? 'Kinnita' : 'Kustuta'
     }
   },
   watch: {
@@ -121,6 +120,11 @@ export default {
     }
   },
   methods: {
+    changeHandler(newState) {
+      if (!newState) {
+        this.$emit('remove', this.device.id)
+      }
+    },
     quit() {
       this.$emit('quit')
     },
