@@ -5,7 +5,7 @@
       <p class="has-text-danger">Eelseadistuse haldus</p>
       <div class="commands field is-grouped is-marginless">
         <div class="control">
-          <button-reload title="Värskenda serverist" @click="apiDataLoad" />
+          <button-reload title="Värskenda serverist" @click="apiDataReload" />
         </div>
         <div class="control">
           <button-add title="Lisa automaattoiming" @click="create" />
@@ -102,7 +102,7 @@ export default {
     this.apiDataLoad()
   },
   methods: {
-    apiDataLoad() {
+    apiDataReload() {
       this.ioGetDeviceData()
       this.ioGetPresets()
     },

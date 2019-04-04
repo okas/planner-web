@@ -8,15 +8,15 @@
     <div class="commands field is-grouped is-marginless">
       <div class="switch-container control" :title="activeTitle">
         <input
-          :id="`setAct|${preset.id}`"
+          :id="`act${preset.id}`"
           v-model="preset.active"
           class="switch is-outlined"
           type="checkbox"
-          :name="`setAct|${preset.id}`"
+          :name="`act${preset.id}`"
           :disabled="disableSetActive"
           @change="saveActiveState(preset, $event.target.checked)"
         />
-        <label :for="`setAct|${preset.id}`" />
+        <label :for="`act${preset.id}`" />
       </div>
       <div class="control">
         <button

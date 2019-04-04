@@ -19,7 +19,7 @@
             v-for="lamp in room.items"
             :key="lamp.id"
             :lamp="lamp"
-            @modify="modify({ room: room.id, lamp })"
+            @modify="modify($event, room.id)"
           ></lamp>
         </div>
       </section>
@@ -68,13 +68,16 @@ export default {
   watch: {
     editorMode(val) {
       // ToDo i18n
-      if (val === constants.MODE_CREATE) {
+      switch (val) {
+        case constants.MODE_CREATE:
         this.editorTitle = 'Loo lamp'
         this.modalShow = true
-      } else if (val === constants.MODE_MODIFY) {
+          return
+        case constants.MODE_MODIFY:
         this.editorTitle = 'Muuda lampi'
         this.modalShow = true
-      } else {
+          return
+        default:
         this.modalShow = false
       }
     }
@@ -93,18 +96,18 @@ export default {
       }
       this.editorMode = constants.MODE_CREATE
     },
-    modify({ room, lamp }) {
-      this.lampToWork = { room, ...lamp }
+    modify(lamp, room) {
+      this.lampToWork = { ...lamp, room }
       this.editorMode = constants.MODE_MODIFY
     },
     quitEventHandler() {
       this.editorMode = null
     },
-    removeEventHandler() {
-      const oldLamp = this.lampToWork
+    removeEventHandler(lampId) {
+      const oldLampRoom = this.lampToWork.room
       this.editorMode = null
       const event = 'lamp-remove'
-      this.$socket.emit(event, oldLamp.id, ({ status, errors }) => {
+      this.$socket.emit(event, lampId, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with error: [ ${errors} ]`)
           return
@@ -118,8 +121,8 @@ export default {
           }
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
-        const oldGroup = this.groupedLamps.find(x => x.id == oldLamp.room)
-        this.deleteFromOldRoom(oldGroup.items, oldLamp)
+        const oldGroup = this.groupedLamps.find(x => x.id == oldLampRoom)
+        this.deleteFromOldRoom(oldGroup.items, lampId)
       })
     },
     saveEventHandler(lamp) {
@@ -150,7 +153,7 @@ export default {
     },
     saveModified(lamp) {
       const event = 'lamp-update'
-      const oldLamp = this.lampToWork
+      const { id: oldLampId, room: oldLampRoom } = this.lampToWork
       this.$socket.emit(event, lamp, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with errors: [ ${errors} ]`)
@@ -165,21 +168,21 @@ export default {
           return
         }
         const { room: mRoom, ...mLamp } = lamp
-        const oldGroup = this.groupedLamps.find(x => x.id == oldLamp.room)
-        if (oldLamp.room === mRoom) {
-          Object.assign(oldGroup.items.find(l => l.id == oldLamp.id), mLamp)
+        const oldGroup = this.groupedLamps.find(x => x.id == oldLampRoom)
+        if (oldLampRoom === mRoom) {
+          Object.assign(oldGroup.items.find(l => l.id == oldLampId), mLamp)
         } else {
-          this.deleteFromOldRoom(oldGroup.items, oldLamp)
+          this.deleteFromOldRoom(oldGroup.items, mLamp.id)
           this.upsertLampToGroup(mRoom, mLamp)
         }
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
-    deleteFromOldRoom(roomLamps, lamp) {
+    deleteFromOldRoom(roomLamps, lampId) {
       if (roomLamps.length == 1) {
         this.groupedLamps.splice(this.groupedLamps.indexOf(roomLamps), 1)
       } else {
-        roomLamps.splice(roomLamps.findIndex(x => x.id == lamp.id), 1)
+        roomLamps.splice(roomLamps.findIndex(x => x.id == lampId), 1)
       }
     },
     upsertLampToGroup(room, lamp) {
