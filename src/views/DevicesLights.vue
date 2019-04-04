@@ -34,8 +34,31 @@
         :editor-title="editorTitle"
         @quit="quitEventHandler"
         @remove="removeEventHandler"
+        @verifyDependents="ioGetLampDependents"
         @save="saveEventHandler"
-      />
+      >
+        <div v-if="lampDependents.length > 0" slot="show-dependents">
+          <h5 class="title is-5 has-text-warning">
+            See lamp on seotud automaatidega
+          </h5>
+          <p>Lambi kustutamisel eemaldatakse see järgmistest automaatidest:</p>
+          <ul>
+            <li v-for="dep of lampDependents" :key="dep.id">
+              <router-link
+                :to="{ name: 'dev-presets', hash: `#item${dep.id}` }"
+                >{{ `${dep.name}` }}</router-link
+              >
+              <router-link
+                class="inline-space-left"
+                target="_blank"
+                :to="{ name: 'dev-presets', hash: `#item${dep.id}` }"
+              >
+                <fa-i class="fa-xs" icon="external-link-alt" />
+              </router-link>
+            </li>
+          </ul>
+        </div>
+      </editor>
     </transition>
   </section>
 </template>
@@ -57,7 +80,8 @@ export default {
       lampToWork: null,
       editorMode: '',
       editorTitle: '',
-      modalShow: false
+      modalShow: false,
+      lampDependents: []
     }
   },
   computed: {
@@ -70,16 +94,22 @@ export default {
       // ToDo i18n
       switch (val) {
         case constants.MODE_CREATE:
-        this.editorTitle = 'Loo lamp'
-        this.modalShow = true
+          this.editorTitle = 'Loo lamp'
+          this.modalShow = true
           return
         case constants.MODE_MODIFY:
-        this.editorTitle = 'Muuda lampi'
-        this.modalShow = true
+          this.editorTitle = 'Muuda lampi'
+          this.modalShow = true
           return
         default:
-        this.modalShow = false
+          this.editorTitle = ''
+          this.lampToWork = null
+          this.modalShow = false
+          return
       }
+    },
+    lampToWork() {
+      this.lampDependents = []
     }
   },
   created() {
@@ -198,6 +228,13 @@ export default {
         'get-all-room_lamps',
         data => (this.groupedLamps = data)
       )
+    },
+    ioGetLampDependents() {
+      this.$socket.emit(
+        'lamp-dependents',
+        this.lampToWork.id,
+        data => (this.lampDependents = data)
+      )
     }
   }
 }
@@ -218,5 +255,8 @@ export default {
     justify-content: start;
     grid-template-columns: repeat(auto-fit, minmax($lamp-width, auto));
   }
+}
+.inline-space-left {
+  margin-inline-start: 0.25rem;
 }
 </style>

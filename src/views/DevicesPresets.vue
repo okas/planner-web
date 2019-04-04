@@ -15,7 +15,9 @@
     <div class="presets-grid">
       <item
         v-for="p in presets"
+        :id="`item${p.id}`"
         :key="p.id"
+        :class="{ 'highlight-preset': highlightItem === `item${p.id}` }"
         :preset="p"
         @modify="modify"
         @removeConfirm="removeConfirm"
@@ -80,6 +82,11 @@ export default {
       }
     )
   },
+  computed: {
+    highlightItem() {
+      return this.$route.hash ? this.$route.hash.substring(1) : ''
+    }
+  },
   watch: {
     editorMode(val) {
       // ToDo i18n
@@ -98,10 +105,19 @@ export default {
       }
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.ioGetPresets(vm.navigateToHashAfterDataRender))
+  },
   created() {
-    this.apiDataLoad()
+    this.ioGetDeviceData()
   },
   methods: {
+    async navigateToHashAfterDataRender() {
+      if (this.$route.hash) {
+        await this.$nextTick()
+        window.location.href = this.$route.fullPath
+      }
+    },
     apiDataReload() {
       this.ioGetDeviceData()
       this.ioGetPresets()
@@ -202,9 +218,12 @@ export default {
       const dev = this.getDevice(id, type)
       return dev ? `${dev.typeName} / ${dev.room} / ${dev.name}` : null
     },
-    ioGetPresets() {
+    ioGetPresets(fn = null) {
       this.$socket.emit('presets-get-all', data => {
         this.presets = data
+        if (typeof fn === 'function') {
+          fn()
+        }
       })
     },
     ioGetDeviceData() {
@@ -217,3 +236,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.highlight-preset {
+  box-shadow: inset 0px 0px 14px 1.5px $info;
+}
+</style>

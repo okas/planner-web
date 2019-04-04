@@ -13,7 +13,7 @@
       <button class="delete" title="Katkesta" @click="quit" />
     </header>
     <div class="quickview-body">
-      <div class="quickview-block">
+      <section class="quickview-block">
         <div class="field">
           <label class="label">Nimi</label>
           <div class="control">
@@ -42,7 +42,10 @@
             <option v-for="r in existingRooms" :key="r" :value="r" />
           </datalist>
         </div>
-      </div>
+      </section>
+      <section v-if="showDependents" class="show-dependents quickview-block">
+        <slot name="show-dependents" />
+      </section>
     </div>
     <footer class="quickview-footer">
       <div class="field is-grouped">
@@ -57,9 +60,9 @@
         <div class="control">
           <button
             class="button is-text"
-            title="Katkesta"
-            @click="quit"
-            v-text="canceltext"
+            :title="quitOrCanceltext"
+            @click="quitOrCancelHandler"
+            v-text="quitOrCanceltext"
           />
         </div>
         <div v-if="showRemoveButton" class="control">
@@ -77,14 +80,13 @@
 
 <script>
 import { MODE_MODIFY } from '../constants/uiEditorConstants'
-import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import { FocusDirectiveMixin } from '../directives/focus'
 import ButtonOk from '../components/ButtonOk'
 import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
 
 export default {
   components: { ButtonOk, ButtonRemoveConfirm },
-  mixins: [i18SelectMixin, FocusDirectiveMixin],
+  mixins: [FocusDirectiveMixin],
   props: {
     mode: { type: String, default: null },
     deviceForEdit: { type: Object, required: true },
@@ -94,6 +96,7 @@ export default {
   },
   data() {
     return {
+      device: this.cloneInput(this.deviceForEdit),
       showDependents: false
     }
   },
@@ -101,10 +104,8 @@ export default {
     showRemoveButton() {
       return this.mode === MODE_MODIFY
     },
-    canceltext() {
-      switch (this.$language) {
-        case 'et':
-          return 'Katkesta'
+    quitOrCanceltext() {
+      return 'Katkesta'
     },
     removeConfirmTitle() {
       return this.showDependents ? 'Kinnita' : 'Kustuta'
@@ -116,10 +117,23 @@ export default {
         return
       }
       // Todo notify the change to user.
+      this.showDependents = false
       this.device = this.cloneInput(newValue)
+    },
+    showDependents(newValue) {
+      if (newValue) {
+        this.$emit('verifyDependents', this.device.id)
+      }
     }
   },
   methods: {
+    quitOrCancelHandler() {
+      if (this.showDependents) {
+        this.showDependents = false
+      } else {
+        this.quit()
+      }
+    },
     changeHandler(newState) {
       if (!newState) {
         this.$emit('remove', this.device.id)
@@ -127,9 +141,6 @@ export default {
     },
     quit() {
       this.$emit('quit')
-    },
-    remove() {
-      this.$emit('remove')
     },
     save() {
       this.$emit('save', this.device)
