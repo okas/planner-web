@@ -8,9 +8,7 @@
   >
     <header class="quickview-header">
       <slot name="header-title" :_class="'title'">
-        <h4 class="title has-text-primary">
-          <span v-text="editorTitle" />
-        </h4>
+        <h4 class="title has-text-primary" v-text="editorTitle" />
       </slot>
       <button class="delete" title="Katkesta" @click="quit" />
     </header>
@@ -152,3 +150,9 @@ export const transitionMixin = {
   }
 }
 </script>
+
+<style lang="scss">
+.quickview-block {
+  padding: 1rem;
+}
+</style>
