@@ -61,6 +61,9 @@ export default {
   props: { preset: { type: Object, required: true } },
   computed: {
     devices() {
+      if (!this.preset || !this.preset.devices) {
+        return []
+      }
       return this.preset.devices.map(pd => ({
         ...pd,
         name: this.getDevName(pd, true)
