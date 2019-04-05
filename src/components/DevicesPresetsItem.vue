@@ -19,15 +19,12 @@
         <label :for="`act${preset.id}`" />
       </div>
       <div class="control">
-        <button
-          class="button is-small is-outlined is-light"
+        <button-remove-confirm
+          class="is-small is-outlined"
           title="Kustuta automaattoiming"
-          @click="$emit('removeConfirm', preset)"
-        >
-          <i class="icon">
-            <fa-i class="fa-lg" icon="trash" />
-          </i>
-        </button>
+          :ask-timeout="5000"
+          @change="removeHandler"
+        />
       </div>
       <div class="control">
         <button-edit
@@ -52,10 +49,11 @@
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import cronstrue from 'cronstrue/i18n'
 import ButtonEdit from '../components/ButtonEdit'
+import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
 import Device from '../components/DevicesPresetsItemDevice'
 
 export default {
-  components: { ButtonEdit, Device },
+  components: { ButtonRemoveConfirm, ButtonEdit, Device },
   mixins: [i18SelectMixin],
   inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },
@@ -112,6 +110,11 @@ export default {
         }
         preset.active = newState
       })
+    },
+    removeHandler(newState) {
+      if (!newState) {
+        this.$emit('remove', this.preset.id)
+      }
     }
   }
 }

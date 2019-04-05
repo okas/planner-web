@@ -20,16 +20,9 @@
         :class="{ 'highlight-preset': highlightItem === `item${p.id}` }"
         :preset="p"
         @modify="modify"
-        @removeConfirm="removeConfirm"
+        @remove="removeHandler"
       />
     </div>
-    <remove-confirm
-      v-if="modalRemoveConfirmShow"
-      :class="{ 'is-active': modalRemoveConfirmShow }"
-      :preset-name="presetToWork.name"
-      @quit="quitEventHandler"
-      @remove="removeConfirmedHandler"
-    />
     <editor
       v-if="modalShow"
       class="component"
@@ -51,12 +44,11 @@ import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Item from '../components/DevicesPresetsItem'
-import RemoveConfirm from '../components/DevicesPresetsRemoveConfirm'
 import Editor from '../components/DevicesPresetsEditor'
 
 export default {
   name: 'Presets',
-  components: { ButtonAdd, ButtonReload, Item, RemoveConfirm, Editor },
+  components: { ButtonAdd, ButtonReload, Item, Editor },
   mixins: [i18SelectMixin],
   data() {
     return {
@@ -65,7 +57,6 @@ export default {
       editorMode: null,
       editorTitle: '',
       modalShow: false,
-      modalRemoveConfirmShow: false,
       devicesData: []
     }
   },
@@ -137,17 +128,8 @@ export default {
       this.editorMode = constants.MODE_MODIFY
       this.presetToWork = preset
     },
-    removeConfirm(preset) {
-      this.presetToWork = preset
-      this.modalRemoveConfirmShow = true
-    },
-    removeConfirmedHandler() {
-      this.modalRemoveConfirmShow = false
-      this.remove(this.presetToWork)
-      this.presetToWork = null
-    },
-    remove(preset) {
-      this.$socket.emit('preset-remove', preset.id, ({ status, error }) => {
+    removeHandler(presetId) {
+      this.$socket.emit('preset-remove', presetId, ({ status, error }) => {
         if (error) {
           console.error(`preset-remove: API responded with error: [ ${error} ]`)
           return
@@ -161,7 +143,10 @@ export default {
           }
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
-        this.$delete(this.presets, this.presets.indexOf(preset))
+        this.$delete(
+          this.presets,
+          this.presets.findIndex(p => p.id == presetId)
+        )
       })
     },
     saveEventHandler(preset) {
@@ -203,7 +188,6 @@ export default {
       })
     },
     quitEventHandler() {
-      this.modalRemoveConfirmShow = false
       this.presetToWork = this.editorMode = null
     },
     getDevice(id, type) {

@@ -24,15 +24,19 @@ export default {
   model: { event: 'change' },
   props: {
     tag: { type: String, default: 'a' },
-    value: { type: Boolean, default: false }
+    value: { type: Boolean, default: false },
+    askTimeout: { type: Number, default: 0 }
   },
   data() {
-    return { ask: this.value }
+    return { ask: this.value, timeoutId: 0 }
   },
   watch: {
     value(newValue) {
       this.ask = newValue
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timeoutId)
   },
   methods: {
     changeState() {
@@ -40,8 +44,15 @@ export default {
       if (this.disabled) {
         return
       }
+      if (this.askTimeout > 0) {
+        this.timeoutId = setTimeout(this.resetAsk, this.askTimeout, this)
+      }
       this.ask = !this.ask
       this.$emit('change', this.ask)
+    },
+    resetAsk() {
+      this.ask = false
+      this.timeoutId = 0
     }
   }
 }
