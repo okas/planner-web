@@ -31,9 +31,11 @@
       @quit="quitEventHandler"
       @save="saveEventHandler"
     >
-      <h2 slot="header-title" class="title is-2 has-text-danger">
-        <span v-text="editorTitle" />
-      </h2>
+      <h2
+        slot="header-title"
+        class="title is-2 has-text-danger"
+        v-text="editorTitle"
+      />
     </editor>
   </section>
 </template>
