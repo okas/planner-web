@@ -43,8 +43,8 @@
           </datalist>
         </div>
       </section>
-      <section v-if="showDependents" class="show-dependents quickview-block">
-        <slot name="show-dependents" />
+      <section class="dependents quickview-block">
+        <slot v-if="showDependents" name="show-dependents" />
       </section>
     </div>
     <footer class="quickview-footer">
