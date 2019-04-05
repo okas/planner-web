@@ -3,7 +3,7 @@
     :is="tag"
     role="button"
     class="remove-confirm button"
-    :class="ask ? 'is-danger' : 'is-warning'"
+    :class="ask ? 'is-danger' : defaultStateClass"
     :disabled="disabled"
     :aria-disabled="disabled"
     v-bind="$attrs"
@@ -25,7 +25,8 @@ export default {
   props: {
     tag: { type: String, default: 'a' },
     value: { type: Boolean, default: false },
-    askTimeout: { type: Number, default: 0 }
+    askTimeout: { type: Number, default: 0 },
+    defaultStateClass: { type: String, default: 'is-warning' }
   },
   data() {
     return { ask: this.value, timeoutId: 0 }

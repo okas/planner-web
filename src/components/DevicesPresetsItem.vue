@@ -21,6 +21,7 @@
       <div class="control">
         <button-remove-confirm
           class="is-small is-outlined"
+          default-state-class="is-light"
           title="Kustuta automaattoiming"
           :ask-timeout="5000"
           @change="removeHandler"
