@@ -37,27 +37,13 @@
         @verifyDependents="ioGetLampDependents"
         @save="saveEventHandler"
       >
-        <div v-if="lampDependents.length > 0" slot="show-dependents">
-          <h5 class="title is-5 has-text-warning">
-            See lamp on seotud automaatidega
-          </h5>
-          <p>Lambi kustutamisel eemaldatakse see järgmistest automaatidest:</p>
-          <ul>
-            <li v-for="dep of lampDependents" :key="dep.id">
-              <router-link
-                :to="{ name: 'dev-presets', hash: `#item${dep.id}` }"
-                >{{ `${dep.name}` }}</router-link
-              >
-              <router-link
-                class="inline-space-left"
-                target="_blank"
-                :to="{ name: 'dev-presets', hash: `#item${dep.id}` }"
-              >
-                <fa-i class="fa-xs" icon="external-link-alt" />
-              </router-link>
-            </li>
-          </ul>
-        </div>
+        <dependents
+          v-if="lampDependents.length > 0"
+          slot="show-dependents"
+          :dependents="lampDependents"
+          header-text="See lamp on seotud automaatidega"
+          message-text="Lambi kustutamisel eemaldatakse see järgmistest automaatidest:"
+        />
       </editor>
     </transition>
   </section>
@@ -69,10 +55,11 @@ import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Lamp from '../components/DevicesLightsLamp'
 import Editor, { transitionMixin } from '../components/DevicesGeneralEditor'
+import Dependents from '../components/DevicesDependentPresets'
 
 export default {
   name: 'Lights',
-  components: { ButtonReload, ButtonAdd, Lamp, Editor },
+  components: { ButtonReload, ButtonAdd, Lamp, Editor, Dependents },
   mixins: [transitionMixin],
   data() {
     return {
@@ -255,8 +242,5 @@ export default {
     justify-content: start;
     grid-template-columns: repeat(auto-fit, minmax($lamp-width, auto));
   }
-}
-.inline-space-left {
-  margin-inline-start: 0.25rem;
 }
 </style>
