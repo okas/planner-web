@@ -35,8 +35,17 @@
         :editor-title="editorTitle"
         @quit="quitEventHandler"
         @remove="removeEventHandler"
+        @verifyDependents="ioGetBlindDependents"
         @save="saveEventHandler"
-      />
+      >
+        <dependents
+          v-if="blindDependents.length > 0"
+          slot="show-dependents"
+          :dependents="blindDependents"
+          header-text="See ruloo on seotud automaatidega"
+          message-text="Ruloo kustutamisel eemaldatakse see järgmistest automaatidest:"
+        />
+      </editor>
     </transition>
   </section>
 </template>
@@ -47,10 +56,11 @@ import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
 import Remote from '../components/DevicesBlindsRemote'
 import Editor, { transitionMixin } from '../components/DevicesGeneralEditor'
+import Dependents from '../components/DevicesDependentPresets'
 
 export default {
   name: 'Blinds',
-  components: { ButtonReload, ButtonAdd, Remote, Editor },
+  components: { ButtonReload, ButtonAdd, Remote, Editor, Dependents },
   mixins: [transitionMixin],
   data() {
     return {
@@ -58,7 +68,8 @@ export default {
       blindToWork: null,
       editorMode: '',
       editorTitle: '',
-      modalShow: false
+      modalShow: false,
+      blindDependents: []
     }
   },
   computed: {
@@ -195,6 +206,13 @@ export default {
       this.$socket.emit(
         'get-all-room_blinds',
         data => (this.groupedBlinds = data)
+      )
+    },
+    ioGetBlindDependents() {
+      this.$socket.emit(
+        'blind-dependents',
+        this.blindToWork.id,
+        data => (this.blindDependents = data)
       )
     }
   }
