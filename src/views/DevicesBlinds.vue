@@ -208,12 +208,10 @@ export default {
         data => (this.groupedBlinds = data)
       )
     },
-    ioGetBlindDependents() {
-      this.$socket.emit(
-        'blind-dependents',
-        this.blindToWork.id,
-        data => (this.blindDependents = data)
-      )
+    ioGetBlindDependents(blindId) {
+      this.$socket.emit('blind-dependents', blindId, data => {
+        this.blindDependents = data
+      })
     }
   }
 }

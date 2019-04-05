@@ -216,12 +216,10 @@ export default {
         data => (this.groupedLamps = data)
       )
     },
-    ioGetLampDependents() {
-      this.$socket.emit(
-        'lamp-dependents',
-        this.lampToWork.id,
-        data => (this.lampDependents = data)
-      )
+    ioGetLampDependents(lampId) {
+      this.$socket.emit('lamp-dependents', lampId, data => {
+        this.lampDependents = data
+      })
     }
   }
 }
