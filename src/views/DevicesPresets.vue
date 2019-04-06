@@ -132,15 +132,14 @@ export default {
       this.presetToWork = preset
     },
     removeHandler(presetId) {
-      this.$socket.emit('preset-remove', presetId, ({ status, error }) => {
-        if (error) {
-          console.error(`preset-remove: API responded with error: [ ${error} ]`)
+      const event = 'preset-remove'
+      this.$socket.emit(event, presetId, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: " ${errors} " `)
           return
         }
         if (status !== 'ok') {
-          console.warn(
-            `API event 'preset-remove' responded with status ${status}.`
-          )
+          console.warn(`API event '${event}' responded with status ${status}.`)
           if (status !== 'no-exist') {
             return
           }
