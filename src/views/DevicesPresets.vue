@@ -20,6 +20,7 @@
         :class="{ 'highlight-preset': highlightItem === `item${p.id}` }"
         :preset="p"
         @modify="modify"
+        @setActive="setActiveHandler"
         @remove="removeHandler"
       />
     </div>
@@ -149,6 +150,23 @@ export default {
           this.presets,
           this.presets.findIndex(p => p.id == presetId)
         )
+      })
+    },
+    setActiveHandler(preset, newState) {
+      const event = 'presets-set-active'
+      const payload = { id: preset.id, active: newState }
+      this.$socket.emit(event, payload, ({ status, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: " ${errors} "`)
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event '${event}' responded with status " ${status} ".`
+          )
+          return
+        }
+        preset.active = newState
       })
     },
     saveEventHandler(preset) {

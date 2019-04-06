@@ -9,12 +9,12 @@
       <div class="switch-container control" :title="activeTitle">
         <input
           :id="`act${preset.id}`"
-          v-model="preset.active"
+          :checked="preset.active"
           class="switch is-outlined"
           type="checkbox"
           :name="`act${preset.id}`"
           :disabled="disableSetActive"
-          @change="saveActiveState(preset, $event.target.checked)"
+          @change="saveActiveState"
         />
         <label :for="`act${preset.id}`" />
       </div>
@@ -23,7 +23,7 @@
           class="is-small is-outlined"
           default-state-class="is-light"
           title="Kustuta automaattoiming"
-          :ask-timeout="5000"
+          :ask-timeout="askTimeout"
           @change="removeHandler"
         />
       </div>
@@ -31,7 +31,7 @@
         <button-edit
           title="Muuda automaattoiming"
           class="is-small is-outlined is-light"
-          @click="$emit('modify', preset)"
+          @click="modifyHandler"
         />
       </div>
       <div class="control">
@@ -58,6 +58,11 @@ export default {
   mixins: [i18SelectMixin],
   inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },
+  data() {
+    return {
+      askTimeout: 5000
+    }
+  },
   computed: {
     devices() {
       if (!this.preset || !this.preset.devices) {
@@ -86,31 +91,12 @@ export default {
       return this.devices.some(d => !d.name)
     }
   },
-  watch: {
-    'preset.schedule'(val) {
-      if (!val) {
-        this.preset.active = val ? true : false
-      }
-    }
-  },
   methods: {
-    saveActiveState(preset, newState) {
-      const payload = { id: preset.id, active: newState }
-      this.$socket.emit('presets-set-active', payload, ({ status, error }) => {
-        if (error) {
-          console.error(
-            `presets-set-active: API responded with error: [ ${error} ]`
-          )
-          return
-        }
-        if (status !== 'ok') {
-          console.warn(
-            `API event 'presets-set-active' responded with status ${status}.`
-          )
-          return
-        }
-        preset.active = newState
-      })
+    modifyHandler() {
+      this.$emit('modify', this.preset)
+    },
+    saveActiveState(event) {
+      this.$emit('setActive', this.preset, event.target.checked)
     },
     removeHandler(newState) {
       if (!newState) {
