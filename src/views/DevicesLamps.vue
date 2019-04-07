@@ -15,12 +15,12 @@
       <section v-for="room in groupedLamps" :key="room.id" class="room">
         <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id" />
         <div class="lamps-grid">
-          <lamp
+          <item
             v-for="lamp in room.items"
             :key="lamp.id"
             :lamp="lamp"
             @modify="modify($event, room.id)"
-          ></lamp>
+          ></item>
         </div>
       </section>
     </div>
@@ -53,13 +53,13 @@
 import * as constants from '../constants/uiEditorConstants.js'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
-import Lamp from '../components/DevicesLightsLamp'
+import Item from '../components/DevicesLampItem'
 import Editor, { transitionMixin } from '../components/DevicesGeneralEditor'
 import Dependents from '../components/DevicesDependentPresets'
 
 export default {
-  name: 'Lights',
-  components: { ButtonReload, ButtonAdd, Lamp, Editor, Dependents },
+  name: 'Lamps',
+  components: { ButtonReload, ButtonAdd, Item, Editor, Dependents },
   mixins: [transitionMixin],
   data() {
     return {
@@ -73,6 +73,7 @@ export default {
   },
   computed: {
     existingRooms() {
+      // ToDo turn to set ?
       return this.groupedLamps.map(g => g.id)
     }
   },
@@ -123,7 +124,7 @@ export default {
     removeEventHandler(lampId) {
       const oldLampRoom = this.lampToWork.room
       this.editorMode = null
-      const event = 'lamp-remove'
+      const event = 'lamp__remove'
       this.$socket.emit(event, lampId, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with error: [ ${errors} ]`)
@@ -155,7 +156,7 @@ export default {
     },
     saveCreated(lamp) {
       // ToDo handle case when API do not respond!
-      const event = 'lamp-add'
+      const event = 'lamp__add'
       this.$socket.emit(event, lamp, ({ id, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with errors: [ ${errors} ]`)
@@ -169,7 +170,7 @@ export default {
       // ToDo say it with toast/snackbar/notification if event times out!
     },
     saveModified(lamp) {
-      const event = 'lamp-update'
+      const event = 'lamp__update'
       const { id: oldLampId, room: oldLampRoom } = this.lampToWork
       this.$socket.emit(event, lamp, ({ status, errors }) => {
         if (errors && errors.length > 0) {
@@ -211,13 +212,10 @@ export default {
       }
     },
     ioGetAllLamps() {
-      this.$socket.emit(
-        'get-all-room_lamps',
-        data => (this.groupedLamps = data)
-      )
+      this.$socket.emit('lamp__get-all', data => (this.groupedLamps = data))
     },
     ioGetLampDependents(lampId) {
-      this.$socket.emit('lamp-dependents', lampId, data => {
+      this.$socket.emit('lamp__get-dependent-presets', lampId, data => {
         this.lampDependents = data
       })
     }
@@ -226,7 +224,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/devices_lights.scss';
+@import '../assets/devices_lamps.scss';
 
 .rooms-grid {
   display: grid;

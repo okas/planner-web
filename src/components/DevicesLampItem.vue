@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/devices_lights.scss';
+@import '../assets/devices_lamps.scss';
 
 .edit:hover {
   color: initial;

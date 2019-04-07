@@ -132,7 +132,7 @@ export default {
       this.presetToWork = preset
     },
     removeHandler(presetId) {
-      const event = 'preset-remove'
+      const event = 'preset__remove'
       this.$socket.emit(event, presetId, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with errors: " ${errors} " `)
@@ -152,7 +152,7 @@ export default {
       })
     },
     setActiveHandler(preset, newState) {
-      const event = 'presets-set-active'
+      const event = 'presets__set_active'
       const payload = { id: preset.id, active: newState }
       this.$socket.emit(event, payload, ({ status, errors }) => {
         if (errors && errors.length > 0) {
@@ -177,7 +177,7 @@ export default {
       this.editorMode = null
     },
     saveCreated(preset) {
-      const event = 'presets-add'
+      const event = 'preset__add'
       // ToDo handle case when API do not respond!
       this.$socket.emit(event, preset, ({ id, errors }) => {
         if (errors && errors.length > 0) {
@@ -192,7 +192,7 @@ export default {
     },
     saveModified(preset) {
       // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
-      const event = 'preset-update'
+      const event = 'preset__update'
       this.$socket.emit(event, preset, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with error: [ ${errors} ]`)
@@ -222,7 +222,7 @@ export default {
       return dev ? `${dev.typeName} / ${dev.room} / ${dev.name}` : null
     },
     ioGetPresets(fn = null) {
-      this.$socket.emit('presets-get-all', data => {
+      this.$socket.emit('preset__get_all', data => {
         this.presets = data
         if (typeof fn === 'function') {
           fn()
@@ -231,7 +231,7 @@ export default {
     },
     ioGetDeviceData() {
       this.$socket.emit(
-        'presets-get-devices-selection',
+        'preset__get_devices_all',
         this.$language,
         data => (this.devicesData = data)
       )

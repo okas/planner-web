@@ -115,7 +115,7 @@ export default {
     removeEventHandler() {
       const oldBlind = this.blindToWork
       this.editorMode = null
-      const event = 'blind-remove'
+      const event = 'blind__remove'
       this.$socket.emit(event, oldBlind.id, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with error: [ ${errors} ]`)
@@ -146,7 +146,7 @@ export default {
       this.editorMode = null
     },
     saveCreated(blind) {
-      const event = 'blind-add'
+      const event = 'blind__add'
       // ToDo handle case when API do not respond!
       this.$socket.emit(event, blind, ({ id, errors }) => {
         if (errors && errors.length > 0) {
@@ -161,7 +161,7 @@ export default {
       // ToDo say it with toast/snackbar/notification if event times out!
     },
     saveModified(blind) {
-      const event = 'blind-update'
+      const event = 'blind__update'
       const oldBlind = this.blindToWork
       this.$socket.emit(event, blind, ({ status, errors }) => {
         if (errors && errors.length > 0) {
@@ -203,13 +203,10 @@ export default {
       }
     },
     ioGetAllBlinds() {
-      this.$socket.emit(
-        'get-all-room_blinds',
-        data => (this.groupedBlinds = data)
-      )
+      this.$socket.emit('blind__get_all', data => (this.groupedBlinds = data))
     },
     ioGetBlindDependents(blindId) {
-      this.$socket.emit('blind-dependents', blindId, data => {
+      this.$socket.emit('lamp__get-dependent-presets', blindId, data => {
         this.blindDependents = data
       })
     }

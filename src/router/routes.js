@@ -6,13 +6,13 @@ export default [
   {
     path: '/devices',
     component: '../layouts/Devices.vue',
-    redirect: { name: 'lights' },
+    redirect: { name: 'lamps' },
     meta: { title: 'Seadmed' },
     children: [
       {
-        path: 'lights',
-        component: '../views/DevicesLights.vue',
-        name: 'lights',
+        path: 'lamps',
+        component: '../views/DevicesLamps.vue',
+        name: 'lamps',
         meta: { title: 'Valgustid', alt: 'Tulede juhtimine' }
       },
       {
