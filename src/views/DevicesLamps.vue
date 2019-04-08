@@ -19,7 +19,7 @@
             v-for="lamp of lamps"
             :key="lamp.id"
             :lamp="lamp"
-            @modify="modify($event, room.id)"
+            @openEditor="modify"
           ></item>
         </div>
       </section>
