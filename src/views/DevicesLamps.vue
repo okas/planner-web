@@ -12,11 +12,11 @@
       </div>
     </header>
     <div class="rooms-grid">
-      <section v-for="room in groupedLamps" :key="room.id" class="room">
-        <h3 class="subtitle is-5 has-text-weight-light" v-text="room.id" />
+      <section v-for="[room, lamps] of roomLampsMap" :key="room" class="room">
+        <h3 class="subtitle is-5 has-text-weight-light" v-text="room" />
         <div class="lamps-grid">
           <item
-            v-for="lamp in room.items"
+            v-for="lamp of lamps"
             :key="lamp.id"
             :lamp="lamp"
             @modify="modify($event, room.id)"
@@ -63,7 +63,7 @@ export default {
   mixins: [transitionMixin],
   data() {
     return {
-      groupedLamps: [],
+      lampsData: [],
       lampToWork: null,
       editorMode: '',
       editorTitle: '',
@@ -72,9 +72,18 @@ export default {
     }
   },
   computed: {
+    roomLampsMap() {
+      return this.lampsData.reduce((map, { room, ...lamp }) => {
+        let lamps = map.get(room)
+        if (!lamps) {
+          map.set(room, (lamps = []))
+        }
+        lamps.push(lamp)
+        return map
+      }, new Map())
+    },
     existingRooms() {
-      // ToDo turn to set ?
-      return this.groupedLamps.map(g => g.id)
+      return [...this.roomLampsMap.keys()]
     }
   },
   watch: {
@@ -114,15 +123,14 @@ export default {
       }
       this.editorMode = constants.MODE_CREATE
     },
-    modify(lamp, room) {
-      this.lampToWork = { ...lamp, room }
+    modify(lampId) {
+      this.lampToWork = this.lampsData.find(l => l.id === lampId)
       this.editorMode = constants.MODE_MODIFY
     },
     quitEventHandler() {
       this.editorMode = null
     },
     removeEventHandler(lampId) {
-      const oldLampRoom = this.lampToWork.room
       this.editorMode = null
       const event = 'lamp__remove'
       this.$socket.emit(event, lampId, ({ status, errors }) => {
@@ -139,8 +147,10 @@ export default {
           }
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
-        const oldGroup = this.groupedLamps.find(x => x.id == oldLampRoom)
-        this.deleteFromOldRoom(oldGroup.items, lampId)
+        this.$delete(
+          this.lampsData,
+          this.lampsData.findIndex(x => x.id == lampId)
+        )
       })
     },
     saveEventHandler(lamp) {
@@ -164,14 +174,12 @@ export default {
           return
         }
         lamp.id = id
-        const { room, ...nLamp } = lamp
-        this.upsertLampToGroup(room, nLamp)
+        this.lampsData.push(lamp)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
     saveModified(lamp) {
       const event = 'lamp__update'
-      const { id: oldLampId, room: oldLampRoom } = this.lampToWork
       this.$socket.emit(event, lamp, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with errors: [ ${errors} ]`)
@@ -185,34 +193,12 @@ export default {
           // ToDo say it with toast/snackbar/notification if event times out!
           return
         }
-        const { room: mRoom, ...mLamp } = lamp
-        const oldGroup = this.groupedLamps.find(x => x.id == oldLampRoom)
-        if (oldLampRoom === mRoom) {
-          Object.assign(oldGroup.items.find(l => l.id == oldLampId), mLamp)
-        } else {
-          this.deleteFromOldRoom(oldGroup.items, mLamp.id)
-          this.upsertLampToGroup(mRoom, mLamp)
-        }
+        Object.assign(this.lampsData.find(l => l.id === lamp.id), lamp)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
-    deleteFromOldRoom(roomLamps, lampId) {
-      if (roomLamps.length == 1) {
-        this.groupedLamps.splice(this.groupedLamps.indexOf(roomLamps), 1)
-      } else {
-        roomLamps.splice(roomLamps.findIndex(x => x.id == lampId), 1)
-      }
-    },
-    upsertLampToGroup(room, lamp) {
-      const group = this.groupedLamps.find(x => x.id == room)
-      if (group) {
-        group.items.push(lamp)
-      } else {
-        this.groupedLamps.push({ id: room, items: [lamp] })
-      }
-    },
     ioGetAllLamps() {
-      this.$socket.emit('lamp__get-all', data => (this.groupedLamps = data))
+      this.$socket.emit('lamp__get-all', data => (this.lampsData = data))
     },
     ioGetLampDependents(lampId) {
       this.$socket.emit('lamp__get-dependent-presets', lampId, data => {

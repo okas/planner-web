@@ -33,7 +33,7 @@ export default {
   props: { lamp: { type: Object, required: true } },
   methods: {
     modify() {
-      this.$emit('modify', this.lamp)
+      this.$emit('modify', this.lamp.id)
     }
   }
 }
