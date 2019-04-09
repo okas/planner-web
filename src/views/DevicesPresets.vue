@@ -95,6 +95,7 @@ export default {
           break
         default:
           this.editorTitle = ''
+          this.presetToWork = null
           this.modalShow = false
       }
     }
@@ -128,8 +129,11 @@ export default {
       }
     },
     modify(preset) {
-      this.editorMode = constants.MODE_MODIFY
       this.presetToWork = preset
+      this.editorMode = constants.MODE_MODIFY
+    },
+    quitEventHandler() {
+      this.editorMode = null
     },
     removeHandler(presetId) {
       const event = 'preset__remove'
@@ -187,7 +191,6 @@ export default {
         }
         preset.id = id
         this.presets.push(preset)
-        this.presetToWork = null
       })
     },
     saveModified(preset) {
@@ -202,13 +205,10 @@ export default {
           console.warn(`API event '${event}' responded with status ${status}.`)
           return
         }
-        Object.assign(this.presetToWork, preset)
-        this.presetToWork = null
+        Object.assign(this.presets.find(p => p.id === preset.id), preset)
       })
     },
-    quitEventHandler() {
-      this.presetToWork = this.editorMode = null
-    },
+
     getDevice(id, type) {
       const group = this.devicesData.find(g => g.type === type)
       if (!group) {
