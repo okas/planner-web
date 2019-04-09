@@ -40,7 +40,7 @@ export default {
   props: { blind: { type: Object, required: true } },
   methods: {
     modify() {
-      this.$emit('modify')
+      this.$emit('openEditor', this.blind.id)
     }
   }
 }

@@ -13,14 +13,14 @@
       </div>
     </header>
     <div class="rooms-grid">
-      <section v-for="room of groupedBlinds" :key="room.id" class="room">
-        <h3 class="title is-4" v-text="room.id" />
+      <section v-for="[room, blinds] of roomBlindsMap" :key="room" class="room">
+        <h3 class="title is-4" v-text="room" />
         <div class="remotes-grid">
           <remote
-            v-for="blind in room.items"
+            v-for="blind in blinds"
             :key="blind.id"
             :blind="blind"
-            @modify="modify({ room: room.id, blind })"
+            @openEditor="modify"
           />
         </div>
       </section>
@@ -64,7 +64,7 @@ export default {
   mixins: [transitionMixin],
   data() {
     return {
-      groupedBlinds: [],
+      blindsData: [],
       blindToWork: null,
       editorMode: '',
       editorTitle: '',
@@ -73,8 +73,18 @@ export default {
     }
   },
   computed: {
+    roomBlindsMap() {
+      return this.blindsData.reduce((map, { room, ...blind }) => {
+        let blinds = map.get(room)
+        if (!blinds) {
+          map.set(room, (blinds = []))
+        }
+        blinds.push(blind)
+        return map
+      }, new Map())
+    },
     existingRooms() {
-      return this.groupedBlinds.map(g => g.id)
+      return [...this.roomBlindsMap.keys()]
     }
   },
   watch: {
@@ -105,18 +115,17 @@ export default {
       }
       this.editorMode = constants.MODE_CREATE
     },
-    modify({ room, blind }) {
-      this.blindToWork = { room, ...blind }
+    modify(blindId) {
+      this.blindToWork = this.blindsData.find(b => b.id === blindId)
       this.editorMode = constants.MODE_MODIFY
     },
     quitEventHandler() {
       this.editorMode = null
     },
-    removeEventHandler() {
-      const oldBlind = this.blindToWork
+    removeEventHandler(blindId) {
       this.editorMode = null
       const event = 'blind__remove'
-      this.$socket.emit(event, oldBlind.id, ({ status, errors }) => {
+      this.$socket.emit(event, blindId, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with error: [ ${errors} ]`)
           return
@@ -130,8 +139,10 @@ export default {
           }
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
-        const oldGroup = this.groupedBlinds.find(x => x.id == oldBlind.room)
-        this.deleteFromOldRoom(oldGroup.items, oldBlind)
+        this.$delete(
+          this.blindsData,
+          this.blindsData.findIndex(x => x.id == blindId)
+        )
       })
     },
     saveEventHandler(blind) {
@@ -155,14 +166,12 @@ export default {
           return
         }
         blind.id = id
-        const { room, ...nBlind } = blind
-        this.upsertBlindToGroup(room, nBlind)
+        this.blindsData.push(blind)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
     saveModified(blind) {
       const event = 'blind__update'
-      const oldBlind = this.blindToWork
       this.$socket.emit(event, blind, ({ status, errors }) => {
         if (errors && errors.length > 0) {
           console.error(`${event}: API responded with errors: [ ${errors} ]`)
@@ -176,37 +185,15 @@ export default {
           // ToDo say it with toast/snackbar/notification if event times out!
           return
         }
-        const { room: mRoom, ...mBlind } = blind
-        const oldGroup = this.groupedBlinds.find(x => x.id == oldBlind.room)
-        if (oldBlind.room === mRoom) {
-          Object.assign(oldGroup.items.find(l => l.id == oldBlind.id), mBlind)
-        } else {
-          this.deleteFromOldRoom(oldGroup.items, oldBlind)
-          this.upsertBlindToGroup(mRoom, mBlind)
-        }
+        Object.assign(this.blindsData.find(l => l.id === blind.id), blind)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
-    deleteFromOldRoom(roomBlinds, blind) {
-      if (roomBlinds.length == 1) {
-        this.groupedBlinds.splice(this.groupedBlinds.indexOf(roomBlinds), 1)
-      } else {
-        roomBlinds.splice(roomBlinds.findIndex(x => x.id == blind.id), 1)
-      }
-    },
-    upsertBlindToGroup(room, blind) {
-      const group = this.groupedBlinds.find(x => x.id == room)
-      if (group) {
-        group.items.push(blind)
-      } else {
-        this.groupedBlinds.push({ id: room, items: [blind] })
-      }
-    },
     ioGetAllBlinds() {
-      this.$socket.emit('blind__get_all', data => (this.groupedBlinds = data))
+      this.$socket.emit('blind__get_all', data => (this.blindsData = data))
     },
     ioGetBlindDependents(blindId) {
-      this.$socket.emit('lamp__get-dependent-presets', blindId, data => {
+      this.$socket.emit('blind__get-dependent-presets', blindId, data => {
         this.blindDependents = data
       })
     }
