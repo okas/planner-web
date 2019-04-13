@@ -105,6 +105,20 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllBlinds()
   },
+  sockets: {
+    connect() {
+      this.ioGetAllBlinds()
+    },
+    blind__api_add(data) {
+      this.blindsData.push(data)
+    },
+    blind__api_update(data) {
+      Object.assign(this.blindsData.find(l => l.id === data.id), data)
+    },
+    blind__api_remove({ id }) {
+      this.$delete(this.blindsData, this.blindsData.findIndex(x => x.id == id))
+    }
+  },
   methods: {
     create() {
       this.blindToWork = {
@@ -134,9 +148,7 @@ export default {
           console.warn(
             `API event '${event}' responded with status [ ${status} ].`
           )
-          if (status !== 'no-exist') {
-            return
-          }
+          return
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
         this.$delete(
