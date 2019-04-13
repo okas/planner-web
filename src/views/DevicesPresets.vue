@@ -171,7 +171,7 @@ export default {
       })
     },
     setActiveHandler(preset, newState) {
-      const event = 'presets__set_active'
+      const event = 'preset__set_active'
       const payload = { id: preset.id, active: newState }
       this.$socket.emit(event, payload, ({ status, errors }) => {
         if (errors && errors.length > 0) {
