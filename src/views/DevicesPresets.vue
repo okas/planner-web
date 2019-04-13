@@ -14,7 +14,7 @@
     </header>
     <div class="presets-grid">
       <item
-        v-for="p in presets"
+        v-for="p in presetsData"
         :id="`item${p.id}`"
         :key="p.id"
         :class="{ 'highlight-preset': highlightItem === `item${p.id}` }"
@@ -55,7 +55,7 @@ export default {
   mixins: [i18SelectMixin],
   data() {
     return {
-      presets: [],
+      presetsData: [],
       presetToWork: null,
       editorMode: null,
       editorTitle: '',
@@ -150,8 +150,8 @@ export default {
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
         this.$delete(
-          this.presets,
-          this.presets.findIndex(p => p.id == presetId)
+          this.presetsData,
+          this.presetsData.findIndex(p => p.id == presetId)
         )
       })
     },
@@ -190,7 +190,7 @@ export default {
           return
         }
         preset.id = id
-        this.presets.push(preset)
+        this.presetsData.push(preset)
       })
     },
     saveModified(preset) {
@@ -205,7 +205,7 @@ export default {
           console.warn(`API event '${event}' responded with status ${status}.`)
           return
         }
-        Object.assign(this.presets.find(p => p.id === preset.id), preset)
+        Object.assign(this.presetsData.find(p => p.id === preset.id), preset)
       })
     },
 
@@ -223,7 +223,7 @@ export default {
     },
     ioGetPresets(fn = null) {
       this.$socket.emit('preset__get_all', data => {
-        this.presets = data
+        this.presetsData = data
         if (typeof fn === 'function') {
           fn()
         }
