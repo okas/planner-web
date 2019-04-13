@@ -121,6 +121,9 @@ export default {
         this.presetsData,
         this.presetsData.findIndex(p => p.id == id)
       )
+    },
+    preset__api_set_active({ id, active }) {
+      this.presetsData.find(p => p.id === id).active = active
     }
   },
   methods: {
