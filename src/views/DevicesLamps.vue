@@ -113,6 +113,20 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllLamps()
   },
+  sockets: {
+    connect() {
+      this.ioGetAllLamps()
+    },
+    lamp__api_add(data) {
+      this.lampsData.push(data)
+    },
+    lamp__api_update(data) {
+      Object.assign(this.lampsData.find(l => l.id === data.id), data)
+    },
+    lamp__api_remove({ id }) {
+      this.$delete(this.lampsData, this.lampsData.findIndex(x => x.id == id))
+    }
+  },
   methods: {
     create() {
       this.lampToWork = {
@@ -142,9 +156,7 @@ export default {
           console.warn(
             `API event '${event}' responded with status [ ${status} ].`
           )
-          if (status !== 'no-exist') {
-            return
-          }
+          return
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
         this.$delete(
