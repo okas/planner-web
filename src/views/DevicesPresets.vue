@@ -106,6 +106,23 @@ export default {
   created() {
     this.ioGetDeviceData()
   },
+  sockets: {
+    connect() {
+      this.apiDataReload()
+    },
+    preset__api_add(data) {
+      this.presetsData.push(data)
+    },
+    preset__api_update(data) {
+      Object.assign(this.presetsData.find(p => p.id === data.id), data)
+    },
+    preset__api_remove({ id }) {
+      this.$delete(
+        this.presetsData,
+        this.presetsData.findIndex(p => p.id == id)
+      )
+    }
+  },
   methods: {
     async navigateToHashAfterDataRender() {
       if (this.$route.hash) {
@@ -144,9 +161,7 @@ export default {
         }
         if (status !== 'ok') {
           console.warn(`API event '${event}' responded with status ${status}.`)
-          if (status !== 'no-exist') {
-            return
-          }
+          return
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
         this.$delete(
