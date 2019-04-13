@@ -193,7 +193,7 @@ export default {
       this.$socket.emit('blind__get_all', data => (this.blindsData = data))
     },
     ioGetBlindDependents(blindId) {
-      this.$socket.emit('blind__get-dependent-presets', blindId, data => {
+      this.$socket.emit('blind__get_dependent_presets', blindId, data => {
         this.blindDependents = data
       })
     }

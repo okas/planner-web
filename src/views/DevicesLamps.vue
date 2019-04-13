@@ -198,10 +198,10 @@ export default {
       // ToDo say it with toast/snackbar/notification if event times out!
     },
     ioGetAllLamps() {
-      this.$socket.emit('lamp__get-all', data => (this.lampsData = data))
+      this.$socket.emit('lamp__get_all', data => (this.lampsData = data))
     },
     ioGetLampDependents(lampId) {
-      this.$socket.emit('lamp__get-dependent-presets', lampId, data => {
+      this.$socket.emit('lamp__get_dependent_presets', lampId, data => {
         this.lampDependents = data
       })
     }
