@@ -113,6 +113,7 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllLamps()
   },
+  socketRoom: 'lamp',
   sockets: {
     connect() {
       this.ioGetAllLamps()

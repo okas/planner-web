@@ -3,6 +3,7 @@ import VueStatic from 'vue-static'
 import router from './router'
 import store from './store'
 import './socket.io'
+import ioRoom from './plugins/vue-socket.io-room'
 import './fa-icons'
 import { VueI18nSelect } from './plugins/vue-i18n-select'
 import { insertFaviconsToDOM } from './utilities'
@@ -12,6 +13,7 @@ import './assets/app_imports.scss'
 Vue.config.productionTip = process.env.NODE_ENV !== 'production'
 
 Vue.use(VueStatic)
+Vue.use(ioRoom)
 Vue.use(VueI18nSelect, { store, active: 'et', languages: ['et', 'en', 'es'] })
 
 const appOptions = {

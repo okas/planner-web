@@ -106,6 +106,7 @@ export default {
   created() {
     this.ioGetDeviceData()
   },
+  socketRoom: 'preset',
   sockets: {
     connect() {
       this.apiDataReload()
