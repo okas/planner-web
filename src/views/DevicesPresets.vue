@@ -125,6 +125,34 @@ export default {
     },
     preset__api_set_active({ id, active }) {
       this.presetsData.find(p => p.id === id).active = active
+    },
+    lamp__api_add(data) {
+      this.devicesData.find(d => d.type === 'lamp').items.push(data)
+    },
+    lamp__api_update(data) {
+      const lamp = this.devicesData
+        .find(d => d.type === 'lamp')
+        .items.find(l => l.id === data.id)
+      Object.assign(lamp, data)
+    },
+    lamp__api_remove({ id }) {
+      const lamps = this.devicesData.find(d => d.type === 'lamp').items
+      const idx = lamps.findIndex(x => x.id == id)
+      this.$delete(lamps, idx)
+    },
+    blind__api_add(data) {
+      this.devicesData.find(d => d.type === 'blind').items.push(data)
+    },
+    blind__api_update(data) {
+      const blind = this.devicesData
+        .find(d => d.type === 'blind')
+        .items.find(l => l.id === data.id)
+      Object.assign(blind, data)
+    },
+    blind__api_remove({ id }) {
+      const blinds = this.devicesData.find(d => d.type === 'blind').items
+      const idx = blinds.findIndex(x => x.id == id)
+      this.$delete(blinds, idx)
     }
   },
   methods: {
