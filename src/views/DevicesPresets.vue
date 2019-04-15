@@ -106,7 +106,7 @@ export default {
   created() {
     this.ioGetDeviceData()
   },
-  socketRoom: 'preset',
+  socketRooms: ['preset', 'lamp', 'blind'],
   sockets: {
     connect() {
       this.apiDataReload()

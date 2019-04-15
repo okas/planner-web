@@ -105,7 +105,7 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllBlinds()
   },
-  socketRoom: 'blind',
+  socketRooms: ['blind'],
   sockets: {
     connect() {
       this.ioGetAllBlinds()

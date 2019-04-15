@@ -20,7 +20,7 @@
             :key="lamp.id"
             :lamp="lamp"
             @openEditor="modify"
-          ></item>
+          />
         </div>
       </section>
     </div>
@@ -113,7 +113,7 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllLamps()
   },
-  socketRoom: 'lamp',
+  socketRooms: ['lamp'],
   sockets: {
     connect() {
       this.ioGetAllLamps()
