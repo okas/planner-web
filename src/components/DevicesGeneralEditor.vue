@@ -18,7 +18,7 @@
           <label class="label">Nimi</label>
           <div class="control">
             <input
-              v-model="device.name"
+              v-model.trim="device.name"
               v-focus
               class="input"
               type="text"
@@ -31,7 +31,7 @@
           <div class="control">
             <input
               id="selectedroom"
-              v-model="device.room"
+              v-model.trim="device.room"
               class="input"
               type="text"
               list="existingrooms"
