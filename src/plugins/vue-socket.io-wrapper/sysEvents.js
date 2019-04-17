@@ -1,6 +1,6 @@
 const color = 'color:MediumPurple'
 
-export default function register(socket) {
+export default function registerSystemEvents(socket) {
   socket.on('connect', () => {
     console.info(`%c|-> [ ${socket.id} ] : id.`, color)
   })

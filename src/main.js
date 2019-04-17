@@ -2,18 +2,35 @@ import Vue from 'vue'
 import VueStatic from 'vue-static'
 import router from './router'
 import store from './store'
-import './socket.io'
-import ioRoom from './plugins/vue-socket.io-room'
+import VueSocketIoWrapper from './plugins/vue-socket.io-wrapper'
 import './fa-icons'
 import { VueI18nSelect } from './plugins/vue-i18n-select'
 import { insertFaviconsToDOM } from './utilities'
 import LayoutApp from './layouts/App.vue'
 import './assets/app_imports.scss'
 
-Vue.config.productionTip = process.env.NODE_ENV !== 'production'
+const devMode = process.env.NODE_ENV !== 'production'
+Vue.config.productionTip = devMode
 
 Vue.use(VueStatic)
-Vue.use(ioRoom)
+Vue.use(
+  VueSocketIoWrapper,
+  {
+    uri: '/',
+    path: '/api',
+    transports: ['websocket', 'polling'],
+    forceNew: true,
+    autoConnect: false
+  },
+  {
+    debug: devMode,
+    vuex: {
+      store,
+      actionPrefix: 'a_io_',
+      mutationPrefix: 'M_IO_'
+    }
+  }
+)
 Vue.use(VueI18nSelect, { store, active: 'et', languages: ['et', 'en', 'es'] })
 
 const appOptions = {
