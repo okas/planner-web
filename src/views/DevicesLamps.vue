@@ -115,7 +115,7 @@ export default {
   },
   socketRooms: ['lamp'],
   sockets: {
-    connect() {
+    reconnect() {
       this.ioGetAllLamps()
     },
     lamp__api_add(data) {

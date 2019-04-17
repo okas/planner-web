@@ -108,7 +108,7 @@ export default {
   },
   socketRooms: ['preset', 'lamp', 'blind'],
   sockets: {
-    connect() {
+    reconnect() {
       this.apiDataReload()
     },
     preset__api_add(data) {

@@ -107,7 +107,7 @@ export default {
   },
   socketRooms: ['blind'],
   sockets: {
-    connect() {
+    reconnect() {
       this.ioGetAllBlinds()
     },
     blind__api_add(data) {
