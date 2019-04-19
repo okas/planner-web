@@ -81,7 +81,11 @@ export default {
         : ''
     },
     disableSetActive() {
-      return !this.preset.schedule || !this.$store.state.ioConnected
+      return (
+        !this.preset.schedule ||
+        this.preset.devices.length < 1 ||
+        !this.$store.state.ioConnected
+      )
     },
     activeTitle() {
       // ToDo i18n
