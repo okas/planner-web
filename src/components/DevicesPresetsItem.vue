@@ -14,7 +14,7 @@
           type="checkbox"
           :name="`act${preset.id}`"
           :disabled="disableSetActive"
-          @change="saveActiveState"
+          @click.prevent.stop="saveActiveState"
         />
         <label :for="`act${preset.id}`" />
       </div>
