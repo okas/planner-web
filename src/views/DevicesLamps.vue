@@ -19,6 +19,7 @@
             v-for="lamp of lamps"
             :key="lamp.id"
             :lamp="lamp"
+            @lampStateChanged="lampStateChangedHandler"
             @openEditor="modify"
           />
         </div>
@@ -113,7 +114,7 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllLamps()
   },
-  socketRooms: ['lamp'],
+  socketRooms: ['lamp', 'lamp-state'],
   sockets: {
     reconnect() {
       this.ioGetAllLamps()
@@ -126,6 +127,9 @@ export default {
     },
     lamp__api_remove({ id }) {
       this.$delete(this.lampsData, this.lampsData.findIndex(x => x.id == id))
+    },
+    lamp__api_set_state({ id, state }) {
+      this.lampsData.find(l => l.id === id).state = state
     }
   },
   methods: {
@@ -210,8 +214,45 @@ export default {
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
+    lampStateChangedHandler(id, state) {
+      const event = 'lamp__set_state'
+      const payload = { id, state }
+      this.$socket.emit(event, payload, ({ status, response, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: " ${errors} "`)
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event '${event}' responded with status " ${status} ".`
+          )
+          return
+        }
+        if (response !== state) {
+          console.warn(
+            `API event '${event}' response indicates that new value was not set on server
+            Expected new value "${state}"; API responded: "${response}".`
+          )
+        }
+        const lamp = this.lampsData.find(l => l.id === id)
+        if (lamp) {
+          lamp.state = state
+        }
+      })
+    },
     ioGetAllLamps() {
-      this.$socket.emit('lamp__get_all', data => (this.lampsData = data))
+      this.$socket.emit('lamp__get_all', data => {
+        this.lampsData = data.map(lamp => {
+          lamp.state = null
+          this.ioGetLampState(lamp)
+          return lamp
+        })
+      })
+    },
+    ioGetLampState(lamp) {
+      this.$socket.emit('lamp__get_state', lamp.id, data => {
+        lamp.state = data
+      })
     },
     ioGetLampDependents(lampId) {
       this.$socket.emit('lamp__get_dependent_presets', lampId, data => {

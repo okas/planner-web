@@ -9,11 +9,10 @@
     <div class="switch-container">
       <input
         :id="`l${lamp.id}`"
-        v-model="lamp.state"
+        :checked="!!lamp.state"
         class="switch is-thin is-rounded"
         type="checkbox"
-        :true-value="1"
-        :false-value="0"
+        @click.prevent="changeLampState"
       />
       <label class="switch-label" :for="`l${lamp.id}`" />
       <button-edit
@@ -32,6 +31,9 @@ export default {
   components: { ButtonEdit },
   props: { lamp: { type: Object, required: true } },
   methods: {
+    changeLampState(event) {
+      this.$emit('lampStateChanged', this.lamp.id, +event.target.checked)
+    },
     modify() {
       this.$emit('openEditor', this.lamp.id)
     }
