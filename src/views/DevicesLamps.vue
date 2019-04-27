@@ -123,16 +123,25 @@ export default {
       this.lampsData.push(data)
     },
     lamp__api_update(data) {
-      Object.assign(this.lampsData.find(l => l.id === data.id), data)
+      Object.assign(this.lampsData.find(l => l.id == data.id), data)
     },
     lamp__api_remove({ id }) {
       this.$delete(this.lampsData, this.lampsData.findIndex(x => x.id == id))
     },
     lamp__api_set_state({ id, state }) {
-      this.lampsData.find(l => l.id === id).state = state
+      this.findAndSetState(id, state)
+    },
+    lamp__api_present({ id, state }) {
+      this.findAndSetState(id, state)
     }
   },
   methods: {
+    findAndSetState(id, state) {
+      const lamp = this.lampsData.find(l => l.id == id)
+      if (lamp) {
+        lamp.state = state
+      }
+    },
     create() {
       this.lampToWork = {
         id: 0,
@@ -143,7 +152,7 @@ export default {
       this.editorMode = constants.MODE_CREATE
     },
     modify(lampId) {
-      this.lampToWork = this.lampsData.find(l => l.id === lampId)
+      this.lampToWork = this.lampsData.find(l => l.id == lampId)
       this.editorMode = constants.MODE_MODIFY
     },
     quitEventHandler() {
@@ -210,7 +219,7 @@ export default {
           // ToDo say it with toast/snackbar/notification if event times out!
           return
         }
-        Object.assign(this.lampsData.find(l => l.id === lamp.id), lamp)
+        Object.assign(this.lampsData.find(l => l.id == lamp.id), lamp)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
@@ -234,10 +243,7 @@ export default {
             Expected new value "${state}"; API responded: "${response}".`
           )
         }
-        const lamp = this.lampsData.find(l => l.id === id)
-        if (lamp) {
-          lamp.state = state
-        }
+        this.findAndSetState(id, state)
       })
     },
     ioGetAllLamps() {

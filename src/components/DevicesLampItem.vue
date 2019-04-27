@@ -1,17 +1,33 @@
 <template>
   <div class="lamp box is-marginless">
     <h4 class="lamp-name is-size-6" v-text="lamp.name" />
-    <fa-i
-      class="lamp-icon fa-2x"
-      icon="lightbulb"
-      :class="{ 'has-text-warning': !!lamp.state }"
-    />
+    <i class="lamp-icon icon" :title="iconTitle">
+      <fa-l class="fa-2x">
+        <fa-i
+          class
+          icon="lightbulb"
+          :class="{ 'has-text-warning': !!lamp.state }"
+        />
+        <transition name="fade">
+          <fa-i
+            v-if="isOffline"
+            class="has-text-danger"
+            icon="ban"
+            transform="shrink-6 left-2.1 up-2.3"
+          />
+        </transition>
+      </fa-l>
+    </i>
+
     <div class="switch-container">
       <input
         :id="`l${lamp.id}`"
-        :checked="!!lamp.state"
-        class="switch is-thin is-rounded"
         type="checkbox"
+        class="switch is-thin is-rounded"
+        :disabled="isOffline"
+        :aria-disabled="isOffline"
+        :value="!!lamp.state"
+        checked="checked"
         @click.prevent="changeLampState"
       />
       <label class="switch-label" :for="`l${lamp.id}`" />
@@ -30,9 +46,17 @@ import ButtonEdit from '../components/ButtonEdit'
 export default {
   components: { ButtonEdit },
   props: { lamp: { type: Object, required: true } },
+  computed: {
+    isOffline() {
+      return this.lamp.state === undefined || this.lamp.state === null
+    },
+    iconTitle() {
+      return this.isOffline ? 'Lamp pole onlines või puudub juhtseade' : ''
+    }
+  },
   methods: {
     changeLampState(event) {
-      this.$emit('lampStateChanged', this.lamp.id, +event.target.checked)
+      this.$emit('lampStateChanged', this.lamp.id, +event.target.value)
     },
     modify() {
       this.$emit('openEditor', this.lamp.id)
@@ -43,12 +67,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/devices_lamps.scss';
+@import '../assets/css_fade_transition.scss';
 
 .edit:hover {
   color: initial;
   background-color: initial;
 }
-
 .lamp {
   display: grid;
   grid-column-gap: 5%;
