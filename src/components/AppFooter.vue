@@ -11,7 +11,7 @@
           </span>
         </div>
         <div class="status column is-1 is-offset-3 has-text-centered">
-          <span
+          <i
             class="icon"
             :title="ioIconTitle"
             @click="quickDashRevelaed = !quickDashRevelaed"
@@ -31,7 +31,7 @@
                 />
               </transition>
             </fa-l>
-          </span>
+          </i>
         </div>
       </section>
       <transition name="slide-fade">
@@ -95,7 +95,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-$speed: 0.3s;
+@import '../assets/css_fade_transition.scss';
 
 .footer {
   position: fixed;
@@ -117,20 +117,6 @@ $speed: 0.3s;
       .vue-logo {
         width: 16px;
         vertical-align: middle;
-      }
-    }
-    .status {
-      .icon {
-        .fa-ban {
-          &.fade-enter-active,
-          &.fade-leave-active {
-            transition: opacity $speed;
-          }
-          &.fade-enter,
-          &.fade-leave-to {
-            opacity: 0;
-          }
-        }
       }
     }
   }

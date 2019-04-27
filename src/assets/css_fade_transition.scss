@@ -1,0 +1,10 @@
+$speed: 0.3s;
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity $speed;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
