@@ -133,6 +133,9 @@ export default {
     },
     lamp__api_present({ id, state }) {
       this.findAndSetState(id, state)
+    },
+    lamp__api_lost(id) {
+      this.findAndSetState(id, null)
     }
   },
   methods: {
