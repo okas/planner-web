@@ -129,17 +129,17 @@ export default {
       this.$delete(this.lampsData, this.lampsData.findIndex(x => x.id == id))
     },
     lamp__api_set_state({ id, state }) {
-      this.findAndSetState(id, state)
+      this.setLampState(id, state)
     },
     lamp__api_present({ id, state }) {
-      this.findAndSetState(id, state)
+      this.setLampState(id, state)
     },
     lamp__api_lost(id) {
-      this.findAndSetState(id, null)
+      this.setLampState(id, null)
     }
   },
   methods: {
-    findAndSetState(id, state) {
+    setLampState(id, state) {
       const lamp = this.lampsData.find(l => l.id == id)
       if (lamp) {
         lamp.state = state
@@ -246,7 +246,7 @@ export default {
             Expected new value "${state}"; API responded: "${response}".`
           )
         }
-        this.findAndSetState(id, state)
+        this.setLampState(id, state)
       })
     },
     ioGetAllLamps() {

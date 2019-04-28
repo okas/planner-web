@@ -18,7 +18,6 @@
         </transition>
       </fa-l>
     </i>
-
     <div class="switch-container">
       <input
         :id="`l${lamp.id}`"
