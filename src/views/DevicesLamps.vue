@@ -237,12 +237,12 @@ export default {
       const payload = { id, state }
       this.$socket.emit(event, payload, ({ status, response, errors }) => {
         if (errors && errors.length > 0) {
-          console.error(`${event}: API responded with errors: " ${errors} "`)
+          console.error(`${event}: API responded with errors: "${errors}"`)
           return
         }
         if (status !== 'ok') {
           console.warn(
-            `API event '${event}' responded with status " ${status} ".`
+            `API event '${event}' responded with status "${status}".`
           )
           return
         }
@@ -252,7 +252,7 @@ export default {
             Expected new value "${state}"; API responded: "${response}".`
           )
         }
-        this.setLampState(id, state)
+        this.setLampState(id, response)
       })
     },
     ioGetAllLamps() {
