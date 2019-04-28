@@ -41,17 +41,27 @@
 </template>
 
 <script>
+import { disabled } from '../mixins/ioNotConnected'
 import ButtonEdit from '../components/ButtonEdit'
 
 export default {
   components: { ButtonEdit },
+  mixins: [disabled],
   props: { lamp: { type: Object, required: true } },
   computed: {
     isOffline() {
-      return this.lamp.state === undefined || this.lamp.state === null
+      return (
+        this.disabled ||
+        this.lamp.state === undefined ||
+        this.lamp.state === null
+      )
     },
     iconTitle() {
-      return this.isOffline ? 'Lamp pole onlines või puudub juhtseade' : ''
+      return this.disabled
+        ? 'Meil puudub ühendus serveriga'
+        : this.isOffline
+        ? 'Lamp pole onlines või puudub juhtseade'
+        : ''
     }
   },
   methods: {
