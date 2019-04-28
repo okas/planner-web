@@ -59,7 +59,7 @@ export default {
       return this.disabled
         ? 'Meil puudub ühendus serveriga'
         : this.isOffline
-        ? 'Lamp pole onlines või puudub juhtseade'
+        ? 'Lambiga puudub võrguühendus'
         : ''
     }
   },
