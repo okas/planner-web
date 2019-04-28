@@ -20,7 +20,7 @@
     </i>
     <div class="switch-container">
       <input
-        :id="`l${lamp.id}`"
+        :id="idForDOM"
         type="checkbox"
         class="switch is-thin is-rounded"
         :disabled="isOffline"
@@ -28,7 +28,7 @@
         :checked="!!lamp.state"
         @click.prevent="changeLampState"
       />
-      <label class="switch-label" :for="`l${lamp.id}`" />
+      <label class="switch-label" :for="idForDOM" />
       <button-edit
         title="Muuda lampi"
         class="is-small is-text"
@@ -47,6 +47,9 @@ export default {
   mixins: [disabled],
   props: { lamp: { type: Object, required: true } },
   computed: {
+    idForDOM() {
+      return `lamp-${this.lamp.id}`
+    },
     isOffline() {
       return (
         this.disabled ||
