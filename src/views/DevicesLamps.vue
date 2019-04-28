@@ -136,6 +136,12 @@ export default {
     },
     lamp__api_lost(id) {
       this.setLampState(id, null)
+    },
+    devices__api_lost() {
+      this.lampsData.forEach(l => (l.state = null))
+    },
+    devices__api_ready() {
+      this.lampsData.forEach(this.ioGetLampState)
     }
   },
   methods: {
@@ -252,6 +258,10 @@ export default {
     ioGetAllLamps() {
       this.$socket.emit('lamp__get_all', data => {
         this.lampsData = data.map(lamp => {
+          /**
+           * Tri-state property. Value null means no conection to device.
+           * Values true or false indicate the state of the online device.
+           */
           lamp.state = null
           this.ioGetLampState(lamp)
           return lamp
