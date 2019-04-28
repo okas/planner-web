@@ -25,8 +25,7 @@
         class="switch is-thin is-rounded"
         :disabled="isOffline"
         :aria-disabled="isOffline"
-        :value="!!lamp.state"
-        checked="checked"
+        :checked="!!lamp.state"
         @click.prevent="changeLampState"
       />
       <label class="switch-label" :for="`l${lamp.id}`" />
@@ -64,8 +63,12 @@ export default {
     }
   },
   methods: {
-    changeLampState(event) {
-      this.$emit('lampStateChanged', this.lamp.id, +event.target.value)
+    changeLampState() {
+      this.$emit(
+        'lampStateChanged',
+        this.lamp.id,
+        this.lamp.state === 0 ? 1 : 0
+      )
     },
     modify() {
       this.$emit('openEditor', this.lamp.id)
