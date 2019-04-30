@@ -15,11 +15,12 @@
     <div class="rooms-grid">
       <section v-for="[room, blinds] of roomBlindsMap" :key="room" class="room">
         <h3 class="title is-4" v-text="room" />
-        <div class="remotes-grid">
-          <remote
+        <div class="blinds-grid">
+          <item
             v-for="blind in blinds"
             :key="blind.id"
             :blind="blind"
+            @blindStateChanged="blindStateChangedHandler"
             @openEditor="modify"
           />
         </div>
@@ -54,13 +55,13 @@
 import * as constants from '../constants/uiEditorConstants'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
-import Remote from '../components/DevicesBlindsRemote'
+import Item from '../components/DevicesBlindItem'
 import Editor, { transitionMixin } from '../components/DevicesGeneralEditor'
 import Dependents from '../components/DevicesDependentPresets'
 
 export default {
   name: 'Blinds',
-  components: { ButtonReload, ButtonAdd, Remote, Editor, Dependents },
+  components: { ButtonReload, ButtonAdd, Item, Editor, Dependents },
   mixins: [transitionMixin],
   data() {
     return {
@@ -105,7 +106,7 @@ export default {
     // Can be combined with addtional component display while loading. "After Nav Fetch"
     this.ioGetAllBlinds()
   },
-  socketRooms: ['blind'],
+  socketRooms: ['blind', 'blind-state'],
   sockets: {
     reconnect() {
       this.ioGetAllBlinds()
@@ -118,14 +119,40 @@ export default {
     },
     blind__api_remove({ id }) {
       this.$delete(this.blindsData, this.blindsData.findIndex(x => x.id == id))
+    },
+    blind__api_set_state({ id, state }) {
+      this.setBlindState(id, state)
+    },
+    blind__api_present({ id, state }) {
+      this.setBlindState(id, state)
+    },
+    blind__api_lost(id) {
+      this.setBlindState(id, null)
+    },
+    devices__api_lost() {
+      this.blindsData.forEach(l => (l.state = null))
+    },
+    devices__api_ready() {
+      this.blindsData.forEach(this.ioGetBlindState)
     }
   },
   methods: {
+    setBlindState(id, state) {
+      const blind = this.blindsData.find(l => l.id == id)
+      if (blind) {
+        blind.state = state
+      }
+    },
     create() {
       this.blindToWork = {
         id: 0,
         name: '',
         room: '',
+        /**
+         * Tri-state property. Value null means no connection to device.
+         * Values true or false indicate the state of the online device.
+         */
+        state: null,
         valuestep: 0.01
       }
       this.editorMode = constants.MODE_CREATE
@@ -179,6 +206,7 @@ export default {
           return
         }
         blind.id = id
+        this.ioGetBlindState(blind)
         this.blindsData.push(blind)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
@@ -198,12 +226,47 @@ export default {
           // ToDo say it with toast/snackbar/notification if event times out!
           return
         }
+        this.ioGetBlindState(blind)
         Object.assign(this.blindsData.find(l => l.id === blind.id), blind)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },
+    blindStateChangedHandler(id, state) {
+      const event = 'blind__set_state'
+      const payload = { id, state }
+      this.$socket.emit(event, payload, ({ status, response, errors }) => {
+        if (errors && errors.length > 0) {
+          console.error(`${event}: API responded with errors: "${errors}"`)
+          return
+        }
+        if (status !== 'ok') {
+          console.warn(
+            `API event '${event}' responded with status "${status}".`
+          )
+          return
+        }
+        if (response !== state) {
+          console.warn(
+            `API event '${event}' response indicates that new value was not set on server
+            Expected new value "${state}"; API responded: "${response}".`
+          )
+        }
+        this.setBlindState(id, response)
+      })
+    },
     ioGetAllBlinds() {
-      this.$socket.emit('blind__get_all', data => (this.blindsData = data))
+      this.$socket.emit('blind__get_all', data => {
+        this.blindsData = data.map(blind => {
+          blind.state = null
+          this.ioGetBlindState(blind)
+          return blind
+        })
+      })
+    },
+    ioGetBlindState(blind) {
+      this.$socket.emit('blind__get_state', blind.id, data => {
+        blind.state = data
+      })
     },
     ioGetBlindDependents(blindId) {
       this.$socket.emit('blind__get_dependent_presets', blindId, data => {
@@ -222,13 +285,13 @@ export default {
   gap: 3rem;
   grid-auto-flow: dense;
   justify-content: start;
-  grid-template-columns: repeat(auto-fit, minmax($remote-width, 1fr));
-  .remotes-grid {
+  grid-template-columns: repeat(auto-fit, minmax($blind-width, 1fr));
+  .blinds-grid {
     display: grid;
     gap: 1.5rem;
     grid-auto-flow: dense;
     justify-content: start;
-    grid-template-columns: repeat(auto-fit, minmax($remote-width, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax($blind-width, 1fr));
   }
 }
 </style>

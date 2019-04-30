@@ -2,12 +2,12 @@
 
 $body-size: 16px;
 
-$remote-col-gap: 10px;
-$remote-row-gap: 22.5px;
+$blind-col-gap: 10px;
+$blind-row-gap: 22.5px;
 
 $button-height: 45px;
 $button-width: 49.5px;
 
-$remote-box-padding: $body-size * 1.25; // 1.25rem
-$remote-width: #{$button-width * 2 + $remote-col-gap + $remote-box-padding * 2};
-$remote-height: 343px;
+$blind-box-padding: $body-size * 1.25; // 1.25rem
+$blind-width: #{$button-width * 2 + $blind-col-gap + $blind-box-padding * 2};
+$blind-height: 343px;
