@@ -156,7 +156,7 @@ export default {
         id: 0,
         name: '',
         room: '',
-        valuestep: 1 // Todo non-dimmable lamps have 1, dimmable valu between 0-0.5
+        valuestep: 1 // Todo non-dimmable lamps have 1, dimmable value between 0-0.5
       }
       this.editorMode = constants.MODE_CREATE
     },
@@ -258,10 +258,6 @@ export default {
     ioGetAllLamps() {
       this.$socket.emit('lamp__get_all', data => {
         this.lampsData = data.map(lamp => {
-          /**
-           * Tri-state property. Value null means no conection to device.
-           * Values true or false indicate the state of the online device.
-           */
           lamp.state = null
           this.ioGetLampState(lamp)
           return lamp

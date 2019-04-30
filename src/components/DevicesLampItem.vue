@@ -59,7 +59,7 @@ export default {
     },
     iconTitle() {
       return this.disabled
-        ? 'Meil puudub ühendus serveriga'
+        ? 'Puudub ühendus serveriga'
         : this.isOffline
         ? 'Lambiga puudub võrguühendus'
         : ''
