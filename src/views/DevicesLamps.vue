@@ -156,6 +156,11 @@ export default {
         id: 0,
         name: '',
         room: '',
+        /**
+         * Tri-state property. Value null means no connection to device.
+         * Values true or false indicate the state of the online device.
+         */
+        state: null,
         valuestep: 1 // Todo non-dimmable lamps have 1, dimmable value between 0-0.5
       }
       this.editorMode = constants.MODE_CREATE
@@ -209,6 +214,7 @@ export default {
           return
         }
         lamp.id = id
+        this.ioGetLampState(lamp)
         this.lampsData.push(lamp)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
@@ -228,6 +234,7 @@ export default {
           // ToDo say it with toast/snackbar/notification if event times out!
           return
         }
+        this.ioGetLampState(lamp)
         Object.assign(this.lampsData.find(l => l.id == lamp.id), lamp)
       })
       // ToDo say it with toast/snackbar/notification if event times out!
