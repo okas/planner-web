@@ -22,9 +22,9 @@ export function insertFaviconsToDOM(sizes, assestsDir = './assets') {
 
 /**
  * Python-like range function, for numbers only.
- * @param [start] Range start. Default: `0`.
+ * @param {number} [start=0] Range start. Default: `0`.
  * @param {number} end Range end, excluded (like Python!).
- * @param [end] Step, nagative is supported. Default: `1`.
+ * @param {number} [end] Step, nagative is supported. Default: `1`.
  * @returns generator of numbers.
  * @throws if arguments are not numbers or convertable to numbers.
  */
