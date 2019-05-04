@@ -42,6 +42,19 @@
             <option v-for="r in existingRooms" :key="r" :value="r" />
           </datalist>
         </div>
+        <div v-if="showIdField" class="field">
+          <label class="label">ID</label>
+          <div class="control">
+            <input
+              v-focus
+              class="input"
+              type="text"
+              readonly
+              disabled
+              :value="device.id"
+            />
+          </div>
+        </div>
       </section>
       <section class="dependents quickview-block">
         <slot v-if="showDependents" name="show-dependents" />
@@ -102,6 +115,9 @@ export default {
   },
   computed: {
     showRemoveButton() {
+      return this.mode === MODE_MODIFY
+    },
+    showIdField() {
       return this.mode === MODE_MODIFY
     },
     quitOrCanceltext() {
