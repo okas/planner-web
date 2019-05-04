@@ -35,7 +35,10 @@
         />
       </div>
       <div class="control">
-        <button class="button is-small is-outlined is-light">
+        <button
+          class="button is-small is-outlined is-light"
+          :disabled="disabled"
+        >
           <i class="icon">
             <fa-i class="fa-lg" icon="play" />
           </i>
@@ -48,6 +51,7 @@
 
 <script>
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
+import { disabled } from '../mixins/ioNotConnected'
 import cronstrue from 'cronstrue/i18n'
 import ButtonEdit from '../components/ButtonEdit'
 import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
@@ -55,7 +59,7 @@ import Device from '../components/DevicesPresetsItemDevice'
 
 export default {
   components: { ButtonRemoveConfirm, ButtonEdit, Device },
-  mixins: [i18SelectMixin],
+  mixins: [i18SelectMixin, disabled],
   inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },
   data() {
@@ -82,9 +86,7 @@ export default {
     },
     disableSetActive() {
       return (
-        !this.preset.schedule ||
-        this.preset.devices.length < 1 ||
-        !this.$store.state.ioConnected
+        !this.preset.schedule || this.preset.devices.length < 1 || this.disabled
       )
     },
     activeTitle() {
