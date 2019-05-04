@@ -1,5 +1,5 @@
 <template>
-  <div class="blind grid box is-marginless">
+  <div class="blind grid box is-marginless" :title="blind.id">
     <h4 class="blind-label is-size-5 has-text-centered" v-text="blind.name" />
     <div class="blind-manage">
       <i class="blind-icon icon" :title="iconTitle">

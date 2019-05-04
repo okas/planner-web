@@ -1,5 +1,5 @@
 <template>
-  <div class="lamp box is-marginless">
+  <div class="lamp box is-marginless" :title="lamp.id">
     <h4 class="lamp-name is-size-6" v-text="lamp.name" />
     <i class="lamp-icon icon" :title="iconTitle">
       <fa-l class="fa-2x">
