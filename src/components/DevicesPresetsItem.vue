@@ -37,7 +37,7 @@
       <div class="control">
         <button
           class="button is-small is-outlined is-light"
-          :disabled="disabled"
+          @click="runPresetTask"
         >
           <i class="icon">
             <fa-i class="fa-lg" icon="play" />
@@ -108,6 +108,9 @@ export default {
       if (!newState) {
         this.$emit('remove', this.preset.id)
       }
+    },
+    runPresetTask() {
+      this.$emit('runPresetTask', this.preset.id)
     }
   }
 }

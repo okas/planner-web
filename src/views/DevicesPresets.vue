@@ -22,6 +22,7 @@
         @modify="modify"
         @setActive="setActiveHandler"
         @remove="removeHandler"
+        @runPresetTask="runPresetTaskHandler"
       />
     </div>
     <editor
@@ -255,7 +256,25 @@ export default {
         Object.assign(this.presetsData.find(p => p.id === preset.id), preset)
       })
     },
-
+    runPresetTaskHandler(id) {
+      const event = 'preset__run_taks_manually'
+      this.$socket.emit(
+        event,
+        id,
+        ({ status, startedDevicesCount, errors }) => {
+          if (errors && errors.length > 0) {
+            console.error(`${event}: API responded with error: [ ${errors} ]`)
+            return
+          }
+          if (status !== 'ok') {
+            console.warn(
+              `API event '${event}' responded with status ${status}.`
+            )
+            return
+          }
+        }
+      )
+    },
     getDevice(id, type) {
       const group = this.devicesData.find(g => g.type === type)
       if (!group) {
