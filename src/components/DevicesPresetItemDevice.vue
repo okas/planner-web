@@ -2,7 +2,10 @@
   <div class="devices-grid" :class="{ 'has-text-warning': !device.name }">
     <!-- <span class="order" v-text="preset.setorder[d.id] || '='" /> -->
     <span class="device-path has-text-right" v-text="name" />
-    <span class="device-value" v-text="device.value" />
+    <span class="device-value has-text-right" v-text="device.value" />
+    <div class="device-task-state has-text-right">
+      <slot name="task-state" />
+    </div>
   </div>
 </template>
 
@@ -21,12 +24,9 @@ export default {
 
 <style lang="scss" scoped>
 .devices-grid {
-  // grid-column: 1 / 4;
-  grid-column: 1 / 3;
   display: grid;
   gap: 0.7rem;
   grid-auto-flow: column;
-  grid-template-columns: /* 2rem */ 17rem 3rem;
-  grid-auto-rows: 1fr;
+  grid-template-columns: 17rem 2.5rem 2.5rem;
 }
 </style>

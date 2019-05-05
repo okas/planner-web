@@ -61,7 +61,8 @@ export default {
       editorMode: null,
       editorTitle: '',
       modalShow: false,
-      devicesData: []
+      devicesData: [],
+      runningTasks: new Map()
     }
   },
   provide() {
@@ -154,6 +155,25 @@ export default {
       const blinds = this.devicesData.find(d => d.type === 'blind').items
       const idx = blinds.findIndex(x => x.id == id)
       this.$delete(blinds, idx)
+    },
+    preset__api_run_taks_manually({
+      presetId,
+      status,
+      timeoutReached,
+      startedDevices
+    }) {
+      const event = 'preset__api_run_taks_manually'
+      if (status !== 'ok') {
+        console.warn(
+          `API event "${event}" responded with status " ${status} ".`
+        )
+        return
+      }
+      if (this.runningTasks.has(presetId)) {
+        this.runningTasks.get(presetId)(timeoutReached, startedDevices)
+      } else {
+        console.warn(`API event "${event}" : no "done" calback found.`)
+      }
     }
   },
   methods: {
@@ -197,6 +217,7 @@ export default {
           return
         }
         // ToDo add some 'toast' notifications or useer to show if all was not 100% OK!
+        this.runningTasks.delete(presetId)
         this.$delete(
           this.presetsData,
           this.presetsData.findIndex(p => p.id == presetId)
@@ -256,12 +277,12 @@ export default {
         Object.assign(this.presetsData.find(p => p.id === preset.id), preset)
       })
     },
-    runPresetTaskHandler(id) {
+    runPresetTaskHandler(id, done) {
       const event = 'preset__run_taks_manually'
       this.$socket.emit(
         event,
         id,
-        ({ status, startedDevicesCount, errors }) => {
+        ({ status, startInitiatedDevicesCount, errors }) => {
           if (errors && errors.length > 0) {
             console.error(`${event}: API responded with error: [ ${errors} ]`)
             return
@@ -274,6 +295,7 @@ export default {
           }
         }
       )
+      this.runningTasks.set(id, done)
     },
     getDevice(id, type) {
       const group = this.devicesData.find(g => g.type === type)

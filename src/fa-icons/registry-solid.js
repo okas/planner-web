@@ -18,8 +18,10 @@ import {
   faTimes,
   faTrash,
   faExclamationCircle,
-  faExternalLinkAlt
-} from '@fortawesome/free-solid-svg-icons'
+  faExternalLinkAlt,
+  faSpinner,
+  faPause
+} from '@fortawesome/free-solid-svg-icons/'
 
 library.add(
   faLightbulb,
@@ -39,5 +41,7 @@ library.add(
   faTimes,
   faTrash,
   faExclamationCircle,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faSpinner,
+  faPause
 )
