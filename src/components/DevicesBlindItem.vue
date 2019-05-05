@@ -79,6 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/devices-blinds.scss';
+@import '../assets/css_fade_transition.scss';
 
 $slider-height: $blind-row-gap * 2 + $button-height * 3;
 // Following 3 lines calculate transform-origin values related to slider height
