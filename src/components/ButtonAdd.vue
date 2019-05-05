@@ -3,10 +3,8 @@
     :is="tag"
     role="button"
     class="add button"
-    :disabled="disabled"
-    :aria-disabled="disabled"
-    v-bind="$attrs"
-    v-on="listenersToggled"
+    v-bind="$attrsInternal"
+    v-on="$listenersInternal"
   >
     <i class="icon">
       <fa-i class="fa-lg" icon="plus" />
@@ -15,10 +13,9 @@
 </template>
 
 <script>
-import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
+import buttonBase from '../mixins/buttonBase'
 
 export default {
-  mixins: [disabled, removeDOMListeners],
-  props: { tag: { type: String, default: 'a' } }
+  mixins: [buttonBase]
 }
 </script>

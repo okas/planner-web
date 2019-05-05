@@ -4,23 +4,21 @@
     role="button"
     class="remove-confirm button"
     :class="ask ? 'is-danger' : defaultStateClass"
-    :disabled="disabled"
-    :aria-disabled="disabled"
-    v-bind="$attrs"
-    v-on="listenersToggled"
+    v-bind="$attrsInternal"
+    v-on="$listenersInternal"
     @click.prevent.stop="changeState"
   >
     <i class="icon">
-      <fa-i class="fa-lg" :icon="ask ? 'exclamation-circle' : 'trash'" />
+      <fa-i class="fa-lg" :icon="ask ? 'exclamation-circle' : 'trash'"/>
     </i>
   </component>
 </template>
 
 <script>
-import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
+import buttonBase from '../mixins/buttonBase'
 
 export default {
-  mixins: [disabled, removeDOMListeners],
+  mixins: [buttonBase],
   model: { event: 'change' },
   props: {
     tag: { type: String, default: 'a' },
