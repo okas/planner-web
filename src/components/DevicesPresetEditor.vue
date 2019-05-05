@@ -78,11 +78,11 @@
 <script>
 import BulmaSteps from 'bulma-extensions/bulma-steps/src/js'
 import ButtonOk from '../components/ButtonOk'
-import Naming from './DevicesPresetsEditorNaming'
-import Schedule from './DevicesPresetsEditorSchedule'
-import Selection from './DevicesPresetsEditorSelection'
-import States from './DevicesPresetsEditorStates'
-// import Step4 from './DevicesPresetsEditorStep4Content'
+import Naming from './DevicesPresetEditorNaming'
+import Schedule from './DevicesPresetEditorSchedule'
+import Selection from './DevicesPresetEditorSelection'
+import States from './DevicesPresetEditorStates'
+// import Step4 from './DevicesPresetEditorStep4Content'
 
 export default {
   components: { ButtonOk, Naming, Schedule, Selection, States /* Step4 */ },

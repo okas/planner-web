@@ -29,7 +29,7 @@ export default [
       },
       {
         path: 'presets',
-        component: '../views/DevicesPresets.vue',
+        component: '../views/DevicesPreset.vue',
         name: 'dev-presets',
         meta: {
           title: 'Automaat',

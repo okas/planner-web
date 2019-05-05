@@ -55,7 +55,7 @@ import { disabled } from '../mixins/ioNotConnected'
 import cronstrue from 'cronstrue/i18n'
 import ButtonEdit from '../components/ButtonEdit'
 import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
-import Device from '../components/DevicesPresetsItemDevice'
+import Device from '../components/DevicesPresetItemDevice'
 
 export default {
   components: { ButtonRemoveConfirm, ButtonEdit, Device },

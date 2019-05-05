@@ -47,8 +47,8 @@ import * as constants from '../constants/uiEditorConstants.js'
 import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import ButtonReload from '../components/ButtonReload'
 import ButtonAdd from '../components/ButtonAdd'
-import Item from '../components/DevicesPresetsItem'
-import Editor from '../components/DevicesPresetsEditor'
+import Item from '../components/DevicesPresetItem'
+import Editor from '../components/DevicesPresetEditor'
 
 export default {
   name: 'Presets',
