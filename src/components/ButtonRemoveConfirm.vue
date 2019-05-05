@@ -29,7 +29,7 @@ export default {
     defaultStateClass: { type: String, default: 'is-warning' }
   },
   data() {
-    return { ask: this.value, timeoutId: 0 }
+    return { ask: this.value, timeout: null }
   },
   watch: {
     value(newValue) {
@@ -37,7 +37,7 @@ export default {
     }
   },
   beforeDestroy() {
-    clearTimeout(this.timeoutId)
+    clearTimeout(this.timeout)
   },
   methods: {
     changeState() {
@@ -46,14 +46,14 @@ export default {
         return
       }
       if (this.askTimeout > 0) {
-        this.timeoutId = setTimeout(this.resetAsk, this.askTimeout, this)
+        this.timeout = setTimeout(this.resetAsk, this.askTimeout, this)
       }
       this.ask = !this.ask
       this.$emit('change', this.ask)
     },
     resetAsk() {
       this.ask = false
-      this.timeoutId = 0
+      this.timeout = null
     }
   }
 }
