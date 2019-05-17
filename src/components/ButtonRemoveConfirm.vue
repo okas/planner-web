@@ -9,7 +9,7 @@
     @click.prevent.stop="changeState"
   >
     <i class="icon">
-      <fa-i class="fa-lg" :icon="ask ? 'exclamation-circle' : 'trash'"/>
+      <fa-i class="fa-lg" :icon="ask ? 'exclamation-circle' : 'trash'" />
     </i>
   </component>
 </template>
