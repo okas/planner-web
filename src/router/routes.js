@@ -35,6 +35,15 @@ export default [
           title: 'Automaat',
           alt: 'Seadistused automaatseteks tegevusteks'
         }
+      },
+      {
+        path: 'iot',
+        component: '../views/DevicesIot.vue',
+        name: 'dev-iot',
+        meta: {
+          title: 'IoT asja lisamine',
+          alt: 'Teosta WiFi IoT asja algseadistus'
+        }
       }
     ]
   },
