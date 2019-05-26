@@ -20,7 +20,9 @@ import {
   faExclamationCircle,
   faExternalLinkAlt,
   faSpinner,
-  faPause
+  faPause,
+  faCopy,
+  faMicrochip
 } from '@fortawesome/free-solid-svg-icons/'
 
 library.add(
@@ -43,5 +45,7 @@ library.add(
   faExclamationCircle,
   faExternalLinkAlt,
   faSpinner,
-  faPause
+  faPause,
+  faCopy,
+  faMicrochip
 )
