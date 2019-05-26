@@ -4,9 +4,6 @@
       <slot name="header-title" :_class="'has-text-info'" />
       <p class="has-text-info">IoT asjade algseadistamine</p>
     </header>
-    <p class="notification is-warning has-text-weight-semibold is-size-5">
-      Palun ära lae lehte uuesti, kui oled ühenud IoT seadmega!
-    </p>
     <article>
       <header>
         <h4 class="subtitle is-4">Töövoo kirjeldus</h4>
@@ -93,13 +90,27 @@
             </div>
           </div>
           <div class="field">
-            <label class="label has-text-grey-light">Seadme ID</label>
+            <label class="label has-text-grey-light">IoT seadme ID</label>
             <div class="control">
               <input
-                v-model="clientId"
+                v-model="iotDeviceId"
                 class="input"
                 type="text"
                 placeholder="sisesta SaarTK süsteemi poolt genereeritud seadme ID"
+                required
+              />
+            </div>
+          </div>
+          <div v-for="a of actuators" :key="a.id" class="field">
+            <label class="label has-text-grey-light"
+              >Täitur-{{ a.id }} ID</label
+            >
+            <div class="control">
+              <input
+                v-model="a.value"
+                class="input"
+                type="text"
+                placeholder="xxxx"
                 required
               />
             </div>
@@ -116,17 +127,21 @@
 </template>
 
 <script>
-/** @type {WebSocket} */
-let webSocket
+import ReconnectingWebSocket from 'reconnecting-websocket'
+
+/** @type {ReconnectingWebSocket} */
+let rws
 
 export default {
   data() {
     return {
-      ssid: '',
-      psk: '',
-      clientId: null,
-      iotConnected: false,
-      hostname: null
+      ssid: null,
+      psk: null,
+      hostname: null,
+      /** @type {Array.<{id: String, value: String}>} */
+      actuators: [],
+      iotDeviceId: null,
+      iotConnected: false
     }
   },
   computed: {
@@ -135,19 +150,21 @@ export default {
     }
   },
   mounted() {
-    webSocket = new WebSocket('ws://192.168.4.1:81')
-    webSocket.onopen = this.wsOnOpen
-    webSocket.onclose = webSocket.onerror = this.wsOnClose
-    webSocket.onmessage = this.wsMessageHandler
+    rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
+      connectionTimeout: 1000
+    })
+    rws.onopen = this.wsOnOpen
+    rws.onclose = rws.onerror = this.wsOnClose
+    rws.onmessage = this.wsMessageHandler
   },
   beforeDestroy() {
-    webSocket.close()
+    rws.close()
   },
   methods: {
     wsOnOpen(wsEvent) {
       console.log(wsEvent)
       this.iotConnected = true
-      webSocket.send('get-currentState')
+      rws.send('get-currentState')
     },
     wsOnClose(wsEvent) {
       console.log(wsEvent)
@@ -159,10 +176,11 @@ export default {
       const [subject, ...data] = wsEvent.data.split('\n')
       switch (subject) {
         case 'get-currentState-R': {
-          const [hostname, ssid, clientId] = data
+          const [hostname, ssid, iotDeviceId, ...actuatorIds] = data
           this.hostname = hostname
           this.ssid = ssid
-          this.clientId = clientId
+          this.iotDeviceId = iotDeviceId
+          this.actuators = actuatorIds.map((value, id) => ({ id, value }))
           break
         }
         case 'set-initValues-R':
@@ -171,9 +189,7 @@ export default {
       }
     },
     wsSendWifiData() {
-      webSocket.send(
-        `set-initValues\n${this.ssid}\n${this.psk}\n${this.clientId}`
-      )
+      rws.send(`set-initValues\n${this.ssid}\n${this.psk}\n${this.iotDeviceId}`)
     }
   }
 }
