@@ -54,12 +54,14 @@
         </fa-l>
       </i>
       <span v-if="iotConnected">Ühendatud seadmega: {{ hostname }}</span>
+      &nbsp;&nbsp;
+      <span v-if="iotConnected">IoT tüüp: {{ iotType }}</span>
     </article>
     <article>
       <header>
         <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
       </header>
-      <form autocomplete="on" @submit.prevent="wsSendWifiData">
+      <form autocomplete="on" @submit.prevent="wsSendIotInitData">
         <fieldset :disabled="!iotConnected">
           <div class="field">
             <label class="label has-text-grey-light">SSID</label>
@@ -101,20 +103,24 @@
               />
             </div>
           </div>
-          <div v-for="a of actuators" :key="a.id" class="field">
-            <label class="label has-text-grey-light"
-              >Täitur-{{ a.id }} ID</label
-            >
-            <div class="control">
-              <input
-                v-model="a.value"
-                class="input"
-                type="text"
-                placeholder="xxxx"
-                required
-              />
+          <fieldset class="field">
+            <legend class="label has-text-grey-light">Väljundid</legend>
+            <div class="field is-grouped">
+              <div v-for="a of actuators" :key="a.id" class="control">
+                <input
+                  :id="a.id"
+                  v-model="a.value"
+                  class="switch is-outlined"
+                  type="checkbox"
+                />
+                <label
+                  class="label has-text-grey-light"
+                  :for="a.id"
+                  v-text="a.id"
+                />
+              </div>
             </div>
-          </div>
+          </fieldset>
           <div class="field">
             <div class="control">
               <button type="submit" class="button is-primary">Seadista</button>
@@ -132,6 +138,10 @@ import ReconnectingWebSocket from 'reconnecting-websocket'
 /** @type {ReconnectingWebSocket} */
 let rws
 
+const iotTypes = {
+  'generic-2out': 'Üldine kahe täituriga seade'
+}
+
 export default {
   data() {
     return {
@@ -140,6 +150,7 @@ export default {
       hostname: null,
       /** @type {Array.<{id: String, value: String}>} */
       actuators: [],
+      iotType: null,
       iotDeviceId: null,
       iotConnected: false
     }
@@ -176,11 +187,13 @@ export default {
       const [subject, ...data] = wsEvent.data.split('\n')
       switch (subject) {
         case 'get-currentState-R': {
-          const [hostname, ssid, iotDeviceId, ...actuatorIds] = data
+          const [hostname, ssid, psk, iotDeviceId, type, ...outputs] = data
           this.hostname = hostname
           this.ssid = ssid
+          this.psk = psk
           this.iotDeviceId = iotDeviceId
-          this.actuators = actuatorIds.map((value, id) => ({ id, value }))
+          this.iotType = iotTypes[type]
+          this.actuators = outputs.map((v, i) => ({ id: i + 1, value: !!+v }))
           break
         }
         case 'set-initValues-R':
@@ -188,8 +201,12 @@ export default {
           break
       }
     },
-    wsSendWifiData() {
-      rws.send(`set-initValues\n${this.ssid}\n${this.psk}\n${this.iotDeviceId}`)
+    wsSendIotInitData() {
+      let payload = `set-initValues\n${this.ssid}\n${this.psk}\n${
+        this.iotDeviceId
+      }`
+      this.actuators.forEach(a => (payload += `\n${+a.value}`))
+      rws.send(payload)
     }
   }
 }
