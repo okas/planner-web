@@ -162,7 +162,11 @@ export default {
   },
   mounted() {
     rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
-      connectionTimeout: 1000
+      reconnectionDelayGrowFactor: 1,
+      maxReconnectionDelay: 1000,
+      minReconnectionDelay: 1000,
+      connectionTimeout: 500,
+      minUptime: 250
     })
     rws.onopen = this.wsOnOpen
     rws.onclose = rws.onerror = this.wsOnClose
