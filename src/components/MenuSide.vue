@@ -37,7 +37,7 @@ export default {
     foundRoutes() {
       return this.$router.options.routes.filter(
         r =>
-          r.hasOwnProperty('meta') &&
+          Object.prototype.hasOwnProperty.call(r, 'meta') &&
           this.paths.some(p => r.path.toLowerCase() == p.toLowerCase())
       )
     },

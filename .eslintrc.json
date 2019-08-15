@@ -4,15 +4,9 @@
     "node": true,
     "es6": true
   },
-  "extends": [
-    "plugin:vue/recommended",
-    "@vue/prettier"
-  ],
+  "extends": ["plugin:vue/recommended", "@vue/prettier"],
   "rules": {
-    "quotes": [
-      2,
-      "single"
-    ],
+    "quotes": [2, "single"],
     "no-console": "off",
     "no-restricted-syntax": [
       "error",
@@ -21,7 +15,7 @@
         "message": "Unexpected property on console object was called"
       }
     ],
-    "vue/no-v-html": "warning"
+    "vue/no-v-html": 1
   },
   "parserOptions": {
     "parser": "babel-eslint",

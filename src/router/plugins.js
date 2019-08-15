@@ -8,7 +8,7 @@ export function resolveRouteOptionComponents(routeOptions) {
         import(/* webpackChunkName: "[request]" */ `@/${convertForWebPackLazyLoad(
           opt.component
         )}`),
-      ...(opt.hasOwnProperty('children') && {
+      ...(Object.prototype.hasOwnProperty.call(opt, 'children') && {
         children: resolveRouteOptionComponents(opt.children)
       })
     }
