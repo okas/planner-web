@@ -22,7 +22,9 @@ import {
   faSpinner,
   faPause,
   faCopy,
-  faMicrochip
+  faMicrochip,
+  faCheckCircle,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons/'
 
 library.add(
@@ -47,5 +49,7 @@ library.add(
   faSpinner,
   faPause,
   faCopy,
-  faMicrochip
+  faMicrochip,
+  faCheckCircle,
+  faTimesCircle
 )

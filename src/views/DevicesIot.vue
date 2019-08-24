@@ -4,6 +4,117 @@
       <slot name="header-title" :_class="'has-text-info'" />
       <p class="has-text-info">IoT asjade algseadistamine</p>
     </header>
+    <div class="columns">
+      <article class="column is-one-third">
+        <header>
+          <h4 class="subtitle is-4">Seadme ühenduse staatus</h4>
+        </header>
+        <p class="level is-marginless">
+          <span class="level-left">
+            <span class="level-item">
+              <i class="icon is-medium">
+                <fa-l class="fa">
+                  <fa-i
+                    :icon="stateData.icon"
+                    :class="stateData.iconClasses"
+                    class="fa-2x"
+                  />
+                  <transition name="fade">
+                    <fa-i
+                      v-if="stateData.iconEffect"
+                      class="fa-lg"
+                      :class="stateData.iconEffectClasses"
+                      :icon="stateData.iconEffect"
+                      transform="right-4"
+                    />
+                  </transition>
+                </fa-l>
+              </i>
+            </span>
+            <span class="level-item">
+              <span class="is-lowercase" v-text="stateData.text" />
+            </span>
+          </span>
+        </p>
+        <p>Nimi: {{ hostname }}</p>
+        <p>IoT tüüp: {{ iotType }}</p>
+        <p v-text="additionalText" />
+      </article>
+      <article class="column">
+        <header>
+          <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
+        </header>
+        <form autocomplete="on" @submit.prevent="wsSendIotInitData">
+          <fieldset :disabled="!iotConnected">
+            <div class="field">
+              <label class="label has-text-grey-light">SSID</label>
+              <div class="control">
+                <input
+                  v-model="ssid"
+                  class="input"
+                  type="text"
+                  placeholder="sisesta võrgu nimi"
+                  minlength="1"
+                  maxlength="32"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-grey-light">Võti</label>
+              <div class="control">
+                <input
+                  v-model="psk"
+                  class="input"
+                  type="password"
+                  placeholder="sisesta võti"
+                  minlength="8"
+                  maxlength="63"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-grey-light">IoT seadme ID</label>
+              <div class="control">
+                <input
+                  v-model="iotDeviceId"
+                  class="input"
+                  type="text"
+                  placeholder="sisesta SaarTK süsteemi poolt genereeritud seadme ID"
+                  required
+                />
+              </div>
+            </div>
+            <fieldset class="field">
+              <legend class="label has-text-grey-light">Väljundid</legend>
+              <div class="field is-grouped">
+                <div v-for="a of actuators" :key="a.id" class="control">
+                  <input
+                    :id="a.id"
+                    v-model="a.value"
+                    class="switch is-outlined"
+                    type="checkbox"
+                  />
+                  <label
+                    class="label has-text-grey-light"
+                    :for="a.id"
+                    v-text="a.id"
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <div class="field">
+              <div class="control">
+                <button type="submit" class="button is-primary">
+                  Seadista
+                </button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </article>
+    </div>
     <article>
       <header>
         <h4 class="subtitle is-4">Töövoo kirjeldus</h4>
@@ -32,103 +143,6 @@
         <li>Seade on nüüd kasutusvalmis.</li>
       </ol>
     </article>
-    <article>
-      <header>
-        <h4 class="subtitle is-4">Seadme ühenduse staatus</h4>
-      </header>
-      <i class="icon is-medium" :title="ioIconTitle">
-        <fa-l class="fa">
-          <fa-i
-            class
-            icon="microchip"
-            :class="{ 'has-text-success': iotConnected }"
-          />
-          <transition name="fade">
-            <fa-i
-              v-if="!iotConnected"
-              class="fa-2x has-text-danger"
-              icon="ban"
-              transform="left-4"
-            />
-          </transition>
-        </fa-l>
-      </i>
-      <span v-if="iotConnected">Ühendatud seadmega: {{ hostname }}</span>
-      &nbsp;&nbsp;
-      <span v-if="iotConnected">IoT tüüp: {{ iotType }}</span>
-    </article>
-    <article>
-      <header>
-        <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
-      </header>
-      <form autocomplete="on" @submit.prevent="wsSendIotInitData">
-        <fieldset :disabled="!iotConnected">
-          <div class="field">
-            <label class="label has-text-grey-light">SSID</label>
-            <div class="control">
-              <input
-                v-model="ssid"
-                class="input"
-                type="text"
-                placeholder="sisesta võrgu nimi"
-                minlength="1"
-                maxlength="32"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label has-text-grey-light">Võti</label>
-            <div class="control">
-              <input
-                v-model="psk"
-                class="input"
-                type="password"
-                placeholder="sisesta võti"
-                minlength="8"
-                maxlength="63"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label has-text-grey-light">IoT seadme ID</label>
-            <div class="control">
-              <input
-                v-model="iotDeviceId"
-                class="input"
-                type="text"
-                placeholder="sisesta SaarTK süsteemi poolt genereeritud seadme ID"
-                required
-              />
-            </div>
-          </div>
-          <fieldset class="field">
-            <legend class="label has-text-grey-light">Väljundid</legend>
-            <div class="field is-grouped">
-              <div v-for="a of actuators" :key="a.id" class="control">
-                <input
-                  :id="a.id"
-                  v-model="a.value"
-                  class="switch is-outlined"
-                  type="checkbox"
-                />
-                <label
-                  class="label has-text-grey-light"
-                  :for="a.id"
-                  v-text="a.id"
-                />
-              </div>
-            </div>
-          </fieldset>
-          <div class="field">
-            <div class="control">
-              <button type="submit" class="button is-primary">Seadista</button>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-    </article>
   </section>
 </template>
 
@@ -141,24 +155,127 @@ let rws
 const iotTypes = {
   'generic-2out': 'Üldine kahe täituriga seade'
 }
+Object.freeze(iotTypes)
+
+const initStates = {
+  OFFLINE: Symbol('0: OFFLINE'),
+  IDLE: Symbol('1: IDLE') /* connected */,
+  SUCCEED: Symbol('2: SUCCEED'),
+  FAILED: Symbol('3: FAILED'),
+  SAVING: Symbol('4: SAVING')
+}
+Object.freeze(initStates)
+
+class UIState {
+  /** @type {String} */
+  icon
+  /** @type {String} */
+  iconClasses
+  /** @type {String} */
+  iconEffect
+  /** @type {String} */
+  iconEffectClasses
+  /** @type {String} */
+  text
+  /**
+   * @param {String} icon
+   * @param {String} iconClasses
+   * @param {String} iconEffect
+   * @param {String} iconEffectClasses
+   * @param {String} text
+   */
+  constructor(icon, iconClasses, iconEffect, iconEffectClasses, text) {
+    this.icon = icon
+    this.iconClasses = iconClasses
+    this.iconEffect = iconEffect
+    this.iconEffectClasses = iconEffectClasses
+    this.text = text
+  }
+}
 
 export default {
   data() {
     return {
+      /** @type {String} */
       ssid: null,
+      /** @type {String} */
       psk: null,
+      /** @type {String} */
       hostname: null,
       /** @type {Array.<{id: String, value: String}>} */
       actuators: [],
+      /** @type {String} */
       iotType: null,
+      /** @type {String} */
       iotDeviceId: null,
-      iotConnected: false
+      /** @type {Symbol} */
+      initState: initStates.OFFLINE,
+      /** @type {Map<Symbol, UIState>} */
+      initStateData: null,
+      /** @type {String} */
+      additionalText: null
     }
   },
   computed: {
+    iotConnected() {
+      return this.initState != initStates.OFFLINE
+    },
+    hasConfig() {
+      return (
+        this.ssid &&
+        this.hostname &&
+        this.actuators.length > 0 &&
+        this.iotType &&
+        this.iotDeviceId
+      )
+    },
+    stateData() {
+      return this.initStateData.get(this.initState)
+    },
     ioIconTitle() {
       return this.iotConnected ? 'IoT seadmega ühendatud' : 'Pole IoT ühendust'
     }
+  },
+  created() {
+    const icon = 'microchip'
+    const connected = 'Ühendatud | '
+    this.initStateData = new Map([
+      [
+        initStates.OFFLINE,
+        new UIState(icon, '', 'ban', 'has-text-danger', 'Ühenduseta')
+      ],
+      [initStates.IDLE, new UIState(icon, 'has-text-info', '', '', '')],
+      [
+        initStates.SUCCEED,
+        new UIState(
+          icon,
+          'has-text-success',
+          'check-circle',
+          'has-text-info',
+          connected + 'seaded salvestatud'
+        )
+      ],
+      [
+        initStates.FAILED,
+        new UIState(
+          icon,
+          'has-text-warning',
+          'times-circle',
+          'has-text-danger',
+          connected + 'vead salvestusel'
+        )
+      ],
+      [
+        initStates.SAVING,
+        new UIState(
+          icon,
+          'has-text-warning',
+          'cog',
+          'has-text-info fa-spin',
+          'Salvestamine pooleli'
+        )
+      ]
+    ])
   },
   mounted() {
     rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
@@ -178,31 +295,52 @@ export default {
   methods: {
     wsOnOpen(wsEvent) {
       console.log(wsEvent)
-      this.iotConnected = true
-      rws.send('get-currentState')
+      this.initState = initStates.IDLE
+      rws.send('get-initState')
     },
     wsOnClose(wsEvent) {
       console.log(wsEvent)
-      this.iotConnected = false
-      this.hostname = null
+      if (this.initState != initStates.SAVING) {
+        this.initState = initStates.OFFLINE
+        this.clearConfig()
+      }
     },
     wsMessageHandler(wsEvent) {
       console.log(event)
       const [subject, ...data] = wsEvent.data.split('\n')
       switch (subject) {
-        case 'get-currentState-R': {
-          const [hostname, ssid, psk, iotDeviceId, type, ...outputs] = data
-          this.hostname = hostname
-          this.ssid = ssid
-          this.psk = psk
-          this.iotDeviceId = iotDeviceId
-          this.iotType = iotTypes[type]
-          this.actuators = outputs.map((v, i) => ({ id: i + 1, value: !!+v }))
+        case 'get-initState-R' || 'set-initValues-R':
+          this.wsBrancheOnProcState(data)
           break
-        }
-        case 'set-initValues-R':
-          alert(data[0] ? 'oli edukas' : 'ebaõnnestus')
+        case 'get-currentConfig-R':
+          this.extractConfig(data.slice(1))
+      }
+    },
+    wsBrancheOnProcState(incomingData) {
+      this.additionalText = null
+      const [state, ...data] = incomingData
+      switch (state) {
+        case '1' /* idle */:
+          this.initState = initStates.IDLE
+          this.extractConfig(data)
+          return
+        case '2' /* last value set succeed | */:
+          this.initState = initStates.SUCCEED
           break
+        case '3' /* last value set  failed */:
+          this.initState = initStates.FAILED
+          break
+        case '4' /* working, tray again */:
+          this.initState = initStates.SAVING
+          return
+        default:
+          /* invalid response! */
+          this.initState = initStates.FAILED
+          this.additionalText = `IoT init: bad state code ${state}`
+          return
+      }
+      if (!this.hasConfig) {
+      rws.send('get-currentConfig')
       }
     },
     wsSendIotInitData() {
@@ -210,7 +348,28 @@ export default {
         this.iotDeviceId
       }`
       this.actuators.forEach(a => (payload += `\n${+a.value}`))
+      this.initState = initStates.SAVING
       rws.send(payload)
+    },
+    extractConfig(data) {
+      const [hostname, ssid, psk, iotDeviceId, type, ...outputs] = data
+      this.hostname = hostname
+      this.ssid = ssid
+      this.psk = psk
+      this.iotDeviceId = iotDeviceId
+      this.iotType = iotTypes[type]
+      this.actuators = outputs.map((v, i) => ({
+        id: i + 1,
+        value: !!+v
+      }))
+    },
+    clearConfig() {
+      this.hostname = null
+      this.ssid = null
+      this.psk = null
+      this.iotDeviceId = null
+      this.iotType = null
+      this.actuators.length = 0
     }
   }
 }
