@@ -309,7 +309,8 @@ export default {
       console.log(event)
       const [subject, ...data] = wsEvent.data.split('\n')
       switch (subject) {
-        case 'get-initState-R' || 'set-initValues-R':
+        case 'get-initState-R':
+        case 'set-initValues-R':
           this.wsBrancheOnProcState(data)
           break
         case 'get-currentConfig-R':
