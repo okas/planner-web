@@ -120,27 +120,32 @@
         <h4 class="subtitle is-4">Töövoo kirjeldus</h4>
       </header>
       <ol>
+        <li>
+          Pane seade
+          <i class="is-italic">Algseadistuse</i> režiimi, umbes 5 sek
+          nupuvajutus seadmel.
+        </li>
         <li>Ühendu WiFi võrku, mille nimi (SSID) on sarnane: ESP_XXXXXX.</li>
         <li>
           Seejärel oota kuni staatus näitab ühendust ja kuvatakse seadme
-          riistvara tunnus.
+          praegune info.
         </li>
         <li>
           Nüüd on valmidus salvestada kodu WiFi võrgu nimi (SSID) ja kood.
           Salvesta algseaded.
         </li>
         <li>
-          Edukast seadistamisest antakse teada, ühenduse pilveke näitab ühenduse
-          puudumist.
-          <ul>
-            <li>
-              See tähendab, et IoT seade ei serveeri enam algseadistuse võrku,
-              sest see on nüüd ühenduses kodu WiFi võrguga.
-            </li>
-          </ul>
+          Oota, kuni seade saadab tagasiside salvestuse edukuse kohta, võib
+          kuluda kuni 30 sekundit.
         </li>
-        <li>Ühenda oma seade uuesti kodu WiFi võrkku.</li>
-        <li>Seade on nüüd kasutusvalmis.</li>
+        <ul>
+          <li>Kui staatus on edukas, siis on seade kasutusvalmis.</li>
+          <li>
+            IoT seade sulgeb
+            <i class="is-italic">Algseadistuse</i> režiimi automaatselt.
+          </li>
+        </ul>
+        <li>Ühenda tagasi kodu WiFi võrkku.</li>
       </ol>
     </article>
   </section>
@@ -280,6 +285,7 @@ export default {
   },
   mounted() {
     rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
+      // ToDO use port 80 and show hint to open SPA
       reconnectionDelayGrowFactor: 1,
       maxReconnectionDelay: 1000,
       minReconnectionDelay: 1000,
@@ -342,7 +348,7 @@ export default {
           return
       }
       if (!this.hasConfig) {
-      rws.send('get-currentConfig')
+        rws.send('get-currentConfig')
       }
     },
     wsSendIotInitData() {
