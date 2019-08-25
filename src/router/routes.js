@@ -41,7 +41,7 @@ export default [
         component: '../views/DevicesIot.vue',
         name: 'dev-iot',
         meta: {
-          title: 'IoT asja lisamine',
+          title: 'IoT haldus',
           alt: 'Teosta WiFi IoT asja algseadistus'
         }
       }
