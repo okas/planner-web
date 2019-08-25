@@ -237,39 +237,40 @@ export default {
     }
   },
   created() {
-    const icon = 'microchip'
-    const connected = 'Ühendatud | '
+    const icon = 'microchip',
+      connected = 'Ühendatud | ',
+      warning = 'has-text-warning',
+      info = 'has-text-info',
+      success = 'has-text-success',
+      danger = 'has-text-danger'
     this.initStateData = new Map([
-      [
-        initStates.OFFLINE,
-        new UIState(icon, '', 'ban', 'has-text-danger', 'Ühenduseta')
-      ],
-      [initStates.IDLE, new UIState(icon, 'has-text-info', '', '', '')],
+      [initStates.OFFLINE, new UIState(icon, '', 'ban', danger, 'Ühenduseta')],
+      [initStates.IDLE, new UIState(icon, info, '', '', `${connected}ootel`)],
       [
         initStates.SUCCEED,
         new UIState(
           icon,
-          'has-text-success',
+          success,
           'check-circle',
-          'has-text-info',
-          connected + 'seaded salvestatud'
+          info,
+          `${connected}seaded salvestatud`
         )
       ],
       [
         initStates.FAILED,
         new UIState(
           icon,
-          'has-text-warning',
+          warning,
           'times-circle',
-          'has-text-danger',
-          connected + 'vead salvestusel'
+          danger,
+          `${connected}vead salvestusel`
         )
       ],
       [
         initStates.SAVING,
         new UIState(
           icon,
-          'has-text-warning',
+          warning,
           'cog',
           'has-text-info fa-spin',
           'Salvestamine pooleli'
