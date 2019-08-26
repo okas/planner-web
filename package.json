@@ -8,11 +8,11 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.21",
-    "@fortawesome/free-regular-svg-icons": "^5.10.1",
-    "@fortawesome/free-solid-svg-icons": "^5.10.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-regular-svg-icons": "^5.10.2",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
-    "@riophae/vue-treeselect": "0.1.0",
+    "@riophae/vue-treeselect": "0.2.0",
     "bulma": "^0.7.5",
     "bulma-extensions": "^6.2.7",
     "cronstrue": "git+https://github.com/okas/cRonstrue.git",
@@ -26,16 +26,16 @@
     "vuex": "^3.1.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.10.0",
-    "@vue/cli-plugin-eslint": "^3.10.0",
-    "@vue/cli-service": "^3.10.0",
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "babel-eslint": "^10.0.2",
-    "eslint": "^6.1.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.2.2",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
-    "sass-loader": "^7.2.0",
+    "sass-loader": "^7.3.1",
     "vue-template-compiler": "^2.6.10"
   },
   "browserslist": [
