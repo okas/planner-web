@@ -9,7 +9,7 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: '@import "@/assets/app_initial_variables.scss";'
+        prependData: '@import "@/assets/app_initial_variables.scss";'
       },
       postcss: {
         plugins: [require('autoprefixer')]
