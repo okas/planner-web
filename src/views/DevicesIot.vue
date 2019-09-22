@@ -36,7 +36,7 @@
             </span>
           </span>
         </p>
-        <p>Nimi: {{ hostname }}</p>
+        <p>Seadme tunnus: {{ iotDeviceId }}</p>
         <p>IoT tüüp: {{ iotType }}</p>
         <p v-text="additionalText" />
       </article>
@@ -70,18 +70,6 @@
                   placeholder="sisesta võti"
                   minlength="8"
                   maxlength="63"
-                  required
-                />
-              </div>
-            </div>
-            <div class="field">
-              <label class="label has-text-grey-light">IoT seadme ID</label>
-              <div class="control">
-                <input
-                  v-model="iotDeviceId"
-                  class="input"
-                  type="text"
-                  placeholder="sisesta SaarTK süsteemi poolt genereeritud seadme ID"
                   required
                 />
               </div>
@@ -206,13 +194,11 @@ export default {
       /** @type {String} */
       psk: null,
       /** @type {String} */
-      hostname: null,
+      iotDeviceId: null,
       /** @type {Array.<{id: String, value: String}>} */
       actuators: [],
       /** @type {String} */
       iotType: null,
-      /** @type {String} */
-      iotDeviceId: null,
       /** @type {Symbol} */
       initState: initStates.OFFLINE,
       /** @type {Map<Symbol, UIState>} */
@@ -228,7 +214,6 @@ export default {
     hasConfig() {
       return (
         this.ssid &&
-        this.hostname &&
         this.actuators.length > 0 &&
         this.iotType &&
         this.iotDeviceId
@@ -352,19 +337,16 @@ export default {
       }
     },
     wsSendIotInitData() {
-      let payload = `set-initValues\n${this.ssid}\n${this.psk}\n${
-        this.iotDeviceId
-      }`
+      let payload = `set-initValues\n${this.ssid}\n${this.psk}`
       this.actuators.forEach(a => (payload += `\n${+a.value}`))
       this.initState = initStates.SAVING
       rws.send(payload)
     },
     extractConfig(data) {
-      const [hostname, ssid, psk, iotDeviceId, type, ...outputs] = data
-      this.hostname = hostname
+      const [iotDeviceId, ssid, psk, type, ...outputs] = data
+      this.iotDeviceId = iotDeviceId
       this.ssid = ssid
       this.psk = psk
-      this.iotDeviceId = iotDeviceId
       this.iotType = iotTypes[type]
       this.actuators = outputs.map((v, i) => ({
         id: i + 1,
@@ -372,10 +354,9 @@ export default {
       }))
     },
     clearConfig() {
-      this.hostname = null
+      this.iotDeviceId = null
       this.ssid = null
       this.psk = null
-      this.iotDeviceId = null
       this.iotType = null
       this.actuators.length = 0
     }
