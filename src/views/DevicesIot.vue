@@ -77,17 +77,17 @@
             <fieldset class="field">
               <legend class="label has-text-grey-light">Väljundid</legend>
               <div class="field is-grouped">
-                <div v-for="a of actuators" :key="a.id" class="control">
+                <div v-for="o of outputs" :key="o.id" class="control">
                   <input
-                    :id="a.id"
-                    v-model="a.value"
+                    :id="o.id"
+                    v-model="o.value"
                     class="switch is-outlined"
                     type="checkbox"
                   />
                   <label
                     class="label has-text-grey-light"
-                    :for="a.id"
-                    v-text="a.id"
+                    :for="o.id"
+                    v-text="o.id"
                   />
                 </div>
               </div>
@@ -190,15 +190,15 @@ export default {
   data() {
     return {
       /** @type {String} */
+      iotDeviceId: null,
+      /** @type {String} */
+      iotType: null,
+      /** @type {String} */
       ssid: null,
       /** @type {String} */
       psk: null,
-      /** @type {String} */
-      iotDeviceId: null,
       /** @type {Array.<{id: String, value: String}>} */
-      actuators: [],
-      /** @type {String} */
-      iotType: null,
+      outputs: [],
       /** @type {Symbol} */
       initState: initStates.OFFLINE,
       /** @type {Map<Symbol, UIState>} */
@@ -213,10 +213,7 @@ export default {
     },
     hasConfig() {
       return (
-        this.ssid &&
-        this.actuators.length > 0 &&
-        this.iotType &&
-        this.iotDeviceId
+        this.ssid && this.outputs.length > 0 && this.iotType && this.iotDeviceId
       )
     },
     stateData() {
@@ -288,7 +285,7 @@ export default {
     wsOnOpen(wsEvent) {
       console.log(wsEvent)
       this.initState = initStates.IDLE
-      rws.send('get-initState')
+      rws.send('["get-initState"]')
     },
     wsOnClose(wsEvent) {
       console.log(wsEvent)
@@ -298,32 +295,32 @@ export default {
       }
     },
     wsMessageHandler(wsEvent) {
-      console.log(event)
-      const [subject, ...data] = wsEvent.data.split('\n')
+      console.log(wsEvent)
+      const [subject, objData] = JSON.parse(wsEvent.data)
       switch (subject) {
         case 'get-initState-R':
         case 'set-initValues-R':
-          this.wsBrancheOnProcState(data)
+          this.wsBrancheOnProcState(objData)
           break
         case 'get-currentConfig-R':
-          this.extractConfig(data.slice(1))
+          this.extractConfig(objData)
       }
     },
-    wsBrancheOnProcState(incomingData) {
+    wsBrancheOnProcState(incomingObj) {
       this.additionalText = null
-      const [state, ...data] = incomingData
+      const { state, ...rest } = incomingObj
       switch (state) {
-        case '1' /* idle */:
+        case 1:
           this.initState = initStates.IDLE
-          this.extractConfig(data)
+          this.extractConfig(rest)
           return
-        case '2' /* last value set succeed | */:
+        case 2:
           this.initState = initStates.SUCCEED
           break
-        case '3' /* last value set  failed */:
+        case 3:
           this.initState = initStates.FAILED
           break
-        case '4' /* working, tray again */:
+        case 4:
           this.initState = initStates.SAVING
           return
         default:
@@ -333,32 +330,35 @@ export default {
           return
       }
       if (!this.hasConfig) {
-        rws.send('get-currentConfig')
+        rws.send('["get-currentConfig"]') // TODO: analyze!
       }
     },
     wsSendIotInitData() {
-      let payload = `set-initValues\n${this.ssid}\n${this.psk}`
-      this.actuators.forEach(a => (payload += `\n${+a.value}`))
       this.initState = initStates.SAVING
+      const payload = JSON.stringify([
+        'set-initValues',
+        {
+          ssid: this.ssid,
+          psk: this.psk,
+          outputs: this.outputs.map(o => o.value)
+        }
+      ])
       rws.send(payload)
     },
     extractConfig(data) {
-      const [iotDeviceId, ssid, psk, type, ...outputs] = data
+      const { iotDeviceId, iotType, ssid, psk, outputs } = data
       this.iotDeviceId = iotDeviceId
+      this.iotType = iotTypes[iotType]
       this.ssid = ssid
       this.psk = psk
-      this.iotType = iotTypes[type]
-      this.actuators = outputs.map((v, i) => ({
-        id: i + 1,
-        value: !!+v
-      }))
+      this.outputs = outputs.map((value, i) => ({ id: ++i, value }))
     },
     clearConfig() {
       this.iotDeviceId = null
       this.ssid = null
       this.psk = null
       this.iotType = null
-      this.actuators.length = 0
+      this.outputs.length = 0
     }
   }
 }
