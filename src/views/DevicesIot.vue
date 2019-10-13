@@ -77,18 +77,21 @@
             <fieldset class="field">
               <legend class="label has-text-grey-light">Väljundid</legend>
               <div class="field is-grouped">
-                <div v-for="o of outputs" :key="o.id" class="control">
-                  <input
-                    :id="o.id"
+                <div v-for="o of outputs" :key="o.id" class>
+                  <tree-select
                     v-model="o.value"
-                    class="switch is-outlined"
-                    type="checkbox"
+                    :options="$options.deviceTypes"
+                    :placeholder="`${o.id}: vali...`"
+                  >
+                    <div
+                      slot="value-label"
+                      slot-scope="{ node }"
+                      :class="{
+                        'has-text-info has-text-weight-semibold': o.id
+                      }"
+                      v-text="`${o.id}: ${node.label}`"
                   />
-                  <label
-                    class="label has-text-grey-light"
-                    :for="o.id"
-                    v-text="o.id"
-                  />
+                  </tree-select>
                 </div>
               </div>
             </fieldset>
@@ -141,6 +144,8 @@
 
 <script>
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import TreeSelect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 /** @type {ReconnectingWebSocket} */
 let rws
@@ -158,6 +163,12 @@ const initStates = {
   SAVING: Symbol('4: SAVING')
 }
 Object.freeze(initStates)
+
+const deviceTypes = [
+  { id: 'lamp', label: 'Lamp' },
+  { id: 'blind', label: 'Ruloo' }
+]
+Object.freeze(deviceTypes)
 
 class UIState {
   /** @type {String} */
@@ -187,6 +198,7 @@ class UIState {
 }
 
 export default {
+  components: { TreeSelect },
   data() {
     return {
       /** @type {String} */
@@ -223,6 +235,7 @@ export default {
       return this.iotConnected ? 'IoT seadmega ühendatud' : 'Pole IoT ühendust'
     }
   },
+  deviceTypes: deviceTypes,
   created() {
     const icon = 'microchip',
       connected = 'Ühendatud | ',
@@ -351,7 +364,8 @@ export default {
       this.iotType = iotTypes[iotType]
       this.ssid = ssid
       this.psk = psk
-      this.outputs = outputs.map((value, i) => ({ id: ++i, value }))
+      /* Default value: null is for TreeSelect Component better behavior. */
+      this.outputs = outputs.map((v, i) => ({ id: ++i, value: v || null }))
     },
     clearConfig() {
       this.iotDeviceId = null
