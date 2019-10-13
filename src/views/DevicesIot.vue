@@ -90,7 +90,7 @@
                         'has-text-info has-text-weight-semibold': o.id
                       }"
                       v-text="`${o.id}: ${node.label}`"
-                  />
+                    />
                   </tree-select>
                 </div>
               </div>
