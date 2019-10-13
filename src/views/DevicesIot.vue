@@ -209,7 +209,7 @@ export default {
       ssid: null,
       /** @type {String} */
       psk: null,
-      /** @type {Array.<{id: String, value: String}>} */
+      /** @type {Array.<{id: Number, value: String}>} */
       outputs: [],
       /** @type {Symbol} */
       initState: initStates.OFFLINE,
