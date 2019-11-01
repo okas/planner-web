@@ -12,24 +12,7 @@
         <p class="level is-marginless">
           <span class="level-left">
             <span class="level-item">
-              <i class="icon is-medium">
-                <fa-l class="fa">
-                  <fa-i
-                    :icon="stateData.icon"
-                    :class="stateData.iconClasses"
-                    class="fa-2x"
-                  />
-                  <transition name="fade">
-                    <fa-i
-                      v-if="stateData.iconEffect"
-                      class="fa-lg"
-                      :class="stateData.iconEffectClasses"
-                      :icon="stateData.iconEffect"
-                      transform="right-4"
-                    />
-                  </transition>
-                </fa-l>
-              </i>
+              <iot-icon v-bind="stateData" />
             </span>
             <span class="level-item">
               <span class="is-lowercase" v-text="stateData.text" />
@@ -145,6 +128,7 @@
 <script>
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import TreeSelect from '@riophae/vue-treeselect'
+import IotIcon from '../components/DevicesIotIcon'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 /** @type {ReconnectingWebSocket} */
@@ -198,7 +182,7 @@ class UIState {
 }
 
 export default {
-  components: { TreeSelect },
+  components: { TreeSelect, IotIcon },
   data() {
     return {
       /** @type {String} */
@@ -379,8 +363,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/css_fade_transition.scss';
-
 article:not(:last-of-type) {
   margin-bottom: 1.5rem;
 }
