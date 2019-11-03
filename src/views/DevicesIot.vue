@@ -21,7 +21,12 @@
         </p>
         <p>Seadme tunnus: {{ iotDeviceId }}</p>
         <p>IoT tüüp: {{ iotType }}</p>
-        <p v-text="additionalText" />
+        <p>Edenemine:</p>
+        <pre
+          class="additional-text"
+          :disabled="!iotConnected"
+          v-text="additionalText"
+        />
       </article>
       <article class="column">
         <header>
@@ -304,8 +309,8 @@ export default {
       }
     },
     wsBrancheOnProcState(incomingObj) {
-      this.additionalText = null
-      const { state, ...rest } = incomingObj
+      const { state, stateDetails, ...rest } = incomingObj
+      this.printStateDetails(stateDetails)
       switch (state) {
         case 1:
           this.initState = initStates.IDLE
@@ -319,11 +324,11 @@ export default {
           break
         case 4:
           this.initState = initStates.SAVING
-          return
+          break
         default:
           /* invalid response! */
           this.initState = initStates.FAILED
-          this.additionalText = `IoT init: bad state code ${state}`
+          this.additionalText = `IoT init: bad IoT State code ${state}`
           return
       }
       if (!this.hasConfig) {
@@ -357,6 +362,23 @@ export default {
       this.psk = null
       this.iotType = null
       this.outputs.length = 0
+    },
+    printStateDetails(details) {
+      if (!details || details.length == 0) {
+        return
+      }
+      /* Vue bug: compound assignment will add 'null' at first call! */
+      if (this.additionalText == null) {
+        this.additionalText = ''
+      }
+      const notEmpty = !!this.additionalText.length
+      details.forEach((data, i) => {
+        if (i != 0 || notEmpty) {
+          this.additionalText += '\n'
+        }
+        const [step, desc] = Object.entries(data)[0]
+        this.additionalText += `${step}: ${desc}`
+      })
     }
   }
 }
@@ -369,5 +391,8 @@ article:not(:last-of-type) {
 ol,
 ul {
   margin-left: 1.5rem;
+}
+.additional-text {
+  padding: 0.5rem 0.75rem;
 }
 </style>
