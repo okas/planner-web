@@ -265,11 +265,11 @@ export default {
   mounted() {
     rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
       // ToDO use port 80 and show hint to open SPA
-      reconnectionDelayGrowFactor: 1,
-      maxReconnectionDelay: 1000,
-      minReconnectionDelay: 1000,
-      connectionTimeout: 500,
-      minUptime: 250
+      reconnectionDelayGrowFactor: 1.25,
+      maxReconnectionDelay: 2500,
+      minReconnectionDelay: 2000,
+      connectionTimeout: 2000,
+      minUptime: 1000
     })
     rws.onopen = this.wsOnOpen
     rws.onclose = rws.onerror = this.wsOnClose
