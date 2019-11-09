@@ -65,23 +65,23 @@
             <fieldset class="field">
               <legend class="label has-text-grey-light">Väljundid</legend>
               <div class="field is-grouped">
-                  <tree-select
+                <tree-select
                   v-for="o of outputs"
                   :key="o.id"
-                    v-model="o.value"
-                    :options="$options.deviceTypes"
-                    :placeholder="`${o.id}: vali...`"
-                  >
-                    <div
-                      slot="value-label"
-                      slot-scope="{ node }"
-                      :class="{
-                        'has-text-info has-text-weight-semibold': o.id
-                      }"
-                      v-text="`${o.id}: ${node.label}`"
-                    />
-                  </tree-select>
-                </div>
+                  v-model="o.value"
+                  :options="$options.deviceTypes"
+                  :placeholder="`${o.id}: vali...`"
+                >
+                  <div
+                    slot="value-label"
+                    slot-scope="{ node }"
+                    :class="{
+                      'has-text-info has-text-weight-semibold': o.id
+                    }"
+                    v-text="`${o.id}: ${node.label}`"
+                  />
+                </tree-select>
+              </div>
             </fieldset>
             <div class="field">
               <div class="control">
