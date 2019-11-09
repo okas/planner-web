@@ -191,13 +191,13 @@ export default {
   data() {
     return {
       /** @type {String} */
-      iotDeviceId: null,
+      iotDeviceId: '',
       /** @type {String} */
-      iotType: null,
+      iotType: '',
       /** @type {String} */
-      ssid: null,
+      ssid: '',
       /** @type {String} */
-      psk: null,
+      psk: '',
       /** @type {Array.<{id: Number, value: String}>} */
       outputs: [],
       /** @type {Symbol} */
@@ -205,7 +205,7 @@ export default {
       /** @type {Map<Symbol, UIState>} */
       initStateData: null,
       /** @type {String} */
-      additionalText: null
+      additionalText: ''
     }
   },
   computed: {
@@ -366,10 +366,6 @@ export default {
     printStateDetails(details) {
       if (!details || details.length == 0) {
         return
-      }
-      /* Vue bug: compound assignment will add 'null' at first call! */
-      if (this.additionalText == null) {
-        this.additionalText = ''
       }
       const notEmpty = !!this.additionalText.length
       details.forEach((data, i) => {
