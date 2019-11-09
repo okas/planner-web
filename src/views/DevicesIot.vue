@@ -57,7 +57,7 @@
                   type="password"
                   placeholder="sisesta võti"
                   minlength="8"
-                  maxlength="63"
+                  maxlength="64"
                   required
                 />
               </div>
