@@ -166,6 +166,16 @@ const deviceTypes = [
 ]
 Object.freeze(deviceTypes)
 
+const txtClass = {
+  // TODO Move out of Vue component object
+  warning: 'has-text-warning',
+  info: 'has-text-info',
+  success: 'has-text-success',
+  danger: 'has-text-danger',
+  greyLight: 'has-text-grey-light'
+}
+Object.freeze(txtClass)
+
 class UIState {
   /** @type {String} */
   icon
@@ -225,14 +235,6 @@ export default {
       outputsState: {
         class: '',
         txt: ''
-      },
-      txtClass: {
-        // TODO Move out of Vue component object
-        warning: 'has-text-warning',
-        info: 'has-text-info',
-        success: 'has-text-success',
-        danger: 'has-text-danger',
-        greyLight: 'has-text-grey-light'
       }
     }
   },
@@ -259,23 +261,23 @@ export default {
       handler({ state, step, desc }) {
         const { ssidState: ssid, pskState: psk, outputsState: outs } = this
         ssid.txt = psk.txt = outs.txt = ''
-        ssid.class = psk.class = outs.class = this.txtClass.greyLight
+        ssid.class = psk.class = outs.class = txtClass.greyLight
         if (step == 'wifi') {
           if (desc == 'WL_CONNECTED') {
-            ssid.class = this.txtClass.success
-            outs.class = this.txtClass.info
+            ssid.class = txtClass.success
+            outs.class = txtClass.info
           } else if (desc == 'WL_DISCONNECTED' && state == 3) {
-            ssid.class = psk.class = outs.class = this.txtClass.warning
+            ssid.class = psk.class = outs.class = txtClass.warning
             ssid.txt = 'võimalik vale võrk'
             psk.txt = 'võimalik vale võti'
           } else if (desc == 'WL_NO_SSID_AVAIL') {
-            ssid.class = this.txtClass.danger
-            outs.class = this.txtClass.warning
+            ssid.class = txtClass.danger
+            outs.class = txtClass.warning
             ssid.txt = 'sellist võrku pole näha'
           } else if (desc == 'WL_CONNECT_FAILED') {
-            ssid.class = this.txtClass.success
-            psk.class = this.txtClass.danger
-            outs.class = this.txtClass.warning
+            ssid.class = txtClass.success
+            psk.class = txtClass.danger
+            outs.class = txtClass.warning
             psk.txt = 'vale võti'
           }
           if (desc != 'WL_CONNECTED') {
@@ -292,19 +294,19 @@ export default {
     this.initStateData = new Map([
       [
         initStates.OFFLINE,
-        new UIState(icon, '', 'ban', this.txtClass.danger, 'Ühenduseta')
+        new UIState(icon, '', 'ban', txtClass.danger, 'Ühenduseta')
       ],
       [
         initStates.IDLE,
-        new UIState(icon, this.txtClass.info, '', '', `${connected}ootel`)
+        new UIState(icon, txtClass.info, '', '', `${connected}ootel`)
       ],
       [
         initStates.SUCCEED,
         new UIState(
           icon,
-          this.txtClass.success,
+          txtClass.success,
           'check-circle',
-          this.txtClass.info,
+          txtClass.info,
           `${connected}seaded salvestatud`
         )
       ],
@@ -312,9 +314,9 @@ export default {
         initStates.FAILED,
         new UIState(
           icon,
-          this.txtClass.warning,
+          txtClass.warning,
           'times-circle',
-          this.txtClass.danger,
+          txtClass.danger,
           `${connected}vead salvestusel`
         )
       ],
@@ -322,9 +324,9 @@ export default {
         initStates.SAVING,
         new UIState(
           icon,
-          this.txtClass.warning,
+          txtClass.warning,
           'cog',
-          `${this.txtClass.info} fa-spin`,
+          `${txtClass.info} fa-spin`,
           'Salvestamine pooleli'
         )
       ]
