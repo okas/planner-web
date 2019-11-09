@@ -250,6 +250,7 @@ export default {
       immediate: true,
       deep: true,
       handler({ state, step, desc }) {
+        const outsHelpTxt = 'pole veel salvestatud'
         const { ssidState: ssid, pskState: psk, outputsState: outs } = this
         ssid.txt = psk.txt = outs.txt = ''
         ssid.class = psk.class = outs.class = txtClass.greyLight
@@ -258,21 +259,26 @@ export default {
             ssid.class = txtClass.success
             outs.class = txtClass.info
           } else if (desc == 'WL_DISCONNECTED' && state == 3) {
-            ssid.class = psk.class = outs.class = txtClass.warning
+            ssid.class = psk.class = txtClass.warning
             ssid.txt = 'võimalik vale võrk'
             psk.txt = 'võimalik vale võti'
           } else if (desc == 'WL_NO_SSID_AVAIL') {
             ssid.class = txtClass.danger
-            outs.class = txtClass.warning
             ssid.txt = 'sellist võrku pole näha'
           } else if (desc == 'WL_CONNECT_FAILED') {
             ssid.class = txtClass.success
             psk.class = txtClass.danger
-            outs.class = txtClass.warning
             psk.txt = 'vale võti'
           }
           if (desc != 'WL_CONNECTED') {
-            outs.txt = 'pole veel salvestatud'
+            outs.class = txtClass.warning
+            outs.txt = outsHelpTxt
+          }
+        } else if (step == 'mqtt') {
+          if (desc == 'MQTT_CONNECTED') {
+            ssid.class = psk.class = txtClass.success
+            outs.class = txtClass.warning
+            outs.txt = outsHelpTxt
           }
         }
       }
