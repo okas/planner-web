@@ -1,7 +1,7 @@
 <template>
   <section id="iot">
     <header class="component-header">
-      <slot name="header-title" :_class="'has-text-info'" />
+      <slot name="header-title" :_class="txtClass.info" />
       <p class="has-text-info">IoT asjade algseadistamine</p>
     </header>
     <div class="columns">
@@ -206,7 +206,13 @@ export default {
       initStateData: null,
       /** @type {String} */
       additionalText: '',
-      iotLastInitState: { step: '', desc: '' }
+      iotLastInitState: { step: '', desc: '' },
+      txtClass: {
+        warning: 'has-text-warning',
+        info: 'has-text-info',
+        success: 'has-text-success',
+        danger: 'has-text-danger'
+      }
     }
   },
   computed: {
@@ -228,21 +234,23 @@ export default {
   deviceTypes: deviceTypes,
   created() {
     const icon = 'microchip',
-      connected = 'Ühendatud | ',
-      warning = 'has-text-warning',
-      info = 'has-text-info',
-      success = 'has-text-success',
-      danger = 'has-text-danger'
+      connected = 'Ühendatud | '
     this.initStateData = new Map([
-      [initStates.OFFLINE, new UIState(icon, '', 'ban', danger, 'Ühenduseta')],
-      [initStates.IDLE, new UIState(icon, info, '', '', `${connected}ootel`)],
+      [
+        initStates.OFFLINE,
+        new UIState(icon, '', 'ban', this.txtClass.danger, 'Ühenduseta')
+      ],
+      [
+        initStates.IDLE,
+        new UIState(icon, this.txtClass.info, '', '', `${connected}ootel`)
+      ],
       [
         initStates.SUCCEED,
         new UIState(
           icon,
-          success,
+          this.txtClass.success,
           'check-circle',
-          info,
+          this.txtClass.info,
           `${connected}seaded salvestatud`
         )
       ],
@@ -250,9 +258,9 @@ export default {
         initStates.FAILED,
         new UIState(
           icon,
-          warning,
+          this.txtClass.warning,
           'times-circle',
-          danger,
+          this.txtClass.danger,
           `${connected}vead salvestusel`
         )
       ],
@@ -260,9 +268,9 @@ export default {
         initStates.SAVING,
         new UIState(
           icon,
-          warning,
+          this.txtClass.warning,
           'cog',
-          'has-text-info fa-spin',
+          `${this.txtClass.info} fa-spin`,
           'Salvestamine pooleli'
         )
       ]
