@@ -1,7 +1,7 @@
 <template>
   <section id="iot">
     <header class="component-header">
-      <slot name="header-title" :_class="txtClass.info" />
+      <slot name="header-title" :_class="'has-text-info'" />
       <p class="has-text-info">IoT asjade algseadistamine</p>
     </header>
     <div class="columns">
@@ -35,7 +35,7 @@
         <form autocomplete="on" @submit.prevent="wsSendIotInitData">
           <fieldset :disabled="!iotConnected">
             <div class="field">
-              <label class="label has-text-grey-light">SSID</label>
+              <label :class="['label', ssidState.class]">SSID</label>
               <div class="control">
                 <input
                   v-model="ssid"
@@ -47,9 +47,10 @@
                   required
                 />
               </div>
+              <help v-bind="ssidState" />
             </div>
             <div class="field">
-              <label class="label has-text-grey-light">Võti</label>
+              <label :class="['label', pskState.class]">Võti</label>
               <div class="control">
                 <input
                   v-model="psk"
@@ -61,39 +62,33 @@
                   required
                 />
               </div>
+              <help v-bind="pskState" />
             </div>
-            <fieldset class="field">
-              <legend
-                :class="[
-                  'label',
-                  outputsWarning ? txtClass.warning : 'has-text-grey-light'
-                ]"
-              >
-                Väljundid
-              </legend>
-              <div class="field is-grouped">
-                <tree-select
-                  v-for="o of outputs"
-                  :key="o.id"
-                  v-model="o.value"
-                  :options="$options.deviceTypes"
-                  :placeholder="`${o.id}: vali...`"
-                >
-                  <div
-                    slot="value-label"
-                    slot-scope="{ node }"
-                    :class="[
-                      { 'has-text-weight-semibold': o.id },
-                      [outputsWarning ? txtClass.warning : txtClass.info]
-                    ]"
-                    v-text="`${o.id}: ${node.label}`"
-                  />
-                </tree-select>
+            <div class="field">
+              <lable :class="['label', outputsState.class]">Väljundid</lable>
+              <div class="filed-body">
+                <div class="field is-horizontal">
+                  <tree-select
+                    v-for="o of outputs"
+                    :key="o.id"
+                    v-model="o.value"
+                    :options="$options.deviceTypes"
+                    :placeholder="`${o.id}: vali...`"
+                  >
+                    <div
+                      slot="value-label"
+                      slot-scope="{ node }"
+                      :class="[
+                        { 'has-text-weight-semibold': o.id },
+                        outputsState.class
+                      ]"
+                      v-text="`${o.id}: ${node.label}`"
+                    />
+                  </tree-select>
+                </div>
               </div>
-              <p v-if="outputsWarning" class="help is-warning">
-                Pole veel salvestatud
-              </p>
-            </fieldset>
+              <help v-bind="outputsState" />
+            </div>
             <div class="field">
               <div class="control">
                 <button type="submit" class="button is-primary">
@@ -142,6 +137,7 @@
 </template>
 
 <script>
+import Help from '../components/DevicesIotFormHelp'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import TreeSelect from '@riophae/vue-treeselect'
 import IotIcon from '../components/DevicesIotIcon'
@@ -198,7 +194,7 @@ class UIState {
 }
 
 export default {
-  components: { TreeSelect, IotIcon },
+  components: { TreeSelect, IotIcon, Help },
   data() {
     return {
       /** @type {String} */
@@ -217,12 +213,26 @@ export default {
       initStateData: null,
       /** @type {String} */
       additionalText: '',
-      iotLastInitState: { step: '', desc: '' },
+      iotLastInitState: { state: '', step: '', desc: '' },
+      ssidState: {
+        class: '',
+        txt: ''
+      },
+      pskState: {
+        class: '',
+        txt: ''
+      },
+      outputsState: {
+        class: '',
+        txt: ''
+      },
       txtClass: {
+        // TODO Move out of Vue component object
         warning: 'has-text-warning',
         info: 'has-text-info',
         success: 'has-text-success',
-        danger: 'has-text-danger'
+        danger: 'has-text-danger',
+        greyLight: 'has-text-grey-light'
       }
     }
   },
@@ -240,12 +250,39 @@ export default {
     },
     ioIconTitle() {
       return this.iotConnected ? 'IoT seadmega ühendatud' : 'Pole IoT ühendust'
-    },
-    outputsWarning() {
-      return (
-        this.iotLastInitState.step == 'wifi' &&
-        this.iotLastInitState.desc != 'WL_CONNECTED'
-      )
+    }
+  },
+  watch: {
+    iotLastInitState: {
+      immediate: true,
+      deep: true,
+      handler({ state, step, desc }) {
+        const { ssidState: ssid, pskState: psk, outputsState: outs } = this
+        ssid.txt = psk.txt = outs.txt = ''
+        ssid.class = psk.class = outs.class = this.txtClass.greyLight
+        if (step == 'wifi') {
+          if (desc == 'WL_CONNECTED') {
+            ssid.class = this.txtClass.success
+            outs.class = this.txtClass.info
+          } else if (desc == 'WL_DISCONNECTED' && state == 3) {
+            ssid.class = psk.class = outs.class = this.txtClass.warning
+            ssid.txt = 'võimalik vale võrk'
+            psk.txt = 'võimalik vale võti'
+          } else if (desc == 'WL_NO_SSID_AVAIL') {
+            ssid.class = this.txtClass.danger
+            outs.class = this.txtClass.warning
+            ssid.txt = 'sellist võrku pole näha'
+          } else if (desc == 'WL_CONNECT_FAILED') {
+            ssid.class = this.txtClass.success
+            psk.class = this.txtClass.danger
+            outs.class = this.txtClass.warning
+            psk.txt = 'vale võti'
+          }
+          if (desc != 'WL_CONNECTED') {
+            outs.txt = 'pole veel salvestatud'
+          }
+        }
+      }
     }
   },
   deviceTypes: deviceTypes,
@@ -336,7 +373,7 @@ export default {
     },
     wsBrancheOnProcState(incomingObj) {
       const { state, stateDetails, ...rest } = incomingObj
-      this.handleStateDetails(stateDetails)
+      this.handleStateDetails(state, stateDetails)
       switch (state) {
         case 1:
           this.initState = initStates.IDLE
@@ -389,8 +426,11 @@ export default {
       this.iotType = null
       this.outputs.length = 0
     },
-    /** @param {[{}]} details details */
-    handleStateDetails(details) {
+    /**
+     * @param {string} state
+     * @param {[{}]} details details
+     */
+    handleStateDetails(state, details) {
       if (!details || details.length == 0) {
         return
       }
@@ -403,7 +443,7 @@ export default {
         const [step, desc] = Object.entries(data)[0]
         this.additionalText += `${step}: ${desc}`
         if (i == iLast) {
-          Object.assign(this.iotLastInitState, { step, desc })
+          Object.assign(this.iotLastInitState, { state, step, desc })
         }
       })
     }
