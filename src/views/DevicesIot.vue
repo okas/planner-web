@@ -65,7 +65,7 @@
               <help v-bind="pskState" />
             </div>
             <div class="field">
-              <lable :class="['label', outputsState.class]">Väljundid</lable>
+              <label :class="['label', outputsState.class]">Väljundid</label>
               <div class="filed-body">
                 <div class="field is-horizontal">
                   <tree-select
