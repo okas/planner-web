@@ -224,18 +224,9 @@ export default {
       /** @type {String} */
       additionalText: '',
       iotLastInitState: { state: '', step: '', desc: '' },
-      ssidState: {
-        class: '',
-        txt: ''
-      },
-      pskState: {
-        class: '',
-        txt: ''
-      },
-      outputsState: {
-        class: '',
-        txt: ''
-      }
+      ssidState: { class: '', txt: '' },
+      pskState: { class: '', txt: '' },
+      outputsState: { class: '', txt: '' }
     }
   },
   computed: {
