@@ -205,7 +205,8 @@ export default {
       /** @type {Map<Symbol, UIState>} */
       initStateData: null,
       /** @type {String} */
-      additionalText: ''
+      additionalText: '',
+      iotLastInitState: { step: '', desc: '' }
     }
   },
   computed: {
@@ -310,7 +311,7 @@ export default {
     },
     wsBrancheOnProcState(incomingObj) {
       const { state, stateDetails, ...rest } = incomingObj
-      this.printStateDetails(stateDetails)
+      this.handleStateDetails(stateDetails)
       switch (state) {
         case 1:
           this.initState = initStates.IDLE
@@ -363,17 +364,22 @@ export default {
       this.iotType = null
       this.outputs.length = 0
     },
-    printStateDetails(details) {
+    /** @param {[{}]} details details */
+    handleStateDetails(details) {
       if (!details || details.length == 0) {
         return
       }
       const notEmpty = !!this.additionalText.length
+      const iLast = details.length - 1
       details.forEach((data, i) => {
         if (i != 0 || notEmpty) {
           this.additionalText += '\n'
         }
         const [step, desc] = Object.entries(data)[0]
         this.additionalText += `${step}: ${desc}`
+        if (i == iLast) {
+          Object.assign(this.iotLastInitState, { step, desc })
+        }
       })
     }
   }
