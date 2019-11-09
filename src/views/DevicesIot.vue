@@ -63,7 +63,14 @@
               </div>
             </div>
             <fieldset class="field">
-              <legend class="label has-text-grey-light">Väljundid</legend>
+              <legend
+                :class="[
+                  'label',
+                  outputsWarning ? txtClass.warning : 'has-text-grey-light'
+                ]"
+              >
+                Väljundid
+              </legend>
               <div class="field is-grouped">
                 <tree-select
                   v-for="o of outputs"
@@ -75,13 +82,17 @@
                   <div
                     slot="value-label"
                     slot-scope="{ node }"
-                    :class="{
-                      'has-text-info has-text-weight-semibold': o.id
-                    }"
+                    :class="[
+                      { 'has-text-weight-semibold': o.id },
+                      [outputsWarning ? txtClass.warning : txtClass.info]
+                    ]"
                     v-text="`${o.id}: ${node.label}`"
                   />
                 </tree-select>
               </div>
+              <p v-if="outputsWarning" class="help is-warning">
+                Pole veel salvestatud
+              </p>
             </fieldset>
             <div class="field">
               <div class="control">
@@ -229,6 +240,12 @@ export default {
     },
     ioIconTitle() {
       return this.iotConnected ? 'IoT seadmega ühendatud' : 'Pole IoT ühendust'
+    },
+    outputsWarning() {
+      return (
+        this.iotLastInitState.step == 'wifi' &&
+        this.iotLastInitState.desc != 'WL_CONNECTED'
+      )
     }
   },
   deviceTypes: deviceTypes,
