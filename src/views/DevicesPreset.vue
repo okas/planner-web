@@ -299,6 +299,9 @@ export default {
             )
             return
           }
+          const msg = `API event '${event}' responded [startInitiatedDevicesCount: ${startInitiatedDevicesCount}]`
+          alert(msg)
+          console.log(msg)
         }
       )
       this.runningTasks.set(id, done)
