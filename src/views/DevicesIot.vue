@@ -65,8 +65,9 @@
             <fieldset class="field">
               <legend class="label has-text-grey-light">Väljundid</legend>
               <div class="field is-grouped">
-                <div v-for="o of outputs" :key="o.id" class>
                   <tree-select
+                  v-for="o of outputs"
+                  :key="o.id"
                     v-model="o.value"
                     :options="$options.deviceTypes"
                     :placeholder="`${o.id}: vali...`"
@@ -81,7 +82,6 @@
                     />
                   </tree-select>
                 </div>
-              </div>
             </fieldset>
             <div class="field">
               <div class="control">
