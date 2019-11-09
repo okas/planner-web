@@ -174,9 +174,7 @@ export default {
       }
       this.cronModel.dayWeek.split(',').forEach(listItem => {
         if (listItem.startsWith('-') || listItem.endsWith('-')) {
-          throw `Day of week: range: wrong value found in range expression: [ ${
-            this.cronModel.dayWeek
-          } ]`
+          throw `Day of week: range: wrong value found in range expression: [ ${this.cronModel.dayWeek} ]`
         } else if (listItem === '-') {
           throw 'Day of week: day filed: wrong value as filed list item "-".'
         }

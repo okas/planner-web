@@ -123,10 +123,16 @@ export default {
       this.lampsData.push(data)
     },
     lamp__api_update(data) {
-      Object.assign(this.lampsData.find(l => l.id == data.id), data)
+      Object.assign(
+        this.lampsData.find(l => l.id == data.id),
+        data
+      )
     },
     lamp__api_remove({ id }) {
-      this.$delete(this.lampsData, this.lampsData.findIndex(x => x.id == id))
+      this.$delete(
+        this.lampsData,
+        this.lampsData.findIndex(x => x.id == id)
+      )
     },
     lamp__api_set_state({ id, state }) {
       this.setLampState(id, state)
@@ -235,7 +241,10 @@ export default {
           return
         }
         this.ioGetLampState(lamp)
-        Object.assign(this.lampsData.find(l => l.id == lamp.id), lamp)
+        Object.assign(
+          this.lampsData.find(l => l.id == lamp.id),
+          lamp
+        )
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },

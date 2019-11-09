@@ -115,10 +115,16 @@ export default {
       this.blindsData.push(data)
     },
     blind__api_update(data) {
-      Object.assign(this.blindsData.find(l => l.id === data.id), data)
+      Object.assign(
+        this.blindsData.find(l => l.id === data.id),
+        data
+      )
     },
     blind__api_remove({ id }) {
-      this.$delete(this.blindsData, this.blindsData.findIndex(x => x.id == id))
+      this.$delete(
+        this.blindsData,
+        this.blindsData.findIndex(x => x.id == id)
+      )
     },
     blind__api_set_state({ id, state }) {
       this.setBlindState(id, state)
@@ -227,7 +233,10 @@ export default {
           return
         }
         this.ioGetBlindState(blind)
-        Object.assign(this.blindsData.find(l => l.id === blind.id), blind)
+        Object.assign(
+          this.blindsData.find(l => l.id === blind.id),
+          blind
+        )
       })
       // ToDo say it with toast/snackbar/notification if event times out!
     },

@@ -117,7 +117,10 @@ export default {
       this.presetsData.push(data)
     },
     preset__api_update(data) {
-      Object.assign(this.presetsData.find(p => p.id === data.id), data)
+      Object.assign(
+        this.presetsData.find(p => p.id === data.id),
+        data
+      )
     },
     preset__api_remove({ id }) {
       this.$delete(
@@ -274,7 +277,10 @@ export default {
           console.warn(`API event '${event}' responded with status ${status}.`)
           return
         }
-        Object.assign(this.presetsData.find(p => p.id === preset.id), preset)
+        Object.assign(
+          this.presetsData.find(p => p.id === preset.id),
+          preset
+        )
       })
     },
     runPresetTaskHandler(id, done) {

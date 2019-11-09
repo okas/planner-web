@@ -5,9 +5,11 @@ export function resolveRouteOptionComponents(routeOptions) {
     return {
       ...opt,
       component: () =>
-        import(/* webpackChunkName: "[request]" */ `@/${convertForWebPackLazyLoad(
-          opt.component
-        )}`),
+        import(
+          /* webpackChunkName: "[request]" */ `@/${convertForWebPackLazyLoad(
+            opt.component
+          )}`
+        ),
       ...(Object.prototype.hasOwnProperty.call(opt, 'children') && {
         children: resolveRouteOptionComponents(opt.children)
       })
