@@ -39,7 +39,7 @@
               <div class="control">
                 <input
                   v-model="ssid"
-                  class="input"
+                  :class="['input', ssidState.class1]"
                   type="text"
                   placeholder="sisesta võrgu nimi"
                   minlength="1"
@@ -54,7 +54,7 @@
               <div class="control">
                 <input
                   v-model="psk"
-                  class="input"
+                  :class="['input', pskState.class1]"
                   type="password"
                   placeholder="sisesta võti"
                   minlength="8"
@@ -176,6 +176,15 @@ const txtClass = {
 }
 Object.freeze(txtClass)
 
+const auxClass = {
+  // TODO Move out of Vue component object
+  warning: 'is-warning',
+  info: 'is-info',
+  success: 'is-success',
+  danger: 'is-danger'
+}
+Object.freeze(auxClass)
+
 class UIState {
   /** @type {String} */
   icon
@@ -224,9 +233,9 @@ export default {
       /** @type {String} */
       additionalText: '',
       iotLastInitState: { state: '', step: '', desc: '' },
-      ssidState: { class: '', txt: '' },
-      pskState: { class: '', txt: '' },
-      outputsState: { class: '', txt: '' }
+      ssidState: { class: '', txt: '', class1: '' },
+      pskState: { class: '', txt: '', class1: '' },
+      outputsState: { class: '', txt: '', class1: '' }
     }
   },
   computed: {
@@ -253,21 +262,29 @@ export default {
         const outsHelpTxt = 'pole veel salvestatud'
         const { ssidState: ssid, pskState: psk, outputsState: outs } = this
         ssid.txt = psk.txt = outs.txt = ''
+        // These 2 lines should ac as defaults but, need to evaluate more,
+        // whether they can be set after main routine, or count in other steps
         ssid.class = psk.class = outs.class = txtClass.greyLight
+        ssid.class1 = psk.class1 = outs.class1 = ''
         if (step == 'wifi') {
           if (desc == 'WL_CONNECTED') {
             ssid.class = txtClass.success
+            ssid.class1 = psk.class1 = auxClass.success
             outs.class = txtClass.info
           } else if (desc == 'WL_DISCONNECTED' && state == 3) {
             ssid.class = psk.class = txtClass.warning
+            ssid.class1 = psk.class1 = auxClass.warning
             ssid.txt = 'võimalik vale võrk'
             psk.txt = 'võimalik vale võti'
           } else if (desc == 'WL_NO_SSID_AVAIL') {
             ssid.class = txtClass.danger
+            ssid.class1 = auxClass.danger
             ssid.txt = 'sellist võrku pole näha'
           } else if (desc == 'WL_CONNECT_FAILED') {
             ssid.class = txtClass.success
+            ssid.clas1s = auxClass.success
             psk.class = txtClass.danger
+            psk.class1 = auxClass.danger
             psk.txt = 'vale võti'
           }
           if (desc != 'WL_CONNECTED') {
@@ -277,6 +294,7 @@ export default {
         } else if (step == 'mqtt') {
           if (desc == 'MQTT_CONNECTED') {
             ssid.class = psk.class = txtClass.success
+            ssid.class1 = psk.class1 = auxClass.success
             outs.class = txtClass.warning
             outs.txt = outsHelpTxt
           }
