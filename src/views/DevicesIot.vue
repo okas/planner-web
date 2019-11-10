@@ -268,7 +268,7 @@ export default {
         ssid.class1 = psk.class1 = outs.class1 = ''
         if (step == 'wifi') {
           if (desc == 'WL_CONNECTED') {
-            ssid.class = txtClass.success
+            ssid.class = psk.class = txtClass.success
             ssid.class1 = psk.class1 = auxClass.success
             outs.class = txtClass.info
           } else if (desc == 'WL_DISCONNECTED' && state == 3) {
