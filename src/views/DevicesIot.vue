@@ -293,7 +293,10 @@ export default {
             outs.txt = outsHelpTxt
           }
         } else if (step == 'mqtt') {
-          if (desc == 'MQTT_CONNECTED') {
+          if (
+            desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
+            desc == 'LWMQTT_SUCCESS'
+          ) {
             ssid.class = psk.class = txtClass.success
             ssid.class1 = psk.class1 = auxClass.success
             outs.class = txtClass.warning
