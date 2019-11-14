@@ -80,7 +80,7 @@
                       slot-scope="{ node }"
                       :class="[
                         { 'has-text-weight-semibold': o.id },
-                        outputsState.class
+                        outputsState.class || (o.id ? 'has-text-info' : '')
                       ]"
                       v-text="`${o.id}: ${node.label}`"
                     />
@@ -264,7 +264,8 @@ export default {
         ssid.txt = psk.txt = outs.txt = ''
         // These 2 lines should ac as defaults but, need to evaluate more,
         // whether they can be set after main routine, or count in other steps
-        ssid.class = psk.class = outs.class = txtClass.greyLight
+        ssid.class = psk.class = txtClass.greyLight
+        outs.class = ''
         ssid.class1 = psk.class1 = outs.class1 = ''
         if (step == 'wifi') {
           if (desc == 'WL_CONNECTED') {
