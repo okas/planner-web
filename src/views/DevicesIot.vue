@@ -259,52 +259,7 @@ export default {
     iotLastInitState: {
       immediate: true,
       deep: true,
-      handler({ state, step, desc }) {
-        const outsHelpTxt = 'pole veel salvestatud'
-        const { ssidState: ssid, pskState: psk, outputsState: outs } = this
-        ssid.txt = psk.txt = outs.txt = ''
-        // These 2 lines should ac as defaults but, need to evaluate more,
-        // whether they can be set after main routine, or count in other steps
-        ssid.class = psk.class = txtClass.greyLight
-        outs.class = ''
-        ssid.class1 = psk.class1 = outs.class1 = ''
-        if (step == 'wifi') {
-          if (desc == 'WL_CONNECTED') {
-            ssid.class = psk.class = txtClass.success
-            ssid.class1 = psk.class1 = auxClass.success
-            outs.class = txtClass.info
-          } else if (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) {
-            ssid.class = psk.class = txtClass.warning
-            ssid.class1 = psk.class1 = auxClass.warning
-            ssid.txt = 'võimalik vale võrk'
-            psk.txt = 'võimalik vale võti'
-          } else if (desc == 'WL_NO_SSID_AVAIL') {
-            ssid.class = txtClass.danger
-            ssid.class1 = auxClass.danger
-            ssid.txt = 'sellist võrku pole näha'
-          } else if (desc == 'WL_CONNECT_FAILED') {
-            ssid.class = txtClass.success
-            ssid.clas1s = auxClass.success
-            psk.class = txtClass.danger
-            psk.class1 = auxClass.danger
-            psk.txt = 'vale võti'
-          }
-          if (desc != 'WL_CONNECTED') {
-            outs.class = txtClass.warning
-            outs.txt = outsHelpTxt
-          }
-        } else if (step == 'mqtt') {
-          if (
-            desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
-            desc == 'LWMQTT_SUCCESS'
-          ) {
-            ssid.class = psk.class = txtClass.success
-            ssid.class1 = psk.class1 = auxClass.success
-            outs.class = txtClass.warning
-            outs.txt = outsHelpTxt
-          }
-        }
-      }
+      handler: 'handleUIChangesOnIoTState'
     }
   },
   deviceTypes: deviceTypes,
@@ -481,6 +436,80 @@ export default {
           })
         }
       })
+    },
+    handleUIChangesOnIoTState({ state, step, desc }) {
+      const { ssidState: ssid, pskState: psk, outputsState: outs } = this
+      this.uiGenericRest(ssid, psk, outs)
+      switch (step) {
+        case 'wifi':
+          if (desc == 'WL_CONNECTED') {
+            this.uiWiFiConnected(ssid, psk, outs)
+          } else if (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) {
+            this.uiWiFiDisconnectedAndFailed(ssid, psk)
+          } else if (desc == 'WL_NO_SSID_AVAIL') {
+            this.uiWiFiNoSSID(ssid)
+          } else if (desc == 'WL_CONNECT_FAILED') {
+            this.uiWiFiConnectFailed(ssid, psk)
+          }
+          if (desc != 'WL_CONNECTED') {
+            this.uiWiFiNotConnected(outs)
+          }
+          return
+        case 'mqtt':
+          if (
+            desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
+            desc == 'LWMQTT_SUCCESS'
+          ) {
+            this.uiMqttConnectedOrSuccess(ssid, psk, outs)
+          }
+          return
+        default:
+          return
+      }
+    },
+    uiWiFiConnected(ssid, psk, outs) {
+      ssid.class = psk.class = txtClass.success
+      ssid.class1 = psk.class1 = auxClass.success
+      outs.class = txtClass.info
+    },
+    uiWiFiDisconnectedAndFailed(ssid, psk) {
+      ssid.class = psk.class = txtClass.warning
+      ssid.class1 = psk.class1 = auxClass.warning
+      ssid.txt = 'võimalik vale võrk'
+      psk.txt = 'võimalik vale võti'
+    },
+    uiWiFiNoSSID(ssid) {
+      ssid.class = txtClass.danger
+      ssid.class1 = auxClass.danger
+      ssid.txt = 'sellist võrku pole näha'
+    },
+    uiWiFiConnectFailed(ssid, psk) {
+      ssid.class = txtClass.success
+      ssid.clas1s = auxClass.success
+      psk.class = txtClass.danger
+      psk.class1 = auxClass.danger
+      psk.txt = 'vale võti'
+    },
+    uiWiFiNotConnected(outs) {
+      outs.class = txtClass.warning
+      this.uiGenericSetOutsText(outs)
+    },
+    uiMqttConnectedOrSuccess(ssid, psk, outs) {
+      ssid.class = psk.class = txtClass.success
+      ssid.class1 = psk.class1 = auxClass.success
+      outs.class = txtClass.warning
+      this.uiGenericSetOutsText(outs)
+    },
+    uiGenericRest(ssid, psk, outs) {
+      ssid.txt = psk.txt = outs.txt = ''
+      // These 2 lines should ac as defaults but, need to evaluate more,
+      // whether they can be set after main routine, or count in other steps
+      ssid.class = psk.class = txtClass.greyLight
+      outs.class = ''
+      ssid.class1 = psk.class1 = outs.class1 = ''
+    },
+    uiGenericSetOutsText(outs) {
+      outs.txt = 'pole veel salvestatud'
     }
   }
 }
