@@ -156,7 +156,8 @@ const initStates = {
   IDLE: Symbol('1: IDLE') /* connected */,
   SUCCEED: Symbol('2: SUCCEED'),
   FAILED: Symbol('3: FAILED'),
-  SAVING: Symbol('4: SAVING')
+  SAVING: Symbol('4: SAVING'),
+  UNKNOWN: Symbol('x: UNKNOWN')
 }
 Object.freeze(initStates)
 
@@ -272,7 +273,7 @@ export default {
             ssid.class = psk.class = txtClass.success
             ssid.class1 = psk.class1 = auxClass.success
             outs.class = txtClass.info
-          } else if (desc == 'WL_DISCONNECTED' && state == 3) {
+          } else if (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) {
             ssid.class = psk.class = txtClass.warning
             ssid.class1 = psk.class1 = auxClass.warning
             ssid.txt = 'võimalik vale võrk'
@@ -394,26 +395,16 @@ export default {
     },
     wsBrancheOnProcState(incomingObj) {
       const { state, stateDetails, ...rest } = incomingObj
-      this.handleStateDetails(state, stateDetails)
-      switch (state) {
-        case 1:
-          this.initState = initStates.IDLE
-          this.extractConfig(rest)
-          return
-        case 2:
-          this.initState = initStates.SUCCEED
-          break
-        case 3:
-          this.initState = initStates.FAILED
-          break
-        case 4:
-          this.initState = initStates.SAVING
-          break
-        default:
-          /* invalid response! */
-          this.initState = initStates.FAILED
-          this.additionalText = `IoT init: bad IoT State code ${state}`
-          return
+      this.handleIoTState(state)
+      this.handleStateDetails(stateDetails)
+      if (this.initState == initStates.IDLE) {
+        this.extractConfig(rest)
+        return
+      }
+      if (this.initState == initStates.UNKNOWN) {
+        this.initState = initStates.FAILED
+        this.additionalText = `IoT init: bad IoT State code ${state}`
+        return
       }
       if (!this.hasConfig) {
         rws.send('["get-currentConfig"]')
@@ -447,11 +438,30 @@ export default {
       this.iotType = null
       this.outputs.length = 0
     },
+    handleIoTState(state) {
+      switch (state) {
+        case 1:
+          this.initState = initStates.IDLE
+          return
+        case 2:
+          this.initState = initStates.SUCCEED
+          return
+        case 3:
+          this.initState = initStates.FAILED
+          return
+        case 4:
+          this.initState = initStates.SAVING
+          return
+        default:
+          /* invalid response! */
+          this.initState = initStates.UNKNOWN
+          return
+      }
+    },
     /**
-     * @param {string} state
      * @param {[{}]} details details
      */
-    handleStateDetails(state, details) {
+    handleStateDetails(details) {
       if (!details || details.length == 0) {
         return
       }
@@ -464,7 +474,11 @@ export default {
         const [step, desc] = Object.entries(data)[0]
         this.additionalText += `${step}: ${desc}`
         if (i == iLast) {
-          Object.assign(this.iotLastInitState, { state, step, desc })
+          Object.assign(this.iotLastInitState, {
+            state: this.initState,
+            step,
+            desc
+          })
         }
       })
     }
