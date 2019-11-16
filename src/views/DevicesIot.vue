@@ -442,7 +442,7 @@ export default {
       this.uiGenericRest(ssid, psk, outs)
       switch (step) {
         case 'wifi':
-          if (desc == 'WL_CONNECTED') {
+          if (desc == 'WL_CONNECTED' || desc == 'WL_IDLE_STATUS') {
             this.uiWiFiConnected(ssid, psk, outs)
           } else if (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) {
             this.uiWiFiDisconnectedAndFailed(ssid, psk)
