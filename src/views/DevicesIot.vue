@@ -110,7 +110,16 @@
           <i class="is-italic">Algseadistuse</i> režiimi, umbes 5 sek
           nupuvajutus seadmel.
         </li>
-        <li>Ühendu WiFi võrku, mille nimi (SSID) on sarnane: ESP_XXXXXX.</li>
+        <li>
+          Ühendu WiFi võrku, mille nimi (SSID) on sarnane:
+          <i class="is-italic">ESP_XXXXXX</i>.
+        </li>
+        <ul>
+          <li>
+            Kui paned ajutiselt "ühenda automaatselt", siis on seadistusprotsess
+            mugavam.
+          </li>
+        </ul>
         <li>
           Seejärel oota kuni staatus näitab ühendust ja kuvatakse seadme
           praegune info.
@@ -130,7 +139,13 @@
             <i class="is-italic">Algseadistuse</i> režiimi automaatselt.
           </li>
         </ul>
-        <li>Ühenda tagasi kodu WiFi võrkku.</li>
+        <li>Ühenda oma masin tagasi kodu WiFi võrkku.</li>
+        <ul>
+          <li>
+            Vajadusel pane koduvõrgule tagasi "ühenda automaatselt", kui seda
+            <i class="is-italic">ESP_XXXXXX</i> ühendudes muutsid.
+          </li>
+        </ul>
       </ol>
     </article>
   </section>
