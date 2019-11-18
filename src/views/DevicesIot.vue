@@ -478,6 +478,15 @@ export default {
             this.uiMqttConnectedOrSuccess(ssid, psk, outs)
           }
           return
+        case 'iotnode':
+          if (desc == 'INIT_WAITING_IDS_FROM_API') {
+            this.uiMqttConnectedOrSuccess(ssid, psk, outs)
+          } else if (desc == 'INIT_FAILED_IDS_FROM_API') {
+            this.uiErrorsInApiResponse(ssid, psk, outs)
+          } else if (desc == 'INIT_SUCCESS') {
+            this.uiInitSucceed(ssid, psk, outs)
+          }
+          return
         default:
           return
       }
@@ -507,13 +516,25 @@ export default {
     },
     uiWiFiNotConnected(outs) {
       outs.class = txtClass.warning
-      this.uiGenericSetOutsText(outs)
+      this.uiGenericOutsNotSaved(outs)
     },
     uiMqttConnectedOrSuccess(ssid, psk, outs) {
       ssid.class = psk.class = txtClass.success
       ssid.class1 = psk.class1 = auxClass.success
       outs.class = txtClass.warning
-      this.uiGenericSetOutsText(outs)
+      this.uiGenericOutsNotSaved(outs)
+    },
+    uiErrorsInApiResponse(ssid, psk, outs) {
+      ssid.class = psk.class = txtClass.success
+      ssid.class1 = psk.class1 = auxClass.success
+      outs.class = txtClass.danger
+      outs.class1 = auxClass.danger
+      outs.txt = 'serverisse ei õnnestu salvestada'
+    },
+    uiInitSucceed(ssid, psk, outs) {
+      ssid.class = psk.class = outs.class = txtClass.success
+      ssid.class1 = psk.class1 = outs.class1 = auxClass.success
+      outs.txt = ''
     },
     uiGenericRest(ssid, psk, outs) {
       ssid.txt = psk.txt = outs.txt = ''
@@ -523,7 +544,7 @@ export default {
       outs.class = ''
       ssid.class1 = psk.class1 = outs.class1 = ''
     },
-    uiGenericSetOutsText(outs) {
+    uiGenericOutsNotSaved(outs) {
       outs.txt = 'pole veel salvestatud'
     }
   }
