@@ -271,6 +271,11 @@ export default {
     }
   },
   watch: {
+    iotConnected: function(val) {
+      if (!val) {
+        this.uiGenericRest()
+      }
+    },
     iotLastInitState: {
       immediate: true,
       deep: true,
@@ -454,7 +459,7 @@ export default {
     },
     handleUIChangesOnIoTState({ state, step, desc }) {
       const { ssidState: ssid, pskState: psk, outputsState: outs } = this
-      this.uiGenericRest(ssid, psk, outs)
+      this.uiGenericRest()
       switch (step) {
         case 'wifi':
           if (desc == 'WL_CONNECTED' || desc == 'WL_IDLE_STATUS') {
@@ -536,13 +541,15 @@ export default {
       ssid.class1 = psk.class1 = outs.class1 = auxClass.success
       outs.txt = ''
     },
-    uiGenericRest(ssid, psk, outs) {
-      ssid.txt = psk.txt = outs.txt = ''
+    uiGenericRest() {
+      this.ssidState, this.pskState, this.outputsState
+      this.ssidState.txt = this.pskState.txt = this.outputsState.txt = ''
       // These 2 lines should ac as defaults but, need to evaluate more,
       // whether they can be set after main routine, or count in other steps
-      ssid.class = psk.class = txtClass.greyLight
-      outs.class = ''
-      ssid.class1 = psk.class1 = outs.class1 = ''
+      this.ssidState.class = this.pskState.class = txtClass.greyLight
+      this.outputsState.class = ''
+      this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
+        ''
     },
     uiGenericOutsNotSaved(outs) {
       outs.txt = 'pole veel salvestatud'
