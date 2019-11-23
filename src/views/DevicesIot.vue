@@ -481,6 +481,8 @@ export default {
             desc == 'LWMQTT_SUCCESS'
           ) {
             this.uiMqttConnectedOrSuccess(ssid, psk, outs)
+          } else if (desc == '__PUBLISH_FAILED') {
+            this.uiMqttConnectedOrSuccess(ssid, psk, outs)
           }
           return
         case 'iotnode':
