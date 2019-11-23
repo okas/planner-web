@@ -458,21 +458,20 @@ export default {
       })
     },
     handleUIChangesOnIoTState({ state, step, desc }) {
-      const { ssidState: ssid, pskState: psk, outputsState: outs } = this
       this.uiGenericRest()
       switch (step) {
         case 'wifi':
           if (desc == 'WL_CONNECTED' || desc == 'WL_IDLE_STATUS') {
-            this.uiWiFiConnected(ssid, psk, outs)
+            this.uiWiFiConnected()
           } else if (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) {
-            this.uiWiFiDisconnectedAndFailed(ssid, psk)
+            this.uiWiFiDisconnectedAndFailed()
           } else if (desc == 'WL_NO_SSID_AVAIL') {
-            this.uiWiFiNoSSID(ssid)
+            this.uiWiFiNoSSID()
           } else if (desc == 'WL_CONNECT_FAILED') {
-            this.uiWiFiConnectFailed(ssid, psk)
+            this.uiWiFiConnectFailed()
           }
           if (desc != 'WL_CONNECTED') {
-            this.uiWiFiNotConnected(outs)
+            this.uiWiFiNotConnected()
           }
           return
         case 'mqtt':
@@ -480,71 +479,72 @@ export default {
             desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
             desc == 'LWMQTT_SUCCESS'
           ) {
-            this.uiMqttConnectedOrSuccess(ssid, psk, outs)
+            this.uiMqttConnectedOrSuccess()
           } else if (desc == '__PUBLISH_FAILED') {
-            this.uiMqttConnectedOrSuccess(ssid, psk, outs)
+            this.uiMqttConnectedOrSuccess()
           }
           return
         case 'iotnode':
           if (desc == 'INIT_WAITING_IDS_FROM_API') {
-            this.uiMqttConnectedOrSuccess(ssid, psk, outs)
+            this.uiMqttConnectedOrSuccess()
           } else if (desc == 'INIT_FAILED_IDS_FROM_API') {
-            this.uiErrorsInApiResponse(ssid, psk, outs)
+            this.uiErrorsInApiResponse()
           } else if (desc == 'INIT_SUCCESS') {
-            this.uiInitSucceed(ssid, psk, outs)
+            this.uiInitSucceed()
           }
           return
         default:
           return
       }
     },
-    uiWiFiConnected(ssid, psk, outs) {
-      ssid.class = psk.class = txtClass.success
-      ssid.class1 = psk.class1 = auxClass.success
-      outs.class = txtClass.info
+    uiWiFiConnected() {
+      this.ssidState.class = this.pskState.class = txtClass.success
+      this.ssidState.class1 = this.pskState.class1 = auxClass.success
+      this.outputsState.class = txtClass.info
     },
-    uiWiFiDisconnectedAndFailed(ssid, psk) {
-      ssid.class = psk.class = txtClass.warning
-      ssid.class1 = psk.class1 = auxClass.warning
-      ssid.txt = 'võimalik vale võrk'
-      psk.txt = 'võimalik vale võti'
+    uiWiFiDisconnectedAndFailed() {
+      this.ssidState.class = this.pskState.class = txtClass.warning
+      this.ssidState.class1 = this.pskState.class1 = auxClass.warning
+      this.ssidState.txt = 'võimalik vale võrk'
+      this.pskState.txt = 'võimalik vale võti'
     },
-    uiWiFiNoSSID(ssid) {
-      ssid.class = txtClass.danger
-      ssid.class1 = auxClass.danger
-      ssid.txt = 'sellist võrku pole näha'
+    uiWiFiNoSSID() {
+      this.ssidState.class = txtClass.danger
+      this.ssidState.class1 = auxClass.danger
+      this.ssidState.txt = 'sellist võrku pole näha'
     },
-    uiWiFiConnectFailed(ssid, psk) {
-      ssid.class = txtClass.success
-      ssid.clas1s = auxClass.success
-      psk.class = txtClass.danger
-      psk.class1 = auxClass.danger
-      psk.txt = 'vale võti'
+    uiWiFiConnectFailed() {
+      this.ssidState.class = txtClass.success
+      this.ssidState.clas1s = auxClass.success
+      this.pskState.class = txtClass.danger
+      this.pskState.class1 = auxClass.danger
+      this.pskState.txt = 'vale võti'
     },
-    uiWiFiNotConnected(outs) {
-      outs.class = txtClass.warning
-      this.uiGenericOutsNotSaved(outs)
+    uiWiFiNotConnected() {
+      this.outputsState.class = txtClass.warning
+      this.uiGenericOutsNotSaved()
     },
-    uiMqttConnectedOrSuccess(ssid, psk, outs) {
-      ssid.class = psk.class = txtClass.success
-      ssid.class1 = psk.class1 = auxClass.success
-      outs.class = txtClass.warning
-      this.uiGenericOutsNotSaved(outs)
+    uiMqttConnectedOrSuccess() {
+      this.ssidState.class = this.pskState.class = txtClass.success
+      this.ssidState.class1 = this.pskState.class1 = auxClass.success
+      this.outputsState.class = txtClass.warning
+      this.uiGenericOutsNotSaved()
     },
-    uiErrorsInApiResponse(ssid, psk, outs) {
-      ssid.class = psk.class = txtClass.success
-      ssid.class1 = psk.class1 = auxClass.success
-      outs.class = txtClass.danger
-      outs.class1 = auxClass.danger
-      outs.txt = 'serverisse ei õnnestu salvestada'
+    uiErrorsInApiResponse() {
+      this.ssidState.class = this.pskState.class = txtClass.success
+      this.ssidState.class1 = this.pskState.class1 = auxClass.success
+      this.outputsState.class = txtClass.danger
+      this.outputsState.class1 = auxClass.danger
+      this.outputsState.txt = 'serverisse ei õnnestu salvestada'
     },
-    uiInitSucceed(ssid, psk, outs) {
-      ssid.class = psk.class = outs.class = txtClass.success
-      ssid.class1 = psk.class1 = outs.class1 = auxClass.success
-      outs.txt = ''
+    uiInitSucceed() {
+      this.ssidState.class = this.pskState.class = this.outputsState.class =
+        txtClass.success
+      this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
+        auxClass.success
+      this.outputsState.txt = ''
     },
     uiGenericRest() {
-      this.ssidState, this.pskState, this.outputsState
       this.ssidState.txt = this.pskState.txt = this.outputsState.txt = ''
       // These 2 lines should ac as defaults but, need to evaluate more,
       // whether they can be set after main routine, or count in other steps
@@ -553,8 +553,8 @@ export default {
       this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
         ''
     },
-    uiGenericOutsNotSaved(outs) {
-      outs.txt = 'pole veel salvestatud'
+    uiGenericOutsNotSaved() {
+      this.outputsState.txt = 'pole veel salvestatud'
     }
   }
 }
