@@ -28,77 +28,99 @@
           v-text="additionalText"
         />
       </article>
-      <article class="column">
-        <header>
-          <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
-        </header>
-        <form autocomplete="on" @submit.prevent="wsSendIotInitData">
-          <fieldset :disabled="!iotConnected">
-            <div class="field">
-              <label :class="['label', ssidState.class]">SSID</label>
-              <div class="control">
-                <input
-                  v-model="ssid"
-                  :class="['input', ssidState.class1]"
-                  type="text"
-                  placeholder="sisesta võrgu nimi"
-                  minlength="1"
-                  maxlength="32"
-                  required
-                />
+      <div class="column">
+        <article>
+          <header>
+            <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
+          </header>
+          <form autocomplete="on" @submit.prevent="wsSendIotInitData">
+            <fieldset :disabled="!iotConnected">
+              <div class="field">
+                <label :class="['label', ssidState.class]">SSID</label>
+                <div class="control">
+                  <input
+                    v-model="ssid"
+                    :class="['input', ssidState.class1]"
+                    type="text"
+                    placeholder="sisesta võrgu nimi"
+                    minlength="1"
+                    maxlength="32"
+                    required
+                  />
+                </div>
+                <help v-bind="ssidState" />
               </div>
-              <help v-bind="ssidState" />
-            </div>
-            <div class="field">
-              <label :class="['label', pskState.class]">Võti</label>
-              <div class="control">
-                <input
-                  v-model="psk"
-                  :class="['input', pskState.class1]"
-                  type="password"
-                  placeholder="sisesta võti"
-                  minlength="8"
-                  maxlength="64"
-                  required
-                />
+              <div class="field">
+                <label :class="['label', pskState.class]">Võti</label>
+                <div class="control">
+                  <input
+                    v-model="psk"
+                    :class="['input', pskState.class1]"
+                    type="password"
+                    placeholder="sisesta võti"
+                    minlength="8"
+                    maxlength="64"
+                    required
+                  />
+                </div>
+                <help v-bind="pskState" />
               </div>
-              <help v-bind="pskState" />
-            </div>
-            <div class="field">
-              <label :class="['label', outputsState.class]">Väljundid</label>
-              <div class="filed-body">
-                <div class="field is-horizontal">
-                  <tree-select
-                    v-for="o of outputs"
-                    :key="o.id"
-                    v-model="o.value"
-                    :options="$options.deviceTypes"
-                    :placeholder="`${o.id}: vali...`"
-                  >
-                    <div
-                      slot="value-label"
-                      slot-scope="{ node }"
-                      :class="[
-                        { 'has-text-weight-semibold': o.id },
-                        outputsState.class || (o.id ? 'has-text-info' : '')
-                      ]"
-                      v-text="`${o.id}: ${node.label}`"
-                    />
-                  </tree-select>
+              <div class="field">
+                <label :class="['label', outputsState.class]">Väljundid</label>
+                <div class="filed-body">
+                  <div class="field is-horizontal">
+                    <tree-select
+                      v-for="o of outputs"
+                      :key="o.id"
+                      v-model="o.value"
+                      :options="$options.deviceTypes"
+                      :placeholder="`${o.id}: vali...`"
+                    >
+                      <div
+                        slot="value-label"
+                        slot-scope="{ node }"
+                        :class="[
+                          { 'has-text-weight-semibold': o.id },
+                          outputsState.class || (o.id ? 'has-text-info' : '')
+                        ]"
+                        v-text="`${o.id}: ${node.label}`"
+                      />
+                    </tree-select>
+                  </div>
+                </div>
+                <help v-bind="outputsState" />
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-primary">
+                    Seadista
+                  </button>
                 </div>
               </div>
-              <help v-bind="outputsState" />
-            </div>
-            <div class="field">
-              <div class="control">
-                <button type="submit" class="button is-primary">
-                  Seadista
-                </button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      </article>
+            </fieldset>
+          </form>
+        </article>
+        <article>
+          <header>
+            <h5 class="subtitle is-5">Vead serverisse salestamisel</h5>
+          </header>
+          <ul>
+            <li
+              v-for="(error, i) of serverErrors"
+              :key="i"
+              style="border: 1px solid black"
+            >
+              <samp v-text="error" />
+            </li>
+          </ul>
+          <header>
+            <h5 class="subtitle is-5">Serveris olevad seadistused</h5>
+          </header>
+          <p>Paistab selle selle IoT seadme info on serveris olemas</p>
+          <h6 class="subtitle is-6">Kas kirjutame serveri seadistuse üle?</h6>
+          <pre v-text="serverExistingConfig" />
+        </article>
+      </div>
     </div>
     <article>
       <header>
@@ -251,7 +273,9 @@ export default {
       iotLastInitState: { state: '', step: '', desc: '' },
       ssidState: { class: '', txt: '', class1: '' },
       pskState: { class: '', txt: '', class1: '' },
-      outputsState: { class: '', txt: '', class1: '' }
+      outputsState: { class: '', txt: '', class1: '' },
+      serverErrors: [],
+      serverExistingConfig: ''
     }
   },
   computed: {
@@ -326,6 +350,13 @@ export default {
         )
       ]
     ])
+    const test = JSON.parse(
+      `{"id":"bcddc29d6497","iottype":"generic-2out","outputs":[{"id":6604002963763495000,"usage":"lamp"},{"id":6604002963767689000,"usage":"blind"}]}`
+    )
+    this.serverExistingConfig = JSON.stringify(test, null, 2)
+    this.serverErrors = JSON.parse(
+      `["attempted object didn't have valid {[output.id]} value: '0'","data mismatch, {[output.id]}: incoming has {0}; database has '6604002963763495000'","attempted object didn't have valid {[output.id]} value: '0'","data mismatch, {[output.id]}: incoming has {0}; database has '6604002963767689000'"]`
+    )
   },
   mounted() {
     rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
@@ -372,14 +403,17 @@ export default {
       const { state, stateDetails, ...rest } = incomingObj
       this.handleIoTState(state)
       this.handleStateDetails(stateDetails)
-      if (this.initState == initStates.IDLE) {
-        this.extractConfig(rest)
-        return
-      }
-      if (this.initState == initStates.UNKNOWN) {
-        this.initState = initStates.FAILED
-        this.additionalText = `IoT init: bad IoT State code ${state}`
-        return
+      switch (this.initState) {
+        case initStates.FAILED:
+          this.handleInitErrors(rest)
+          return
+        case initStates.IDLE:
+          this.extractConfig(rest)
+          return
+        case initStates.UNKNOWN:
+          this.initState = initStates.FAILED
+          this.additionalText = `IoT init: bad IoT State code ${state}`
+          return
       }
       if (!this.hasConfig) {
         rws.send('["get-currentConfig"]')
@@ -456,6 +490,15 @@ export default {
           })
         }
       })
+    },
+    // handleInitErrors({ errors, existing, ...unknown }) {
+    handleInitErrors({ apiresults: { errors, existing }, ...other }) {
+      if (errors) {
+        this.serverErrors = errors
+      }
+      if (existing) {
+        this.serverExistingConfig = JSON.stringify(existing, null, 2)
+      }
     },
     handleUIChangesOnIoTState({ state, step, desc }) {
       this.uiGenericRest()
