@@ -19,8 +19,20 @@
             </span>
           </span>
         </p>
-        <p>Seadme tunnus: {{ iotDeviceId }}</p>
-        <p>IoT tüüp: {{ iotType }}</p>
+        <p>
+          Seadme tunnus:
+          <samp style="border: 1px solid black" v-text="iotDeviceId" />
+        </p>
+        <p>
+          IoT tüüp: <samp style="border: 1px solid black" v-text="iotType" />
+        </p>
+        <p>
+          Serveris olemas:
+          <samp
+            style="border: 1px solid black"
+            v-text="isInServer ? 'jah' : 'ilmselt ei'"
+          />
+        </p>
         <p>Edenemine:</p>
         <pre
           class="additional-text"
@@ -69,23 +81,31 @@
                 <label :class="['label', outputsState.class]">Väljundid</label>
                 <div class="filed-body">
                   <div class="field is-horizontal">
-                    <tree-select
-                      v-for="o of outputs"
-                      :key="o.id"
-                      v-model="o.value"
-                      :options="$options.deviceTypes"
-                      :placeholder="`${o.id}: vali...`"
-                    >
-                      <div
-                        slot="value-label"
-                        slot-scope="{ node }"
+                    <div v-for="o of outputs" :key="o._id" class="output">
+                      <label
                         :class="[
-                          { 'has-text-weight-semibold': o.id },
-                          outputsState.class || (o.id ? 'has-text-info' : '')
+                          'output--label label help',
+                          o.id ? outputsState.class : 'has-text-warning'
                         ]"
-                        v-text="`${o.id}: ${node.label}`"
+                        v-text="`id: ${o.id}`"
                       />
-                    </tree-select>
+                      <tree-select
+                        v-model="o.usage"
+                        class="output--control"
+                        :options="$options.deviceTypes"
+                        :placeholder="`${o._id}: vali...`"
+                      >
+                        <div
+                          slot="value-label"
+                          slot-scope="{ node }"
+                          :class="[
+                            { 'has-text-weight-semibold': o._id },
+                            outputsState.class || (o._id ? 'has-text-info' : '')
+                          ]"
+                          v-text="`${o._id}: ${node.label}`"
+                        />
+                      </tree-select>
+                    </div>
                   </div>
                 </div>
                 <help v-bind="outputsState" />
@@ -262,7 +282,7 @@ export default {
       ssid: '',
       /** @type {String} */
       psk: '',
-      /** @type {Array.<{id: Number, value: String}>} */
+      /** @type {Array.<{id: Number; usage: string; _id: number}>} */
       outputs: [],
       /** @type {Symbol} */
       initState: initStates.OFFLINE,
@@ -274,7 +294,9 @@ export default {
       ssidState: { class: '', txt: '', class1: '' },
       pskState: { class: '', txt: '', class1: '' },
       outputsState: { class: '', txt: '', class1: '' },
+      /** @type {string[]} */
       serverErrors: [],
+      /** @type {string} */
       serverExistingConfig: ''
     }
   },
@@ -286,6 +308,9 @@ export default {
       return (
         this.ssid && this.outputs.length > 0 && this.iotType && this.iotDeviceId
       )
+    },
+    isInServer() {
+      return this.outputs.every(({ id }) => id)
     },
     stateData() {
       return this.initStateData.get(this.initState)
@@ -350,13 +375,13 @@ export default {
         )
       ]
     ])
-    const test = JSON.parse(
-      `{"id":"bcddc29d6497","iottype":"generic-2out","outputs":[{"id":6604002963763495000,"usage":"lamp"},{"id":6604002963767689000,"usage":"blind"}]}`
-    )
-    this.serverExistingConfig = JSON.stringify(test, null, 2)
-    this.serverErrors = JSON.parse(
-      `["attempted object didn't have valid {[output.id]} value: '0'","data mismatch, {[output.id]}: incoming has {0}; database has '6604002963763495000'","attempted object didn't have valid {[output.id]} value: '0'","data mismatch, {[output.id]}: incoming has {0}; database has '6604002963767689000'"]`
-    )
+    // const test = JSON.parse(
+    //   '{"id":"bcddc29d6497","iottype":"generic-2out","outputs":[{"id":6604002963763495000,"usage":"lamp"},{"id":6604002963767689000,"usage":"blind"}]}'
+    // )
+    // this.serverExistingConfig = JSON.stringify(test, null, 2)
+    // this.serverErrors = JSON.parse(
+    //   "[\"attempted object didn't have valid {[output.id]} value: '0'\",\"data mismatch, {[output.id]}: incoming has {0}; database has '6604002963763495000'\",\"attempted object didn't have valid {[output.id]} value: '0'\",\"data mismatch, {[output.id]}: incoming has {0}; database has '6604002963767689000'\"]"
+    // )
   },
   mounted() {
     rws = new ReconnectingWebSocket('ws://192.168.4.1:81', [], {
@@ -426,7 +451,7 @@ export default {
         {
           ssid: this.ssid,
           psk: this.psk,
-          outputs: this.outputs.map(o => o.value)
+          outputs: this.outputs.map(({ _id, ...restOutput }) => restOutput)
         }
       ])
       rws.send(payload)
@@ -438,7 +463,11 @@ export default {
       this.ssid = ssid
       this.psk = psk
       /* Default value: null is for TreeSelect Component better behavior. */
-      this.outputs = outputs.map((v, i) => ({ id: ++i, value: v || null }))
+      this.outputs = outputs.map(({ id, usage }, i) => ({
+        id,
+        usage: usage || null,
+        _id: ++i
+      }))
     },
     clearConfig() {
       this.iotDeviceId = null
