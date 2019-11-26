@@ -589,10 +589,8 @@ export default {
     },
     uiGenericRest() {
       this.ssidState.txt = this.pskState.txt = this.outputsState.txt = ''
-      // These 2 lines should ac as defaults but, need to evaluate more,
-      // whether they can be set after main routine, or count in other steps
-      this.ssidState.class = this.pskState.class = txtClass.greyLight
-      this.outputsState.class = ''
+      this.ssidState.class = this.pskState.class = this.outputsState.class =
+        txtClass.greyLight
       this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
         ''
     },
