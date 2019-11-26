@@ -406,14 +406,14 @@ export default {
       switch (this.initState) {
         case initStates.FAILED:
           this.handleInitErrors(rest)
-          return
+          break
         case initStates.IDLE:
           this.extractConfig(rest)
           return
         case initStates.UNKNOWN:
           this.initState = initStates.FAILED
           this.additionalText = `IoT init: bad IoT State code ${state}`
-          return
+          break
       }
       if (!this.hasConfig) {
         rws.send('["get-currentConfig"]')
