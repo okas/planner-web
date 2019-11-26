@@ -492,7 +492,7 @@ export default {
       })
     },
     // handleInitErrors({ errors, existing, ...unknown }) {
-    handleInitErrors({ apiresults: { errors, existing }, ...other }) {
+    handleInitErrors({ apiresult: { errors, existing } = {}, ...other }) {
       if (errors) {
         this.serverErrors = errors
       }
