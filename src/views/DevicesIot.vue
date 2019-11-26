@@ -21,15 +21,19 @@
         </p>
         <p>
           Seadme tunnus:
-          <samp style="border: 1px solid black" v-text="iotDeviceId" />
+          <samp
+            :class="{ 'status--value': iotDeviceId }"
+            v-text="iotDeviceId"
+          />
         </p>
         <p>
-          IoT tüüp: <samp style="border: 1px solid black" v-text="iotType" />
+          IoT tüüp:
+          <samp :class="{ 'status--value': iotType }" v-text="iotType" />
         </p>
         <p>
           Serveris olemas:
           <samp
-            style="border: 1px solid black"
+            :class="{ 'status--value': isInServer }"
             v-text="isInServer ? 'jah' : 'ilmselt ei'"
           />
         </p>
@@ -640,5 +644,8 @@ ul {
 }
 .additional-text {
   padding: 0.5rem 0.75rem;
+}
+.status--value {
+  border: 1px solid black;
 }
 </style>
