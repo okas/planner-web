@@ -79,7 +79,7 @@
           />
         </div>
         <div v-if="showRemoveButton" class="control">
-          <button-remove-confirm
+          <button-confirm-remove
             v-model="showDependents"
             class="is-outlined"
             :title="removeConfirmTitle"
@@ -95,10 +95,10 @@
 import { MODE_MODIFY } from '../constants/uiEditorConstants'
 import { FocusDirectiveMixin } from '../directives/focus'
 import ButtonOk from '../components/ButtonOk'
-import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
+import ButtonConfirmRemove from '../components/ButtonConfirmAction'
 
 export default {
-  components: { ButtonOk, ButtonRemoveConfirm },
+  components: { ButtonOk, ButtonConfirmRemove },
   mixins: [FocusDirectiveMixin],
   props: {
     mode: { type: String, default: null },

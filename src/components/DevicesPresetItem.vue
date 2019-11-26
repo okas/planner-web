@@ -19,7 +19,7 @@
         <label :for="`act${preset.id}`" />
       </div>
       <div class="control">
-        <button-remove-confirm
+        <button-confirm-remove
           class="is-small is-outlined"
           default-state-class="is-light"
           title="Kustuta automaattoiming"
@@ -75,11 +75,11 @@ import { i18SelectMixin } from '../plugins/vue-i18n-select/'
 import { disabled } from '../mixins/ioNotConnected'
 import cronstrue from 'cronstrue/i18n'
 import ButtonEdit from '../components/ButtonEdit'
-import ButtonRemoveConfirm from '../components/ButtonRemoveConfirm'
+import ButtonConfirmRemove from '../components/ButtonConfirmAction'
 import Device from '../components/DevicesPresetItemDevice'
 
 export default {
-  components: { ButtonRemoveConfirm, ButtonEdit, Device },
+  components: { ButtonConfirmRemove, ButtonEdit, Device },
   mixins: [i18SelectMixin, disabled],
   inject: ['getDevName'],
   props: { preset: { type: Object, required: true } },

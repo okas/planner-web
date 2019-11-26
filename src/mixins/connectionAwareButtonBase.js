@@ -1,4 +1,4 @@
-import { disabled, removeDOMListeners } from '../mixins/ioNotConnected'
+import { disabled, removeDOMListeners } from './ioNotConnected'
 
 export default {
   mixins: [disabled, removeDOMListeners],

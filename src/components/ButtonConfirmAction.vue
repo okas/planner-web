@@ -15,13 +15,12 @@
 </template>
 
 <script>
-import buttonBase from '../mixins/buttonBase'
+import connectionAwareButtonBase from '../mixins/connectionAwareButtonBase'
 
 export default {
-  mixins: [buttonBase],
+  mixins: [connectionAwareButtonBase],
   model: { event: 'change' },
   props: {
-    tag: { type: String, default: 'a' },
     value: { type: Boolean, default: false },
     askTimeout: { type: Number, default: 0 },
     defaultStateClass: { type: String, default: 'is-warning' }

@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import buttonBase from '../mixins/buttonBase'
+import connectionAwareButtonBase from '../mixins/connectionAwareButtonBase'
 
 export default {
-  mixins: [buttonBase]
+  mixins: [connectionAwareButtonBase]
 }
 </script>
