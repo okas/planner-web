@@ -110,7 +110,7 @@
                           slot-scope="{ node }"
                           :class="[
                             { 'has-text-weight-semibold': output._id },
-                            outputsState.class || (output._id ? 'has-text-info' : '')
+                            output._id ? outputsState.class2 : ''
                           ]"
                           v-text="`${output._id}: ${node.label}`"
                         />
@@ -303,7 +303,7 @@ export default {
       iotLastInitState: { state: '', step: '', desc: '' },
       ssidState: { class: '', txt: '', class1: '' },
       pskState: { class: '', txt: '', class1: '' },
-      outputsState: { class: '', txt: '', class1: '' },
+      outputsState: { class: '', txt: '', class1: '', class2: '' },
       /** @type {string[]} */
       serverErrors: [],
       /** @type {string} */
@@ -603,35 +603,36 @@ export default {
       this.pskState.txt = 'vale võti'
     },
     uiWiFiNotConnected() {
-      this.outputsState.class = txtClass.warning
+      this.outputsState.class = this.outputsState.class2 = txtClass.warning
       this.uiGenericOutsNotSaved()
     },
     uiMqttConnectedOrSuccess() {
       this.ssidState.class = this.pskState.class = txtClass.success
       this.ssidState.class1 = this.pskState.class1 = auxClass.success
-      this.outputsState.class = txtClass.warning
+      this.outputsState.class = this.outputsState.class2 = txtClass.warning
       this.uiGenericOutsNotSaved()
     },
     uiErrorsInApiResponse() {
       this.ssidState.class = this.pskState.class = txtClass.success
       this.ssidState.class1 = this.pskState.class1 = auxClass.success
-      this.outputsState.class = txtClass.danger
+      this.outputsState.class = this.outputsState.class2 = txtClass.danger
       this.outputsState.class1 = auxClass.danger
       this.outputsState.txt = 'serverisse ei õnnestu salvestada'
     },
     uiInitSucceed() {
-      this.ssidState.class = this.pskState.class = this.outputsState.class =
+      this.ssidState.class = this.pskState.class = this.outputsState.class = this.outputsState.class2 =
         txtClass.success
       this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
         auxClass.success
       this.outputsState.txt = ''
     },
-    uiGenericRest() {
+    uiGenericReset() {
       this.ssidState.txt = this.pskState.txt = this.outputsState.txt = ''
       this.ssidState.class = this.pskState.class = this.outputsState.class =
         txtClass.greyLight
       this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
         ''
+      this.outputsState.class2 = txtClass.info
     },
     uiGenericOutsNotSaved() {
       this.outputsState.txt = 'pole veel salvestatud'
