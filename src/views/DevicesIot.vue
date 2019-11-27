@@ -489,8 +489,8 @@ export default {
       this.iotType = null
       this.outputs.length = 0
     },
-    handleIoTState(state) {
-      switch (state) {
+    handleIoTState(stateCode) {
+      switch (stateCode) {
         case 1:
           this.initState = initStates.IDLE
           return
@@ -512,13 +512,13 @@ export default {
     /**
      * @param {[{}]} details details
      */
-    handleStateDetails(details) {
-      if (!details || details.length == 0) {
+    handleStateDetails(stateDetails) {
+      if (!stateDetails || stateDetails.length == 0) {
         return
       }
       const notEmpty = !!this.additionalText.length
-      const iLast = details.length - 1
-      details.forEach((data, i) => {
+      const iLast = stateDetails.length - 1
+      stateDetails.forEach((data, i) => {
         if (i != 0 || notEmpty) {
           this.additionalText += '\n'
         }
