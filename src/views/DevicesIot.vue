@@ -315,7 +315,10 @@ export default {
     },
     hasConfig() {
       return (
-        this.ssid && this.outputs.length > 0 && this.iotType && this.iotDeviceId
+        !!this.ssid &&
+        this.outputs.length > 0 &&
+        !!this.iotType &&
+        !!this.iotDeviceId
       )
     },
     isInServer() {
