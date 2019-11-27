@@ -322,7 +322,10 @@ export default {
       )
     },
     isInServer() {
-      return this.outputs.length > 0 && this.outputs.every(({ id }) => !!id)
+      return (
+        this.hasServerExistingConfig ||
+        (this.outputs.length > 0 && this.outputs.every(({ id }) => !!id))
+      )
     },
     stateData() {
       return this.initStateData.get(this.initState)
