@@ -427,30 +427,33 @@ export default {
     },
     wsMessageHandler(wsEvent) {
       console.log(wsEvent)
-      const [subject, objData] = JSON.parse(wsEvent.data)
+      const [subject, { state, stateDetails, ...objData }] = JSON.parse(
+        wsEvent.data
+      )
+      this.handleIoTState(state)
+      this.handleStateDetails(stateDetails)
       switch (subject) {
+        case 'set-initValuesUpdate-R':
+        // TOTO: here: this.serverExistingConfig. Clear existing, when response is OK
         case 'get-initState-R':
         case 'set-initValues-R':
-          this.wsBrancheOnProcState(objData)
+          this.wsBrancheOnProcState(state, objData)
           break
         case 'get-currentConfig-R':
           this.extractConfig(objData)
       }
     },
-    wsBrancheOnProcState(incomingObj) {
-      const { state, stateDetails, ...rest } = incomingObj
-      this.handleIoTState(state)
-      this.handleStateDetails(stateDetails)
+    wsBrancheOnProcState(stateCode, objData) {
       switch (this.initState) {
         case initStates.FAILED:
-          this.handleInitErrors(rest)
+          this.handleInitErrors(objData)
           break
         case initStates.IDLE:
-          this.extractConfig(rest)
+          this.extractConfig(objData)
           return
         case initStates.UNKNOWN:
           this.initState = initStates.FAILED
-          this.additionalText = `IoT init: bad IoT State code ${state}`
+          this.additionalText = `IoT init: bad IoT State code ${stateCode}`
           break
       }
       if (!this.hasConfig) {
