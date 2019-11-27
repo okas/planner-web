@@ -473,7 +473,7 @@ export default {
       }
     },
     /**
-     * @param {[{}]} details details
+     * @param {[{}]} stateDetails details
      */
     handleStateDetails(stateDetails) {
       if (!stateDetails || stateDetails.length == 0) {
