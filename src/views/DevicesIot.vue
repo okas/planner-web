@@ -330,8 +330,11 @@ export default {
     ioIconTitle() {
       return this.iotConnected ? 'IoT seadmega ühendatud' : 'Pole IoT ühendust'
     },
-    serverExistingConfigJSONString() {
+    hasServerExistingConfig() {
       return Object.entries(this.serverExistingConfig).length > 0
+    },
+    serverExistingConfigJSONString() {
+      return this.hasServerExistingConfig
         ? JSON.stringify(this.serverExistingConfig, null, 2)
         : ''
     }
