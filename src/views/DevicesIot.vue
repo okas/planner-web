@@ -95,7 +95,7 @@
                       <label
                         :class="[
                           'output--label label help',
-                          output.id ? outputsState.class : 'has-text-warning'
+                          outputsState.class
                         ]"
                         v-text="`id: ${output.id}`"
                       />
