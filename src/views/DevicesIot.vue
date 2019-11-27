@@ -82,7 +82,9 @@
                 <help v-bind="pskState" />
               </div>
               <div class="field">
-                <label :class="['label', outputsState.class]">Väljundid</label>
+                <label :class="['label', outputsState.class]"
+                  >Väljundid (serverist)</label
+                >
                 <div class="filed-body">
                   <div class="field is-horizontal">
                     <div v-for="o of outputs" :key="o._id" class="output">
