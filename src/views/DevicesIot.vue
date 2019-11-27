@@ -87,28 +87,32 @@
                 >
                 <div class="filed-body">
                   <div class="field is-horizontal">
-                    <div v-for="o of outputs" :key="o._id" class="output">
+                    <div
+                      v-for="output of outputs"
+                      :key="output._id"
+                      class="output"
+                    >
                       <label
                         :class="[
                           'output--label label help',
-                          o.id ? outputsState.class : 'has-text-warning'
+                          output.id ? outputsState.class : 'has-text-warning'
                         ]"
-                        v-text="`id: ${o.id}`"
+                        v-text="`id: ${output.id}`"
                       />
                       <tree-select
-                        v-model="o.usage"
+                        v-model="output.usage"
                         class="output--control"
                         :options="$options.deviceTypes"
-                        :placeholder="`${o._id}: vali...`"
+                        :placeholder="`${output._id}: vali...`"
                       >
                         <div
                           slot="value-label"
                           slot-scope="{ node }"
                           :class="[
-                            { 'has-text-weight-semibold': o._id },
-                            outputsState.class || (o._id ? 'has-text-info' : '')
+                            { 'has-text-weight-semibold': output._id },
+                            outputsState.class || (output._id ? 'has-text-info' : '')
                           ]"
-                          v-text="`${o._id}: ${node.label}`"
+                          v-text="`${output._id}: ${node.label}`"
                         />
                       </tree-select>
                     </div>
