@@ -33,7 +33,7 @@
         <p>
           Serveris olemas:
           <samp
-            :class="{ 'status--value': isInServer }"
+            class="status--value"
             v-text="isInServer ? 'jah' : 'ilmselt ei'"
           />
         </p>
