@@ -336,7 +336,7 @@ export default {
   watch: {
     iotConnected: function(val) {
       if (!val) {
-        this.uiGenericRest()
+        this.uiGenericReset()
       }
     },
     iotLastInitState: {
@@ -543,7 +543,7 @@ export default {
       }
     },
     handleUIChangesOnIoTState({ state, step, desc }) {
-      this.uiGenericRest()
+      this.uiGenericReset()
       switch (step) {
         case 'wifi':
           if (desc == 'WL_CONNECTED' || desc == 'WL_IDLE_STATUS') {
