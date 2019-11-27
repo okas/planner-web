@@ -478,10 +478,12 @@ export default {
       this.iotType = iotTypes[iotType]
       this.ssid = ssid
       this.psk = psk
-      /* Default value: null is for TreeSelect Component better behavior. */
+      this.extractConfigOutputs(outputs)
+    },
+    extractConfigOutputs(outputs) {
       this.outputs = outputs.map(({ id, usage }, i) => ({
         id,
-        usage: usage || null,
+        usage: usage || null, // Default value: null is for TreeSelect Component better behavior
         _id: ++i
       }))
     },
