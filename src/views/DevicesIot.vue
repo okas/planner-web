@@ -148,7 +148,7 @@
           </header>
           <p>Paistab selle selle IoT seadme info on serveris olemas</p>
           <h6 class="subtitle is-6">Kas kirjutame serveri seadistuse üle?</h6>
-          <pre v-text="serverExistingConfig" />
+          <pre v-text="serverExistingConfigJSONString" />
         </article>
       </div>
     </div>
@@ -306,8 +306,7 @@ export default {
       outputsState: { class: '', txt: '', class1: '', class2: '' },
       /** @type {string[]} */
       serverErrors: [],
-      /** @type {string} */
-      serverExistingConfig: ''
+      serverExistingConfig: {}
     }
   },
   computed: {
@@ -327,6 +326,11 @@ export default {
     },
     ioIconTitle() {
       return this.iotConnected ? 'IoT seadmega ühendatud' : 'Pole IoT ühendust'
+    },
+    serverExistingConfigJSONString() {
+      return Object.entries(this.serverExistingConfig).length > 0
+        ? JSON.stringify(this.serverExistingConfig, null, 2)
+        : ''
     }
   },
   watch: {
@@ -385,10 +389,9 @@ export default {
         )
       ]
     ])
-    // const test = JSON.parse(
+    // this.serverExistingConfig = JSON.parse(
     //   '{"id":"bcddc29d6497","iottype":"generic-2out","outputs":[{"id":6604002963763495000,"usage":"lamp"},{"id":6604002963767689000,"usage":"blind"}]}'
     // )
-    // this.serverExistingConfig = JSON.stringify(test, null, 2)
     // this.serverErrors = JSON.parse(
     //   "[\"attempted object didn't have valid {[output.id]} value: '0'\",\"data mismatch, {[output.id]}: incoming has {0}; database has '6604002963763495000'\",\"attempted object didn't have valid {[output.id]} value: '0'\",\"data mismatch, {[output.id]}: incoming has {0}; database has '6604002963767689000'\"]"
     // )
@@ -536,7 +539,7 @@ export default {
         this.serverErrors = errors
       }
       if (existing) {
-        this.serverExistingConfig = JSON.stringify(existing, null, 2)
+        this.serverExistingConfig = existing
       }
     },
     handleUIChangesOnIoTState({ state, step, desc }) {
