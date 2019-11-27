@@ -452,57 +452,6 @@ export default {
           this.extractConfig(objData)
       }
     },
-    wsBrancheOnProcState(stateCode, objData) {
-      switch (this.initState) {
-        case initStates.FAILED:
-          this.handleInitErrors(objData)
-          break
-        case initStates.IDLE:
-          this.extractConfig(objData)
-          return
-        case initStates.UNKNOWN:
-          this.initState = initStates.FAILED
-          this.additionalText = `IoT init: bad IoT State code ${stateCode}`
-          break
-      }
-      if (!this.hasConfig) {
-        rws.send('["get-currentConfig"]')
-      }
-    },
-    wsSendIotInitData() {
-      this.initState = initStates.SAVING
-      const payload = JSON.stringify([
-        'set-initValues',
-        {
-          ssid: this.ssid,
-          psk: this.psk,
-          outputs: this.outputs.map(({ _id, ...restOutput }) => restOutput)
-        }
-      ])
-      rws.send(payload)
-    },
-    extractConfig(data) {
-      const { iotDeviceId, iotType, ssid, psk, outputs } = data
-      this.iotDeviceId = iotDeviceId
-      this.iotType = iotTypes[iotType]
-      this.ssid = ssid
-      this.psk = psk
-      this.extractConfigOutputs(outputs)
-    },
-    extractConfigOutputs(outputs) {
-      this.outputs = outputs.map(({ id, usage }, i) => ({
-        id,
-        usage: usage || null, // Default value: null is for TreeSelect Component better behavior
-        _id: ++i
-      }))
-    },
-    clearConfig() {
-      this.iotDeviceId = null
-      this.ssid = null
-      this.psk = null
-      this.iotType = null
-      this.outputs.length = 0
-    },
     handleIoTState(stateCode) {
       switch (stateCode) {
         case 1:
@@ -547,6 +496,23 @@ export default {
         }
       })
     },
+    wsBrancheOnProcState(stateCode, objData) {
+      switch (this.initState) {
+        case initStates.FAILED:
+          this.handleInitErrors(objData)
+          break
+        case initStates.IDLE:
+          this.extractConfig(objData)
+          return
+        case initStates.UNKNOWN:
+          this.initState = initStates.FAILED
+          this.additionalText = `IoT init: bad IoT State code ${stateCode}`
+          break
+      }
+      if (!this.hasConfig) {
+        rws.send('["get-currentConfig"]')
+      }
+    },
     // handleInitErrors({ errors, existing, ...unknown }) {
     handleInitErrors({ apiresult: { errors, existing } = {}, ...other }) {
       if (errors) {
@@ -555,6 +521,28 @@ export default {
       if (existing) {
         this.serverExistingConfig = existing
       }
+    },
+    extractConfig(data) {
+      const { iotDeviceId, iotType, ssid, psk, outputs } = data
+      this.iotDeviceId = iotDeviceId
+      this.iotType = iotTypes[iotType]
+      this.ssid = ssid
+      this.psk = psk
+      this.extractConfigOutputs(outputs)
+    },
+    extractConfigOutputs(outputs) {
+      this.outputs = outputs.map(({ id, usage }, i) => ({
+        id,
+        usage: usage || null, // Default value: null is for TreeSelect Component better behavior
+        _id: ++i
+      }))
+    },
+    clearConfig() {
+      this.iotDeviceId = null
+      this.ssid = null
+      this.psk = null
+      this.iotType = null
+      this.outputs.length = 0
     },
     handleUIChangesOnIoTState({ state, step, desc }) {
       this.uiGenericReset()
