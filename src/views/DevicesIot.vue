@@ -521,6 +521,9 @@ export default {
       this.extractConfigOutputs(outputs)
     },
     extractConfigOutputs(outputs) {
+      if (!outputs || outputs.length == 0) {
+        return
+      }
       this.outputs = outputs.map(({ id, usage }, i) => ({
         id,
         usage: usage || null, // Default value: null is for TreeSelect Component better behavior
