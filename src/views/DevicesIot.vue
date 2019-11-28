@@ -254,16 +254,6 @@ const auxClass = {
 Object.freeze(auxClass)
 
 class UIState {
-  /** @type {String} */
-  icon
-  /** @type {String} */
-  iconClasses
-  /** @type {String} */
-  iconEffect
-  /** @type {String} */
-  iconEffectClasses
-  /** @type {String} */
-  text
   /**
    * @param {String} icon
    * @param {String} iconClasses
