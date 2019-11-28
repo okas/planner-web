@@ -49,7 +49,7 @@
           <header>
             <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
           </header>
-          <form autocomplete="on" @submit.prevent="wsSendIotInitData">
+          <form autocomplete="on" @submit.prevent>
             <fieldset :disabled="!iotConnected">
               <div class="field">
                 <label :class="['label', ssidState.class]">SSID</label>
@@ -120,11 +120,26 @@
                 </div>
                 <help v-bind="outputsState" />
               </div>
-              <div class="field">
+              <div class="buttonbar field is-grouped">
                 <div class="control">
-                  <button type="submit" class="button is-primary">
-                    Seadista
-                  </button>
+                  <button
+                    type="submit"
+                    class="button is-primary"
+                    @click="buttonNewDataEventHandler"
+                    v-text="
+                      isInServer
+                        ? 'Uuenda serveri seadistus'
+                        : 'Salvesta uus seadistus'
+                    "
+                  />
+                </div>
+                <div class="control" v-if="hasServerExistingConfig">
+                  <button
+                    type="submit"
+                    class="button is-warning"
+                    @click="buttonOldDataEventHandler"
+                    v-text="'Kasuta vana seadistus'"
+                  />
                 </div>
               </div>
             </fieldset>
@@ -433,7 +448,7 @@ export default {
       this.handleStateDetails(stateDetails)
       switch (subject) {
         case 'set-initValuesUpdate-R':
-        // TOTO: here: this.serverExistingConfig. Clear existing, when response is OK
+          this.tryClearServerExistingConfig()
         case 'get-initState-R':
         case 'set-initValues-R':
           this.wsBrancheOnProcState(state, objData)
@@ -530,6 +545,50 @@ export default {
         _id: ++i
       }))
     },
+    tryClearServerExistingConfig() {
+      if (this.initState == initStates.SUCCEED) {
+        this.serverExistingConfig = {}
+        return true
+      }
+      return false
+    },
+    buttonNewDataEventHandler(event) {
+      if (!event.target.form.reportValidity()) {
+        return
+      }
+      let subject
+      if (this.hasServerExistingConfig) {
+        this.updateConfigOutputIdsFromExisting()
+        subject = 'set-initValuesUpdate'
+      } else {
+        subject = 'set-initValues'
+      }
+      this.wsSendIotInitData(subject)
+    },
+    buttonOldDataEventHandler(event) {
+      if (!event.target.form.reportValidity()) {
+        return
+      }
+      this.extractConfigOutputs(this.serverExistingConfig.outputs)
+      this.wsSendIotInitData('set-initValuesUpdate')
+    },
+    updateConfigOutputIdsFromExisting() {
+      this.serverExistingConfig.outputs.forEach(({ id: eOut }, i) => {
+        this.outputs[i].id = eOut
+      })
+    },
+    wsSendIotInitData(subject) {
+      this.initState = initStates.SAVING
+      const payload = JSON.stringify([
+        subject,
+        {
+          ssid: this.ssid,
+          psk: this.psk,
+          outputs: this.outputs.map(({ _id, ...restOutput }) => restOutput)
+        }
+      ])
+      rws.send(payload)
+    },
     clearConfig() {
       this.iotDeviceId = null
       this.ssid = null
@@ -564,15 +623,22 @@ export default {
             this.uiMqttConnectedOrSuccess()
           }
           return
-        case 'iotnode':
-          if (desc == 'INIT_WAITING_IDS_FROM_API') {
-            this.uiMqttConnectedOrSuccess()
-          } else if (desc == 'INIT_FAILED_IDS_FROM_API') {
-            this.uiErrorsInApiResponse()
-          } else if (desc == 'INIT_SUCCESS') {
-            this.uiInitSucceed()
+        case 'iotnode': {
+          switch (desc) {
+            case 'INIT_WAITING_IDS_FROM_API':
+            case 'INITUPDATE_WAITING_CONFIRM_FROM_API':
+              this.uiMqttConnectedOrSuccess()
+              return
+            case 'INIT_FAILED_IDS_FROM_API':
+            case 'INITUPDATE_FAILED_FROM_API':
+              this.uiErrorsInApiResponse()
+              return
+            case 'INIT_SUCCESS':
+            case 'INITUPDATE_SUCCESS':
+              this.uiInitSucceed()
+              return
           }
-          return
+        }
         default:
           return
       }
@@ -652,5 +718,8 @@ ul {
 }
 .status--value {
   border: 1px solid black;
+}
+.buttonbar {
+  margin-top: 1.25rem;
 }
 </style>
