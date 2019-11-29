@@ -223,67 +223,18 @@ import Help from '../components/DevicesIotFormHelp'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import TreeSelect from '@riophae/vue-treeselect'
 import IotIcon from '../components/DevicesIotIcon'
+import {
+  iotTypes,
+  initStates,
+  deviceTypes,
+  txtClass,
+  auxClass,
+  UIState
+} from './js/devicesIot'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 /** @type {ReconnectingWebSocket} */
 let rws
-
-const iotTypes = {
-  'generic-2out': 'Üldine kahe täituriga seade'
-}
-Object.freeze(iotTypes)
-
-const initStates = {
-  OFFLINE: Symbol('0: OFFLINE'),
-  IDLE: Symbol('1: IDLE') /* connected */,
-  SUCCEED: Symbol('2: SUCCEED'),
-  FAILED: Symbol('3: FAILED'),
-  SAVING: Symbol('4: SAVING'),
-  UNKNOWN: Symbol('x: UNKNOWN')
-}
-Object.freeze(initStates)
-
-const deviceTypes = [
-  { id: 'lamp', label: 'Lamp' },
-  { id: 'blind', label: 'Ruloo' }
-]
-Object.freeze(deviceTypes)
-
-const txtClass = {
-  // TODO Move out of Vue component object
-  warning: 'has-text-warning',
-  info: 'has-text-info',
-  success: 'has-text-success',
-  danger: 'has-text-danger',
-  greyLight: 'has-text-grey-light'
-}
-Object.freeze(txtClass)
-
-const auxClass = {
-  // TODO Move out of Vue component object
-  warning: 'is-warning',
-  info: 'is-info',
-  success: 'is-success',
-  danger: 'is-danger'
-}
-Object.freeze(auxClass)
-
-class UIState {
-  /**
-   * @param {String} icon
-   * @param {String} iconClasses
-   * @param {String} iconEffect
-   * @param {String} iconEffectClasses
-   * @param {String} text
-   */
-  constructor(icon, iconClasses, iconEffect, iconEffectClasses, text) {
-    this.icon = icon
-    this.iconClasses = iconClasses
-    this.iconEffect = iconEffect
-    this.iconEffectClasses = iconEffectClasses
-    this.text = text
-  }
-}
 
 export default {
   components: { TreeSelect, IotIcon, Help },
