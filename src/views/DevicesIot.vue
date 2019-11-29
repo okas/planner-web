@@ -133,7 +133,7 @@
                     "
                   />
                 </div>
-                <div class="control" v-if="hasServerExistingConfig">
+                <div v-if="hasServerExistingConfig" class="control">
                   <button
                     type="submit"
                     class="button is-warning"
