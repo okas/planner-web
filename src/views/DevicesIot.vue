@@ -553,7 +553,10 @@ export default {
         case 'wifi':
           if (desc == 'WL_CONNECTED' || desc == 'WL_IDLE_STATUS') {
             this.uiWiFiConnected()
-          } else if (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) {
+          } else if (
+            (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) ||
+            desc == 'WL_CONNECTION_TIMEOUT'
+          ) {
             this.uiWiFiDisconnectedAndFailed()
           } else if (desc == 'WL_NO_SSID_AVAIL') {
             this.uiWiFiNoSSID()
