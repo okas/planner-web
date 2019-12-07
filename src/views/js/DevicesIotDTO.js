@@ -38,6 +38,9 @@ export const auxClass = {
 }
 Object.freeze(auxClass)
 
+/**
+ * Instance of certain Device State. Icons and texts of "Status" section in UI.
+ */
 export class UIState {
   /**
    * @param {String} icon
