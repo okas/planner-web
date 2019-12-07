@@ -550,24 +550,29 @@ export default {
     handleUIChangesOnIoTState({ state, step, desc }) {
       this.uiGenericReset()
       switch (step) {
-        case 'wifi':
-          if (desc == 'WL_CONNECTED' || desc == 'WL_IDLE_STATUS') {
-            this.uiWiFiConnected()
-          } else if (
-            (desc == 'WL_DISCONNECTED' && state == initStates.FAILED) ||
-            desc == 'WL_CONNECTION_TIMEOUT'
-          ) {
-            this.uiWiFiDisconnectedAndFailed()
-          } else if (desc == 'WL_NO_SSID_AVAIL') {
-            this.uiWiFiNoSSID()
-          } else if (desc == 'WL_CONNECT_FAILED') {
-            this.uiWiFiConnectFailed()
+        case 'wifi': {
+          switch (desc) {
+            case 'WL_CONNECTED':
+            case 'WL_IDLE_STATUS':
+              this.uiWiFiConnected()
+              break
+            case 'WL_DISCONNECTED':
+              if (state != initStates.FAILED) break
+            case 'WL_CONNECTION_TIMEOUT':
+              this.uiWiFiDisconnectedAndFailed()
+              break
+            case 'WL_NO_SSID_AVAIL':
+              this.uiWiFiNoSSID()
+              break
+            case 'WL_CONNECT_FAILED':
+              this.uiWiFiConnectFailed()
           }
           if (desc != 'WL_CONNECTED') {
             this.uiWiFiNotConnected()
           }
           return
-        case 'mqtt':
+        }
+        case 'mqtt': {
           if (
             desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
             desc == 'LWMQTT_SUCCESS'
@@ -577,6 +582,7 @@ export default {
             this.uiMqttConnectedOrSuccess()
           }
           return
+        }
         case 'iotnode': {
           switch (desc) {
             case 'INIT_WAITING_IDS_FROM_API':
