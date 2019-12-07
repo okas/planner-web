@@ -1,16 +1,16 @@
 export default {
   beforeCreate() {
-    const rooms = this.$options.socketRooms
-    if (rooms) {
-      joinRooms(this.$socket, rooms)
-      const fn = joinRooms.bind(undefined, this.$socket, rooms)
+    const { socketRooms } = this.$options
+    if (socketRooms) {
+      joinRooms(this.$socket, socketRooms)
+      const fn = joinRooms.bind(undefined, this.$socket, socketRooms)
       this.$vueSocketIo.emitter.addListener('reconnect', fn, this)
     }
   },
   beforeRouteLeave(to, from, next) {
-    const rooms = this.$options.socketRooms
-    if (rooms) {
-      leaveRooms(this.$socket, rooms)
+    const { socketRooms } = this.$options
+    if (socketRooms) {
+      leaveRooms(this.$socket, socketRooms)
       this.$vueSocketIo.emitter.removeListener('reconnect', this)
     }
     next()
