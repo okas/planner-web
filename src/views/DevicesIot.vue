@@ -45,152 +45,167 @@
         />
       </article>
       <div class="column">
-        <article>
-          <header>
-            <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
-          </header>
-          <form autocomplete="on" @submit.prevent>
-            <fieldset :disabled="!iotConnected">
-              <div class="field">
-                <label :class="['label', ssidState.class]">SSID</label>
-                <div class="control">
-                  <input
-                    v-model="ssid"
-                    :class="['input', ssidState.class1]"
-                    type="text"
-                    placeholder="sisesta võrgu nimi"
-                    minlength="1"
-                    maxlength="32"
-                    required
-                  />
+        <div v-if="iotConnected">
+          <article>
+            <header>
+              <h4 class="subtitle is-4">IoT seadme algseadistused</h4>
+            </header>
+            <form autocomplete="on" @submit.prevent>
+              <fieldset :disabled="!iotConnected">
+                <div class="field">
+                  <label :class="['label', ssidState.class]">SSID</label>
+                  <div class="control">
+                    <input
+                      v-model="ssid"
+                      :class="['input', ssidState.class1]"
+                      type="text"
+                      placeholder="sisesta võrgu nimi"
+                      minlength="1"
+                      maxlength="32"
+                      required
+                    />
+                  </div>
+                  <help v-bind="ssidState" />
                 </div>
-                <help v-bind="ssidState" />
-              </div>
-              <div class="field">
-                <label :class="['label', pskState.class]">Võti</label>
-                <div class="control">
-                  <input
-                    v-model="psk"
-                    :class="['input', pskState.class1]"
-                    type="password"
-                    placeholder="sisesta võti"
-                    minlength="8"
-                    maxlength="64"
-                    required
-                  />
+                <div class="field">
+                  <label :class="['label', pskState.class]">Võti</label>
+                  <div class="control">
+                    <input
+                      v-model="psk"
+                      :class="['input', pskState.class1]"
+                      type="password"
+                      placeholder="sisesta võti"
+                      minlength="8"
+                      maxlength="64"
+                      required
+                    />
+                  </div>
+                  <help v-bind="pskState" />
                 </div>
-                <help v-bind="pskState" />
-              </div>
-              <div class="field">
-                <label :class="['label', outputsState.class]"
-                  >Väljundid (serverist)</label
-                >
-                <div class="filed-body">
-                  <div class="field is-horizontal">
-                    <div
-                      v-for="output of outputs"
-                      :key="output._id"
-                      class="output"
-                    >
-                      <label
-                        :class="[
-                          'output--label label help',
-                          outputsState.class
-                        ]"
-                        v-text="`id: ${output.id}`"
-                      />
-                      <tree-select
-                        v-model="output.usage"
-                        class="output--control"
-                        :options="$options.deviceTypes"
-                        :placeholder="`${output._id}: vali...`"
+                <div class="field">
+                  <label :class="['label', outputsState.class]"
+                    >Väljundid (serverist)</label
+                  >
+                  <div class="filed-body">
+                    <div class="field is-horizontal">
+                      <div
+                        v-for="output of outputs"
+                        :key="output._id"
+                        class="output"
                       >
-                        <div
-                          slot="value-label"
-                          slot-scope="{ node }"
+                        <label
                           :class="[
-                            { 'has-text-weight-semibold': output._id },
-                            output._id ? outputsState.class2 : ''
+                            'output--label label help',
+                            outputsState.class
                           ]"
-                          v-text="`${output._id}: ${node.label}`"
+                          v-text="`id: ${output.id}`"
                         />
-                      </tree-select>
+                        <tree-select
+                          v-model="output.usage"
+                          class="output--control"
+                          :options="$options.deviceTypes"
+                          :placeholder="`${output._id}: vali...`"
+                        >
+                          <div
+                            slot="value-label"
+                            slot-scope="{ node }"
+                            :class="[
+                              { 'has-text-weight-semibold': output._id },
+                              output._id ? outputsState.class2 : ''
+                            ]"
+                            v-text="`${output._id}: ${node.label}`"
+                          />
+                        </tree-select>
+                      </div>
                     </div>
                   </div>
+                  <help v-bind="outputsState" />
                 </div>
-                <help v-bind="outputsState" />
-              </div>
-              <div class="buttonbar field is-grouped">
-                <div class="control">
-                  <button
-                    type="submit"
-                    class="button is-primary"
-                    @click="buttonNewDataEventHandler"
-                    v-text="
-                      isInServer
-                        ? 'Uuenda serveri seadistus'
-                        : 'Salvesta uus seadistus'
-                    "
-                  />
+                <div class="buttonbar field is-grouped">
+                  <div class="control">
+                    <button
+                      type="submit"
+                      class="button is-primary"
+                      @click="buttonNewDataEventHandler"
+                      v-text="
+                        isInServer
+                          ? 'Uuenda serveri seadistus'
+                          : 'Salvesta uus seadistus'
+                      "
+                    />
+                  </div>
+                  <div v-if="hasServerExistingConfig" class="control">
+                    <button
+                      type="submit"
+                      class="button is-warning"
+                      @click="buttonOldDataEventHandler"
+                      v-text="'Kasuta vana seadistus'"
+                    />
+                  </div>
                 </div>
-                <div v-if="hasServerExistingConfig" class="control">
-                  <button
-                    type="submit"
-                    class="button is-warning"
-                    @click="buttonOldDataEventHandler"
-                    v-text="'Kasuta vana seadistus'"
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </form>
-        </article>
-        <article>
+              </fieldset>
+            </form>
+          </article>
+          <article v-if="hasServerExistingConfig">
+            <header>
+              <h5 class="subtitle is-5">Vead serverisse salestamisel</h5>
+            </header>
+            <ul>
+              <li
+                v-for="(error, i) of serverErrors"
+                :key="i"
+                style="border: 1px solid black"
+              >
+                <samp v-text="error" />
+              </li>
+            </ul>
+            <header>
+              <h5 class="subtitle is-5">Serveris olevad seadistused</h5>
+            </header>
+            <p>Paistab selle selle IoT seadme info on serveris olemas</p>
+            <h6 class="subtitle is-6">Kas kirjutame serveri seadistuse üle?</h6>
+            <pre v-text="serverExistingConfigJSONString" />
+          </article>
+        </div>
+        <article v-else>
           <header>
-            <h5 class="subtitle is-5">Vead serverisse salestamisel</h5>
+            <h4 class="subtitle is-4">Töövoo kirjeldus</h4>
+            <h6 class="subtitle is-6">
+              Esiteks on vaja ühenduda WiFi abil IoT seamdega
+            </h6>
           </header>
           <ul>
-            <li
-              v-for="(error, i) of serverErrors"
-              :key="i"
-              style="border: 1px solid black"
-            >
-              <samp v-text="error" />
+            <li>
+              Pane seade
+              <i class="is-italic">Algseadistuse</i> režiimi, umbes 5 sek
+              nupuvajutus seadmel.
+            </li>
+            <li>
+              Ühendu WiFi võrku, mille nimi (SSID) on sarnane:
+              <i class="is-italic">ESP_XXXXXX</i>.
+            </li>
+            <ul>
+              <li>
+                Kui paned ajutiselt "ühenda automaatselt", siis on
+                seadistusprotsess mugavam.
+              </li>
+            </ul>
+            <li>
+              Seejärel oota kuni staatus näitab ühendust ja kuvatakse seadme
+              praegune info.
             </li>
           </ul>
-          <header>
-            <h5 class="subtitle is-5">Serveris olevad seadistused</h5>
-          </header>
-          <p>Paistab selle selle IoT seadme info on serveris olemas</p>
-          <h6 class="subtitle is-6">Kas kirjutame serveri seadistuse üle?</h6>
-          <pre v-text="serverExistingConfigJSONString" />
         </article>
       </div>
     </div>
-    <article>
+    <article v-if="iotConnected">
       <header>
-        <h4 class="subtitle is-4">Töövoo kirjeldus</h4>
+        <h4 class="subtitle is-4">Töövoo kirjeldus (jätkub)</h4>
+        <h6 class="subtitle is-6">
+          ...peale edukat WiFi ühendamist IoT seadmega...
+        </h6>
       </header>
-      <ol>
-        <li>
-          Pane seade
-          <i class="is-italic">Algseadistuse</i> režiimi, umbes 5 sek
-          nupuvajutus seadmel.
-        </li>
-        <li>
-          Ühendu WiFi võrku, mille nimi (SSID) on sarnane:
-          <i class="is-italic">ESP_XXXXXX</i>.
-        </li>
-        <ul>
-          <li>
-            Kui paned ajutiselt "ühenda automaatselt", siis on seadistusprotsess
-            mugavam.
-          </li>
-        </ul>
-        <li>
-          Seejärel oota kuni staatus näitab ühendust ja kuvatakse seadme
-          praegune info.
-        </li>
+      <ul>
         <li>
           Nüüd on valmidus salvestada kodu WiFi võrgu nimi (SSID) ja kood.
           Salvesta algseaded.
@@ -213,7 +228,7 @@
             <i class="is-italic">ESP_XXXXXX</i> ühendudes muutsid.
           </li>
         </ul>
-      </ol>
+      </ul>
     </article>
   </section>
 </template>
