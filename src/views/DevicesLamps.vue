@@ -140,7 +140,7 @@ export default {
     lamp__api_present({ id, state }) {
       this.setLampState(id, state)
     },
-    lamp__api_lost(id) {
+    lamp__api_lost({ id }) {
       this.setLampState(id, null)
     },
     devices__api_lost() {

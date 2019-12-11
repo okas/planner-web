@@ -132,7 +132,7 @@ export default {
     blind__api_present({ id, state }) {
       this.setBlindState(id, state)
     },
-    blind__api_lost(id) {
+    blind__api_lost({ id }) {
       this.setBlindState(id, null)
     },
     devices__api_lost() {
