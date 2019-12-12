@@ -73,7 +73,7 @@ export default {
               this.uiWiFiConnectFailed()
           }
           if (desc != 'WL_CONNECTED') {
-            this.uiWiFiNotConnected()
+            this.uiFormOutputsWarning()
           }
           return
         }
@@ -83,7 +83,7 @@ export default {
             case 'LWMQTT_CONNECTION_ACCEPTED':
             case 'LWMQTT_SUCCESS':
             case '__PUBLISH_FAILED':
-              this.uiMqttConnectedOrSuccess()
+              this.uiFormOutputsWarning()
               return
           }
         }
@@ -92,7 +92,7 @@ export default {
           switch (desc) {
             case 'INIT_WAITING_IDS_FROM_API':
             case 'INITUPDATE_WAITING_CONFIRM_FROM_API':
-              this.uiMqttConnectedOrSuccess()
+              this.uiFormOutputsWarning()
               return
             case 'INIT_FAILED_IDS_FROM_API':
             case 'INITUPDATE_FAILED_FROM_API':
@@ -130,14 +130,6 @@ export default {
       this.pskState.class1 = auxClass.danger
       this.pskState.txt = 'vale võti'
     },
-    uiWiFiNotConnected() {
-      this.outputsState.class = this.outputsState.class2 = txtClass.warning
-      this.uiGenericOutsNotSaved()
-    },
-    uiMqttConnectedOrSuccess() {
-      this.outputsState.class = this.outputsState.class2 = txtClass.warning
-      this.uiGenericOutsNotSaved()
-    },
     uiErrorsInApiResponse() {
       this.outputsState.class = this.outputsState.class2 = txtClass.danger
       this.outputsState.class1 = auxClass.danger
@@ -156,7 +148,8 @@ export default {
         ''
       this.outputsState.class2 = txtClass.info
     },
-    uiGenericOutsNotSaved() {
+    uiFormOutputsWarning() {
+      this.outputsState.class = this.outputsState.class2 = txtClass.warning
       this.outputsState.txt = 'pole veel salvestatud'
     },
     uiFormWiFiSuccess() {
