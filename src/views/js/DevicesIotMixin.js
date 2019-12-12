@@ -78,6 +78,7 @@ export default {
           return
         }
         case 'mqtt': {
+          this.uiFormWiFiSuccess()
           if (
             desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
             desc == 'LWMQTT_SUCCESS'
@@ -89,6 +90,7 @@ export default {
           return
         }
         case 'iotnode': {
+          this.uiFormWiFiSuccess()
           switch (desc) {
             case 'INIT_WAITING_IDS_FROM_API':
             case 'INITUPDATE_WAITING_CONFIRM_FROM_API':
@@ -109,8 +111,7 @@ export default {
       }
     },
     uiWiFiConnected() {
-      this.ssidState.class = this.pskState.class = txtClass.success
-      this.ssidState.class1 = this.pskState.class1 = auxClass.success
+      this.uiFormWiFiSuccess()
       this.outputsState.class = txtClass.info
     },
     uiWiFiDisconnectedAndFailed() {
@@ -136,23 +137,17 @@ export default {
       this.uiGenericOutsNotSaved()
     },
     uiMqttConnectedOrSuccess() {
-      this.ssidState.class = this.pskState.class = txtClass.success
-      this.ssidState.class1 = this.pskState.class1 = auxClass.success
       this.outputsState.class = this.outputsState.class2 = txtClass.warning
       this.uiGenericOutsNotSaved()
     },
     uiErrorsInApiResponse() {
-      this.ssidState.class = this.pskState.class = txtClass.success
-      this.ssidState.class1 = this.pskState.class1 = auxClass.success
       this.outputsState.class = this.outputsState.class2 = txtClass.danger
       this.outputsState.class1 = auxClass.danger
       this.outputsState.txt = 'serverisse ei õnnestu salvestada'
     },
     uiInitSucceed() {
-      this.ssidState.class = this.pskState.class = this.outputsState.class = this.outputsState.class2 =
-        txtClass.success
-      this.ssidState.class1 = this.pskState.class1 = this.outputsState.class1 =
-        auxClass.success
+      this.outputsState.class = this.outputsState.class2 = txtClass.success
+      this.outputsState.class1 = auxClass.success
       this.outputsState.txt = ''
     },
     uiGenericReset() {
@@ -165,6 +160,10 @@ export default {
     },
     uiGenericOutsNotSaved() {
       this.outputsState.txt = 'pole veel salvestatud'
+    },
+    uiFormWiFiSuccess() {
+      this.ssidState.class = this.pskState.class = txtClass.success
+      this.ssidState.class1 = this.pskState.class1 = auxClass.success
     }
   }
 }
