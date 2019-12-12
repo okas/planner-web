@@ -79,15 +79,13 @@ export default {
         }
         case 'mqtt': {
           this.uiFormWiFiSuccess()
-          if (
-            desc == 'LWMQTT_CONNECTION_ACCEPTED' ||
-            desc == 'LWMQTT_SUCCESS'
-          ) {
-            this.uiMqttConnectedOrSuccess()
-          } else if (desc == '__PUBLISH_FAILED') {
-            this.uiMqttConnectedOrSuccess()
+          switch (desc) {
+            case 'LWMQTT_CONNECTION_ACCEPTED':
+            case 'LWMQTT_SUCCESS':
+            case '__PUBLISH_FAILED':
+              this.uiMqttConnectedOrSuccess()
+              return
           }
-          return
         }
         case 'iotnode': {
           this.uiFormWiFiSuccess()
