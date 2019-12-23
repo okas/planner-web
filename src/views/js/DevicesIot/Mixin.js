@@ -1,4 +1,4 @@
-import { auxClass, initStates, txtClass, UIState } from './DevicesIotDTO'
+import { auxClass, initStates, txtClass, UIState } from './DTOs'
 
 export default {
   created() {
