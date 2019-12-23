@@ -239,7 +239,7 @@ import ReconnectingWebSocket from 'reconnecting-websocket'
 import TreeSelect from '@riophae/vue-treeselect'
 import IotIcon from '../components/DevicesIotIcon'
 import { iotTypes, initStates, deviceTypes, txtClass } from './js/DevicesIotDTO'
-import DevicesIotMixin from './js/DevicesIotMixin'
+import DevicesIotMixin from './js/DevicesIot/Mixin'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 /** @type {ReconnectingWebSocket} */
